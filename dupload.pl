@@ -1,8 +1,9 @@
 #! /usr/bin/perl 
 # (c) 1996 Heiko Schlittermann <heiko@lotte.sax.de>
+# (c) 1999 Stephane Bortzmeyer <bortzmeyer@debian.org>
 # Usage:
 # 	* Go into the directory of your packages to be uploaded.
-#	* Simply say `upload --to chiark' and all will be done
+#	* Simply say `dupload --to chiark' and all will be done
 #	
 #	* Destination is the host named or a default host.
 #	* The .changes files is read and the mentioned files
@@ -12,32 +13,33 @@
 #	* Files already uploaded to a host are not uploaded 
 #	  again.
 #	* configuration is read from
-#	  	- xCONFDIRx/dupload.conf
-#		- ~/.dupload
+#	  	- /etc/dupload.conf
+#		- ~/.dupload.conf
 #		- ./dupload.conf
 
 
-BEGIN { 
-	$ENV{PERL_INC} # for my tests only
-		and unshift @INC, $ENV{PERL_INC};
-	unshift @INC, "xPKGLIBDIRx"; 
-}
+#BEGIN { 
+#	$ENV{PERL_INC} # for my tests only
+#		and unshift @INC, $ENV{PERL_INC};
+#	unshift @INC, ""; 
+#}
 
-#use strict;
+use strict;
+use 5.003; # Because of the prototypes
 use Cwd;
-use Carp;
 use Getopt::Long;
 use File::Basename;
-require 'dupload-ftp.pl';	# NOTE: @INC is modified!!
+use Net::FTP;
+use English;
 
-# more ore less configurable constants
-my $version = "xVERSIONx";
+# more or less configurable constants
+my $version = "2.4";
 my $progname = basename($0);
 my $user = getlogin() || $ENV{LOGNAME} || $ENV{USER};
 my $myhost = `hostname --fqdn`; chomp $myhost;
 my $cwd = cwd();
 
-my $debug = 1;	# for somewhat more verbose output from the ftp module
+my $debug = 0;	# for somewhat more verbose output from the ftp module
 my $force = 0;	# do it, even when already done
 my $keep = 0;   # keep going, even if checksum errors
 my $quiet = 0;	# don't talk too much
@@ -51,16 +53,28 @@ my $sendmail = "/usr/sbin/sendmail";
 
 # global Variables
 my (@changes,	# the files we'll have to read from
-	@skipped,	# the packages we skipped
+    @skipped,	# the packages we skipped
+    @all_the_files,     # ... we installed (for postupload processing)
+    @all_the_debs,      # ... we installed (for postupload processing)
+    %all_packages,      # All Debian binary packages we installed 
+                        # (for postupload processing)
+    $scpfiles,
     $dry,		# if do-nothing
+    $mailonly,          
     $fqdn, 					# per host 
-	$incoming, $queuedir,   # ...
-	$mailto, $mailtx, $cc,  # ...
-	$visiblename, $visibledomain,
-	$fullname,
-	%files, %package, %version, %arch,	# per job
-	%dir, %changes, %log, %announce,    # ...
-	%extra);
+    $server,
+    $dinstall_runs, $passive,
+    $nomail, $archive, $noarchive,
+    %preupload, %postupload,
+    $result,
+    $new_dpkg_dev,
+    $incoming, $queuedir,   # ...
+    $mailto, $mailtx, $cc,  # ...
+    $visiblename, $visibleuser, $visibledomain,
+    $fullname,
+    %files, %package, %version, %arch,	# per job
+    %dir, %changes, %log, %announce,    # ...
+    %extra);
 
 ### Prototypes
 sub configure(@);	# reads the config file(s)
@@ -70,42 +84,62 @@ sub fatal(@);		# bail out
 sub getpass();		# read password
 sub w(@);			# warn (to STDERR if quiet, to STDOUT else)
 sub p(@);			# print (suppress if quiet, to STDOUT else)
+sub announce_if_necessary($);
+sub run ($$);           # Runs an external program and return its exit status
 
 # some tests on constants
-$user or fatal("Who am I? (can't get user identity\n");
+$user or fatal("Who am I? (can't get user identity)\n");
 $myhost or fatal("Who am I? (can't get hostname)\n");
-$cwd or fatal("Where am I? (can't get current directory\n");
+$cwd or fatal("Where am I? (can't get current directory)\n");
 -x $sendmail or fatal("Probably wrong perms on `$sendmail': $!\n");
 
 ### Main
 configure(
-	"xCONFDIRx/dupload.conf",
+	"/etc/dupload.conf",
 	$ENV{HOME} && "$ENV{HOME}/.dupload.conf",
 	"./dupload.conf");
 
 $Getopt::Long::ignorecase = 0;
 GetOptions qw(
 	debug:i 
-	force keep no nomail
+        help
+	force keep no nomail noarchive
+        mailonly
 	to=s print 
-       quiet Version
+       quiet Version version
 ) or fatal("Bad Options\n");
 
 $dry = defined($::opt_no);
+$mailonly = defined($::opt_mailonly);
+if ($mailonly) {
+    $dry = 1;
+}
 $debug = $::opt_debug || $debug;
 $keep = $::opt_keep || $keep;
-$host = $::opt_to;
+$host = $::opt_to || $config::default_host;
 $force = $::opt_force || $force;
 $nomail = $::opt_nomail || 0;
-
+$quiet = $::opt_quiet;
+# "new" is for 'potato'.
+$new_dpkg_dev = 0;
+ 
 # only info or version?
 info($host), exit 0 if $::opt_print;
-p("$progname Version: $version\n"), exit 0 if $::opt_Version;
+p("$progname Version: $version\n"), exit 0 if 
+    ($::opt_Version or $::opt_version);
+
+if ($::opt_help) {
+    p ("Usage: $progname --to HOST FILE.changes ...\n" .
+       "\tUploads the files listed in the above '.changes' to the\n".
+       "\thost HOST.\n" .
+       "\tSee dupload(1) for details.\n");
+    exit 0;
+}
 
 # get the configuration for that host
 # global, job independend information
 
-$host or fatal("Need host to upload to.  (See --to option)\n\n");
+$host or fatal("Need host to upload to.  (See --to option or the default_host configuration variable)\n");
 { my $nick = $config::cfg{$host};
   $method = $nick->{method} || $method;
   $fqdn = $nick->{fqdn} or fatal("Nothing known about host $host\n");
@@ -114,13 +148,48 @@ $host or fatal("Need host to upload to.  (See --to option)\n\n");
   $mailto = $nick->{mailto};
   $mailtx = $nick->{mailtx} || $nick->{mailto};
   $cc = $nick->{cc};
+  $dinstall_runs = $nick->{dinstall_runs};
+  $passive = $nick->{passive}; 
+  if ($passive and ($method ne "ftp")) { 
+      fatal ("Passive mode is only for FTP ($host)");
+  }
+  if (defined ($nick->{archive})) {
+      $archive = $nick->{archive};
+  } 
+  else {
+      $archive = 1;
+  }
+  foreach my $category (qw/changes sourcepackage package file deb/) {
+      if (defined ($nick->{preupload}{$category})) {
+	  $preupload{$category} = $nick->{preupload}{$category};
+      }
+      else {
+	  $preupload{$category} = $config::preupload{$category};
+      }
+      if (defined ($nick->{postupload}{$category})) {
+      	  $postupload{$category} = $nick->{postupload}{$category};
+      }
+      else {
+      	  $postupload{$category} = $config::postupload{$category};
+      }
+  }
+  
   $login = $nick->{login} || $login if $method eq "ftp";
-  $login = $nick->{login} || $user if $method eq "scp";
+  $login = $nick->{login} || $user if ($method eq "scp" || $method eq "scpb");
   $visibleuser = $nick->{visibleuser} || $user; chomp($visibleuser);
   $visiblename = $nick->{visiblename} || ''; chomp($visiblename);
   $fullname = $nick->{fullname} || '';
   undef $passwd unless $login =~ /^anonymous|ftp$/;
+  if ($nick->{password} && ($login =~ /^anonymous|ftp$/)) { 
+      # Do not accept passwords in configuration file,
+      # except for anonymous logins.
+      $passwd = $nick->{password};
+  }
 }
+
+# Command-line options have precedence over configuration files:
+
+$noarchive = $::opt_noarchive || (! $archive);
 
 ($mailto || $mailtx) or w("no announcement will be sent!\n");
 
@@ -143,15 +212,19 @@ foreach (@ARGV) {
 
 @changes or die("No changes file, so nothing to do.\n");
 
+# preupload code for changes files
+foreach my $change (@changes) {
+    if ($preupload{'changes'}) {
+        my ($result) = run $preupload{'changes'}, [$change];
+        if (! $result) {
+            fatal "Pre-upload \'$preupload{'changes'}\' failed for $change\n  ";
+        }
+    }
+}
+
 p("Uploading ($method) to $fqdn:$incoming");
 p("and moving to $fqdn:$queuedir") if $queuedir;
 p("\n");
-
-if ($method eq "ftp") {
-	ftp::debug($debug);
-	$ftp::hashnl = 0;
-	$ftp::showfd = *STDOUT;
-};
 
 select((select(STDOUT), $| = 1)[0]);
 
@@ -162,9 +235,9 @@ select((select(STDOUT), $| = 1)[0]);
 #  %dir - where the files are located
 #  %announce -
 
-PACKAGE: foreach (@changes) {
-	my $dir = dirname($_);
-	my $cf = basename($_);
+PACKAGE: foreach my $change (@changes) {
+	my $dir = dirname($change);
+	my $cf = basename($change);
 	my $job = basename($cf, ".changes");
 	my ($package, $version, $arch) = (split("_", $job, 3));
 	my ($upstream, $debian) = (split("-", $version, 2));
@@ -180,6 +253,16 @@ PACKAGE: foreach (@changes) {
 	$changes{$job} = $cf;
 	$package{$job} = $package;
 	$version{$job} = $version;
+
+        # preupload code for source package
+	if ($preupload{'sourcepackage'}) {
+	    my ($result) = run $preupload{'sourcepackage'}, 
+	                       [basename($package) . " $version"];
+	    if (! $result) {
+		fatal "Pre-upload \'$preupload{'sourcepackage'}\' " .
+		    "failed for " . basename($package) . " $version\n  ";
+	    }
+	}
 
 	p "[ job $job from $cf";
 
@@ -207,12 +290,19 @@ PACKAGE: foreach (@changes) {
 		chomp;
 		/^changes:\s+/i and $fields{changes}++;
 		/^architecture:\s+/i and chomp($arch{$job} = $'), next;
+                /^format: (\d)\.(\d+)/i and do {
+                       my ($major, $minor) = ($1, $2);
+                       if (($major == 1 && $minor >= 6) or ($major >= 2)) {
+			   if ($dinstall_runs) {
+                               $nomail = 1;
+			   }
+			   $new_dpkg_dev = 1;
+                       }
+                };
 		/^distribution:\s+/i and do { $_ = " $'";
 			/\Wstable/i and $mailto{$mailto}++;
-			/\Wcontrib/i and $mailto{$mailto}++;
-			/\Wnon-free/i and $mailto{$mailto}++;
 			/\Wunstable/i and $mailto{$mailtx}++;
-                       /\Wfrozen/i and $mailto{$mailtx}++;
+                        /\Wfrozen/i and $mailto{$mailtx}++;
 			/\Wexperimental/i and $mailto{$mailtx}++;
 			next;
 		};
@@ -227,6 +317,9 @@ PACKAGE: foreach (@changes) {
                        $announce{$job} = join(" ", $announce{$job}, $_);
                        p " will be sent";
 		   }
+                }
+                elsif ( $new_dpkg_dev ) {
+                       p " New dpkg-dev, announcement will NOT be sent";      
                 }
         }
 
@@ -284,8 +377,54 @@ PACKAGE: foreach (@changes) {
 	if (@files) {
 		$log{$job} = $log;
 		$files{$job} = [ @files ];
+       	} else {
+	    $log{$job} = $log;
+	    announce_if_necessary($job);
+	    if (!$dry) {
+		open(L, ">>$log{$job}") 
+		    or w("can't open logfile $log{$job}: $!\n");
+		print L "s $changes{$job} $host " . localtime() . "\n";
+		close(L);
+	    } else {
+		p "\n+ log successful upload\n";
+	    }
 	}
 	p " ]\n";
+
+        # preupload code for all files and for '.deb' 
+        foreach my $file (@files) {
+	    push @all_the_files, $file;
+	    if ($preupload{'file'}) {
+		my ($result) = run $preupload{'file'}, [$file];
+		if (! $result) {
+		    fatal "Pre-upload \'$preupload{'file'}\' " .
+			"failed for $file\n  ";
+		}
+	    }
+	    if ($file =~ /\.deb$/) {
+		push @all_the_debs, $file;
+		my ($binary_package, $version, $garbage) = split ('_', $file);
+       	        $binary_package = basename($binary_package);
+	        $all_packages{$binary_package} = $version;
+		if ($preupload{'package'}) {
+		    my ($result) = run $preupload{'package'}, 
+                                   [$binary_package, $version];
+                    if (! $result) {
+                          fatal "Pre-upload \'$preupload{'dpackage'}\' " .
+                               "failed for $binary_package $version\n  ";
+                }
+            }
+            if ($preupload{'deb'}) {
+                            my ($result) = run $preupload{'deb'}, [$file];
+                            if (! $result) {
+                               fatal "Pre-upload \'$preupload{'deb'}\' " .
+                               "failed for $file\n  ";
+                            }
+             }
+        }
+       }
+
+
 } continue {
 	chdir $cwd or fatal("Can't chdir back to $cwd\n");
 }
@@ -293,28 +432,34 @@ PACKAGE: foreach (@changes) {
 chdir $cwd or fatal("Can't chdir to $cwd: $!\n");
 
 @skipped and w("skipped: @skipped\n");
-%files or p("Nothing to upload\n"), exit 0;
+%files or (p("Nothing to upload\n"), exit(0));
 
 if ($method eq "ftp") {
-	$passwd = getpass() unless defined $passwd;
+	if (!$dry) {
+	    $passwd = getpass() unless defined $passwd;
+	} else { 
+		p "+ getpass()\n";
+	}
 	p "Uploading (ftp) to $host ($fqdn)\n";
 	if (!$dry) {
 		ftp_open($fqdn, $login, $passwd);
-		ftp::cwd($incoming);
+		$server->cwd($incoming);
 	} else {
 		p "+ ftp_open($fqdn, $login, $passwd)\n";
 		p "+ ftp::cwd($incoming\n";
 	}
-} elsif ($method eq "scp") {
+} elsif ($method eq "scp" || $method eq "scpb") {
 	p "Uploading (scp) to $host ($fqdn)\n";
 } else {
 	fatal("Unknown upload method\n");
 }
 
-
 JOB: foreach (keys %files) {
 	my $job = $_;
 	my @files = @{$files{$job}};
+	my $mode;
+	my ($bm, $allfiles);
+	$scpfiles = "";
 
 	chdir $cwd or fatal("Can't chdir to $cwd: $!\n");
 	chdir $dir{$job} or fatal("Can't chdir to $dir{$job}: $!\n");
@@ -322,19 +467,20 @@ JOB: foreach (keys %files) {
 	p "[ Uploading job $job";
 	@files or p ("\n nothing to do ]"), next;
 
-
+	my $wrong_mode = 0; # For scpb only. A priori, the mode is right for every file
 	foreach (@files) {
 		my $file = $_;
 		my $size = -s;
 		my $t;
 
-		p(sprintf "\n $file %0.1f kB ", $size / 1000);
+		p(sprintf "\n $file %0.1f kB ", $size / 1024);
 		$t = time();
 		if ($method eq "ftp") {
 			if (!$dry) {
-                               unless (ftp::put($file, $file)) {
-					ftp::delete($file) ;
-					fatal("Can't upload $file\n");
+			    unless ($server->put($file, $file)) {
+                                        $result = $server->message();
+                                        $server->delete($file) ;
+					fatal("Can't upload $file: $result");
 				}
 				$t = time() - $t;
 			} else {
@@ -342,125 +488,275 @@ JOB: foreach (keys %files) {
 				$t = 1;
 			}
 		} elsif ($method eq "scp") {
+                        $mode = (stat($file))[2];
 			if (!$dry) {
-				system("scp -q $file $login\@$fqdn:$incoming");
+				system("scp -p -q $file $login\@$fqdn:$incoming");
 				fatal("scp $file failed\n") if $?;
 				$t = time() - $t;
-				system("ssh -l $login $fqdn chmod 0644 $incoming/$file");
-				fatal("ssh ... chmod 0644 failed\n") if $?;
+                                # Small optimization
+                                if ($mode != 33188) { # rw-r--r-- aka 0644
+				    system("ssh -x -l $login $fqdn chmod 0644 $incoming/$file");
+				    fatal("ssh ... chmod 0644 failed\n") if $?;
+                                }
 			} else {
-				p "\n+ scp -q $file $login\@$fqdn:$incoming";
-				p "\n+ ssh -l $login $fqdn chmod 0644 $incoming/$file";
+				p "\n+ scp -p -q $file $login\@$fqdn:$incoming";
+                                if ($mode != 33188) { # rw-r--r-- aka 0644
+                                     p "\n+ ssh -x -l $login $fqdn chmod 0644 $incoming/$file";
+                                }
 				$t = 1;
 			}
+                } elsif ($method eq "scpb") {
+                	$scpfiles  .= "$file ";
+			$mode = (stat($file))[2];
+			# Small optimization
+			if ($mode != 33188) { # rw-r--r-- aka 0644
+			   $wrong_mode = 1;
+			}
+			$t = 1;
+			$bm = 1;
 		}
 
 		if ($queuedir) {
 			p", renaming";
 			if ($method eq "ftp") {
 				if (!$dry) {
-					ftp::rename($file, $queuedir . $file) 
-						or ftp::delete($file)
-						or fatal("Can't rename $file -> $queuedir$file\n");
+					$server->rename($file, $queuedir . $file) 
+						or 
+                                                $result=$server->message(),
+                                                $server->delete($file),
+						fatal("Can't rename $file -> $queuedir$file\n");
 				} else {
 					p "\n+ ftp::rename($file, $queuedir$file)";
 				}
 			} elsif ($method eq "scp") {
 				if (!$dry) {
-					system("ssh -l $login $fqdn \"mv $incoming$file $queuedir$file\"");
-					fatal("ssh -l $login $fqdn: mv failed\n") if $?;
+					system("ssh -x -l $login $fqdn \"mv $incoming$file $queuedir$file\"");
+					fatal("ssh -x -l $login $fqdn: mv failed\n") if $?;
 				} else {
-					p "\n+ ssh -l $login $fqdn \"mv $incoming$file $queuedir$file\"";
+					p "\n+ ssh -x -l $login $fqdn \"mv $incoming$file $queuedir$file\"";
 				}
 			}
 		}
 
 		p ", ok";
-		p (sprintf " (${t} s, %.2f kB/s)", $size / 1000 / ($t || 1));
+		p (sprintf " (${t} s, %.2f kB/s)", $size / 1024 / ($t || 1));
 
+		if (!$bm) {
+			if (!$dry) {
+				open(L, ">>$log{$job}") or w "Can't open $log{$job}: $!\n";
+				print L "u $file $host " . localtime() . "\n";
+				close(L);
+			} else {
+				p "\n+ log to $log{$job}\n";
+			}
+			$bm = 0;
+		}
+	}
+	if ($method eq "scpb") {
+        	my $cmd = "ssh -x -l $login $fqdn 'cd $incoming;chmod 0644 $scpfiles;".
+ 			($queuedir ? "mv $scpfiles $queuedir" : "").
+			"'";
+               if (!$dry) {
+                       p "\n";
+                       system("scp $scpfiles $login\@$fqdn:$incoming");
+                       fatal("scp $scpfiles failed\n") if $?;
+		       if ($wrong_mode) {
+			   system($cmd);
+                       }
+                       fatal("$cmd failed\n") if $?;
+               } else {
+                       p "\n+ scp $scpfiles $login\@$fqdn:$incoming";
+                       p "\n+ $cmd";
+                }
+		$allfiles = $scpfiles;
+        }
+
+	if ($bm) {
 		if (!$dry) {
-			open(L, ">>$log{$job}") or w "Can't open $log{$file}: $!\n";
-			print L "u $file $host " . localtime() . "\n";
+			open(L, ">>$log{$job}") or w "Can't open $log{$job}: $!\n";
+			foreach (split(/ /, $allfiles)) {
+				print L "u $_ $host " . localtime() . "\n";
+			}
 			close(L);
 		} else {
 			p "\n+ log to $log{$job}\n";
 		}
 	}
 
-	if ($announce{$job} and (! $nomail)) {
-		my $sendmail_cmd = "|$sendmail -f $visibleuser"
-					. ($visiblename  ? "\@$visiblename" : "") 
-					. ($fullname  ? " -F '($fullname)'" : "")
-					. " $announce{$job}";
-		p "\n announcing to $announce{$job}";
-		if (!$dry) {
-			open(M, $sendmail_cmd) or fatal("Can't pipe to $sendmail $!\n");
-		} else {
-			p "\n+ announce to $announce{$job} using command ``$sendmail_cmd''\n";
-			open(M, ">&STDOUT");
-		}
-
-		print M <<xxx;
-X-dupload: $version
-xxx
-		$cc and print M <<xxx;
-Cc: $cc
-xxx
-		print M <<xxx;
-Subject: Uploaded $package{$job} $version{$job} ($arch{$job}) to $host
-
-xxx
-		foreach (@{$extra{$job}}) {
-			my $line;
-			open (A, "<$_") 
-				or w("Can't open extra announce $_: $!\n"), next;
-			p " ($_";
-			while ($line = <A>) { print M  $line; }
-			close(A);
-			p(" ok)");
-		}
-
-		open(C, "<$changes{$job}") 
-			or fatal("Can't open $changes{$job} $!\n");
-		while (<C>) { print M; }
-		close(C);
-
-		close(M);
-		if ($?) { p ", failed"; }
-		else { p ", ok"; }
-
-		if (!$dry) {
-			open(L, ">>$log{$job}") 
-				or w("can't open logfile $log{$job}: $!\n");
-			print L "a $changes{$job} $announce{$job} " . localtime() . "\n";
-			close(L);
-		} else {
-			p "\n+ log announcemnt\n";
-		}
-	}
+        announce_if_necessary($job);
+        if (!$dry) {
+            open(L, ">>$log{$job}") 
+                or w("can't open logfile $log{$job}: $!\n");
+            print L "s $changes{$job} $host " . localtime() . "\n";
+            close(L);
+        } else {
+            p "\n+ log successful upload\n";
+        }
 	p " ]\n";
+
 }
 
-if (!$dry) { ftp'close(); }
-else { p "\n+ ftp::close\n"; }
+if ($method eq "ftp") {
+  if (!$dry) { $server->close(); }
+  else { p "\n+ ftp::close\n"; }
+}
+
+# postupload code for changes files
+if (! $dry) {
+    foreach my $change (@changes) {
+	if ($postupload{'changes'}) {
+	    my ($result) = run $postupload{'changes'}, [$change];
+	    if (! $result) {
+		fatal "Post-upload \'$postupload{'changes'}\' " . 
+		    "failed for $change\n  ";
+	    }
+	}
+	my ($package, $version, $arch) = (split("_", $_, 3));
+	if ($postupload{'sourcepackage'}) {
+	    my ($result) = run $postupload{'sourcepackage'}, 
+	                       [basename($package), $version];
+	    if (! $result) {
+		fatal "Post-upload \'$postupload{'sourcepackage'}\' " . 
+		    "failed for " . basename($package) . " $version\n  ";
+	    }
+	}
+    }
+    foreach my $file (@all_the_files) {	
+	if ($postupload{'file'}) {
+	    my ($result) = run $postupload{'file'}, [$file];
+	    if (! $result) {
+		fatal "Post-upload \'$postupload{'file'}\' " . 
+		    "failed for $file\n  ";
+	    }
+	}
+    }
+    foreach my $file (@all_the_debs) {	
+	if ($postupload{'deb'}) {
+	    my ($result) = run $postupload{'deb'}, [$file];
+	    if (! $result) {
+		fatal "Post-upload \'$postupload{'deb'}\' " . 
+		    "failed for $file\n  ";
+	    }
+	}
+    }
+    foreach my $package (keys (%all_packages)) {	
+	if ($postupload{'package'}) {
+	    my ($result) = run $postupload{'package'}, 
+                               [$package, $all_packages{$package}];
+	    if (! $result) {
+		fatal "Post-upload \'$postupload{'package'}\' " . 
+		    "failed for $package $all_packages{$package}\n  ";
+	    }
+	}
+    }
+}
 
 @skipped and w("skipped: @skipped\n");
 
 exit 0;
 
 ### SUBS
+
+###
+sub announce_if_necessary ($) {
+    my ($job) = @_[0];
+    my ($opt_fullname) = " -F '($fullname)'";
+    my ($msg);
+    if ($announce{$job} and (! $nomail)) {
+	if ($config::no_parentheses_to_fullname) {
+	       $opt_fullname = " -F '$fullname'";
+	}
+	$fullname =~ s/\'/''/;
+	my $sendmail_cmd = "|$sendmail -f $visibleuser"
+	    . ($visiblename  ? "\@$visiblename" : "") 
+		. ($fullname  ? $opt_fullname : "")
+		    . " $announce{$job}";
+	$msg = "announcing to $announce{$job}";
+	if ($cc) {
+	    $sendmail_cmd .= " " . $cc;
+	    $msg .= " and $cc";
+	}
+	p $msg . "\n";
+	if ((!$dry) or ($mailonly)) {
+	    open(M, $sendmail_cmd) or fatal("Can't pipe to $sendmail $!\n");
+	} else {
+	    p "\n+ announce to $announce{$job} using command ``$sendmail_cmd''\n";
+	    open(M, ">&STDOUT");
+	}
+	
+	print M <<xxx;
+X-dupload: $version
+To: $announce{$job}
+xxx
+        $cc and print M <<xxx;
+Cc: $cc
+xxx
+        $noarchive and print M <<xxx;
+X-No-Archive: yes
+xxx
+                
+	print M <<xxx;
+Subject: Uploaded $package{$job} $version{$job} ($arch{$job}) to $host
+
+xxx
+        foreach (@{$extra{$job}}) {
+	    my $line;
+	    open (A, "<$_") 
+		or w("Can't open extra announce $_: $!\n"), next;
+	    p " ($_";
+	    while ($line = <A>) { print M  $line; }
+	    close(A);
+	    p(" ok)");
+	}
+	
+	open(C, "<$changes{$job}") 
+	    or fatal("Can't open $changes{$job} $!\n");
+	while (<C>) { print M; }
+	close(C);
+	
+	close(M);
+	if ($?) { p ", failed"; }
+	else { p ", ok"; }
+	
+	if (!$dry) {
+	    open(L, ">>$log{$job}") 
+		or w("can't open logfile $log{$job}: $!\n");
+	    print L "a $changes{$job} $announce{$job} " . localtime() . "\n";
+	    close(L);
+	} else {
+	    p "\n+ log announcement\n";
+	}
+    }
+}
+
 ### open the connection
 sub ftp_open($$$) {
 	my ($remote, $user, $pass) = @_;
 	my ($ftp_port, $retry_call, $attempts) = (21, 1, 1);
+	my ($request_passive) = 0;
+	
+	if (($user =~ /@/) or ($passive)) {
+	    $request_passive = 1;
+	    p "+ FTP passive mode selected\n";
+	}
+	
+	# It may seems complicated, but it is to be sure that the
+	# environment variable FTP_PASSIVE works (which needs no
+        # Passive argument).
+	if ($request_passive) {
+	    $server = Net::FTP->new ("$fqdn", Passive => $request_passive);
+	}
+	else {
+	    $server = Net::FTP->new ("$fqdn");
+	}
+	if (! $server) {
+	    fatal ($@);
+	}
+	$server->debug($debug);
 
-	$ftp::use_pasv = $user =~ /@/;
-
-	&ftp::open($remote, $ftp_port, $retry_call, $attempts) == 1
-		or fatal("Can't open ftp connection\n");
-	$_ = &ftp::login($user, $pass)
-		or fatal("Login as $user failed\n");
-	&ftp::type('I')
+	$_ = $server->login($user, $pass)
+		or die("Login as $user failed\n");
+	$server->type('I')
 		or fatal("Can't set binary type\n");
 }
 
@@ -471,14 +767,17 @@ sub info($) {
 	foreach ($host || keys %config::cfg) {
 		my $r = $config::cfg{$_};
 		print <<xxx;
-nick name: $_
-real name: $r->{fqdn}
-login    : $r->{login}
-incoming : $r->{incoming}
-queuedir : $r->{queuedir}
-mail to  : $r->{mailto}
-mail to x: $r->{mailtx}
-cc       : $r->{cc}
+nick name     : $_
+real name     : $r->{fqdn}
+login         : $r->{login}
+incoming      : $r->{incoming}
+queuedir      : $r->{queuedir}
+mail to       : $r->{mailto}
+mail to x     : $r->{mailtx}
+cc            : $r->{cc}
+passive FTP   : $r->{passive}
+dinstall runs : $r->{dinstall_runs}
+archive mail  : $r->{archive}
 
 xxx
 	}
@@ -496,16 +795,10 @@ sub configure(@) {
 	@read or fatal("No configuration files\n");
 }
 
-### Die
-sub fatal(@) {
-	w();
-	croak("$progname: @_");
-}
-
 ### password
 sub getpass() {
 	system "stty -echo cbreak </dev/tty"; $? and fatal("stty");
-	print "\aPassword for ${login}'s ftp account on $fqdn: ";
+	print "\a${login}\@${fqdn}'s ftp account password: ";
 	chomp($_ = <STDIN>);
 	print "\n";
 	system "stty echo -cbreak </dev/tty"; $? and fatal("stty");
@@ -516,23 +809,53 @@ sub getpass() {
 # output
 # p() prints to STDOUT if !$quiet
 # w()          ....             ,
-#     but to STDERR if !quiet
+#     but to STDERR if $quiet
+# fatal() dies
 											{
 my $nl;
-sub p(@) {
+sub p(@) { 
+        return if $quiet;
 	$nl = $_[$#_] =~ /\n$/;
-	print STDOUT @_ if !$quiet;
+	print STDOUT @_;
 }
 
 sub w(@) {
-	if ($quiet) { print STDERR "warning: ", @_; }
-	else { 
-		unshift @_, "warning: ";
-		unshift @_, "\n" if !$nl;
-		print STDOUT @_;
-	}
+    if ($quiet) { print STDERR "$progname warning: ", @_; }
+    else {
 	$nl = $_[$#_] =~ /\n$/;
+	unshift @_, "$progname warning: "; 
+	unshift @_, "\n" if !$nl;
+	print STDOUT @_;
+    }
 }
-											} 
+
+sub fatal(@) {
+    my ($pack,$file,$line);
+    ($pack,$file,$line) = caller();
+    (my $msg = "$progname fatal error: @_ at $file line $line\n") =~ tr/\0//d;
+    die $msg;
+}
+
+sub run ($$) {
+    my ($command, $args) = @_;
+    my (@args) = @{$args};
+    my ($result);
+    my ($i);
+    foreach $i (0..$#args) {
+	$args[$i] =~ s#/#\\/#g;
+	my ($mycode) = "\$command =~ s/\%" . ($i+1) . "/$args[$i]/g;";
+	# Substitute %1 by the first argument, etc
+        $result = eval ($mycode);
+	if (! defined ($result)) {
+	    fatal ("Cannot eval arguments substitution $mycode: $@");
+	}
+    }
+    system "$command";
+    $result = $CHILD_ERROR>>8;
+    return (! $result);
+}
+
+} 
+
 
 # ex:set ts=4 sw=4:

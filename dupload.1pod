@@ -23,7 +23,7 @@ Further processing is done chdir'ed into the directories of the
 changes files.
 
 The files listed in each changes file (with their md5 sums) are
-canditates to be uploaded. Now B<dupload> tests the md5 sum for each
+candidates to be uploaded. Now B<dupload> tests the md5 sum for each
 file in turn. A md5 sum mismatch is considered as fatal. If gone so
 far, B<dupload> checks the F<.upload> file with the basename of the
 F<.changes> file. If the file to be uploaded is found as already
@@ -32,9 +32,23 @@ building the joblist, B<dupload> tries to connect the ftp server and
 upload. Just after each file uploaded and possibly renamed, an entry in
 the logfile is written. If all files of a package are processed, the
 Z<>.changes file is mailed to the announcement address.  If files with
-Z<> F<package>.announce, F<package_upstream>.announce, or
-Z<> F<package_upstream-debian>.announce exist, these files get
-prepended to the announcement.
+Z<> F<package>.announce, F<package_UPSTREAM>.announce, or
+Z<> F<package_UPSTREAM-DEBIAN>.announce exist, these files get
+prepended to the announcement. 
+
+UPSTREAM and DEBIAN are to be replaced with actual versions numbers.
+Example with the B<foobar> package, upstream version 3.14, Debian
+version 2:
+
+If you only want the announcement to be made with only ONE upload,
+you name it foobar_3.14-2.announce.
+
+If you want it to be made with every upload of a particular upstream
+version, name it foobar_3.14.announce.
+
+If you want it made with B<every> upload of a given package, name it
+foobar.announce.
+
 
 B<Please note:>
 Some mail readers (as elm w/ pgp extensions) doesn't show mail contents
@@ -45,6 +59,8 @@ outside of the signed part of a message.
 If no login is supplied in the configuration file,
 E<quot>anonymousE<quot> is used.  The password is derived from your
 login name and your hostname, usual for anonymous ftp logins.
+For anonymous logins only, you can provide the "password" in
+the configuration file.
 
 For logins other than E<quot>anonymousE<quot>, you're asked for 
 the password.  For security reasons there's no way to supply it via
@@ -55,7 +71,12 @@ the commandline or the environment.
 The default transfer method is FTP.  As alternate method SCP/SSH is
 supported.  For SCP/SSH the default login is taken from your 
 local user name.  The SCP/SSH method only works, if no password
-is required (see B<ssh>(1)).
+is required (see B<ssh>(1)). For security reasons (FTP transmits the
+password in clear), it is recommended to use SCP (yes, I know it is 
+non-free.) 
+
+When you use SCP, it is recommended to set the "method" keyword to
+"scpb", which will transfer all files in a batch.
 
 =head1 OPTIONS
 
@@ -63,7 +84,7 @@ is required (see B<ssh>(1)).
 
 =item B<-d> B<--debug> [I<level>]
 
-Switch on more verbose output from the ftp and chat modules.
+Switch on more verbose output from the ftp module.
 
 =item B<-f> B<--force>
 
@@ -73,7 +94,7 @@ Upload, regardless of the already logged transfers.
 
 Keep going, skip broken (due to md5sum mismatches) packages.
 
-=item B<-n> B<--no>
+=item B<--no> 
 
 Dry run, no files are changed, no upload is attempted, only tell
 what we would do.
@@ -83,16 +104,33 @@ what we would do.
 Supress announcement for this run.  You can send it later by just
 calling dupload again w/o this option.
 
+=item B<--mailonly>
+
+Sets dry mode, as if B<--no> has been specified and sends the announcement 
+inconditionally. It does not upload. Useful,for example, after a manual
+upload for whatever reason.
+
+=item B<--noarchive>
+
+Adds a "X-No-Archive: yes" header so the announcement will not be 
+archived. You can use the per-host "archive" option in the configuration
+file.
+
 =item B<-p> B<--print>
 
 Print the E<quot>databaseE<quot> as read from the config files
 and exit.  If a host is specified via option B<--to>, only this
 hosts entry is displayed.
 
-=item B<-t> B<--to> I<nickname> B<required>
+=item B<-q> B<--quiet>
+
+Be quiet. Do not spit so many messages.
+
+=item B<-t> B<--to> I<nickname> B<optional>
 
 Upload to I<nickname>'d host.  I<nickname> is the key for doing lookups
-in the config file.
+in the config file. You can use the "default_host" configuration variable
+to specify a host without B<--to>.
 
 =item B<-V> B<--Version>
 
@@ -121,15 +159,16 @@ I<package_upstream-debian.announce>.
 
 =head2 Announcement-Policy
 
-According to the policy manual announcements are sent as follows:
+According to the Debian Developer's Reference, announcements are sent 
+as follows:
 
 =over 8
 
-=item stable, non-free, contrib
+=item stable
 
 debian-changes@lists.debian.org
 
-=item unstable, experimental
+=item unstable, experimental, frozen
 
 debian-devel-changes@lists.debian.org
 
@@ -150,6 +189,10 @@ A.Macpherson@bnr.co.uk for multi-homed hosts. lchat.pl is (according to
 the lchat module) by Randal L. Schwartz et al.  I've taken these two
 modules from the mirror package.
 
+Starting with B<dupload> 2.0, B<dupload> no longer uses its own
+FTP module but rely on the standard Perl module, Net::FTP, in
+libnet.
+
 =head1 AUTHOR/COPYRIGHT
 
 Copyright 1996 Heiko Schlittermann.  B<dupload> is free
@@ -161,5 +204,5 @@ Heiko Schlittermann <heiko@lotte.sax.de>
 
 =head1 SEE ALSO
 
-B<dupload>(5)
+B<dupload.conf>(5)
 

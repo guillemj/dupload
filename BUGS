@@ -1,0 +1,61 @@
+Bugs in Hooks in dupload 2.3 :
+
+Global hooks:
+
+$preupload{'deb'}        Tested, works
+$preupload{'changes'}  Tested, works
+$preupload{'sourcepackage'}  Tested, works
+$preupload{'package'} Tested, works
+$preupload{'file'}   Tested, works
+
+$postupload{'deb'}        Tested, works
+$postupload{'changes'}   Tested, failed
+$postupload{'sourcepackage'}  Tested, works
+$postupload{'package'} Tested, works
+$postupload{'file'}   Tested, works
+
+Per-host hooks
+
+$cfg{test}{preupload}{'deb'} Tested, ignored
+$cfg{test}{preupload}{'changes'} Tested, works
+$cfg{test}{preupload}{'sourcepackage'} Tested, ignored
+$cfg{test}{preupload}{'package'} Tested, ignored
+$cfg{test}{preupload}{'file'} Tested, ignored
+
+$cfg{test}{postupload}{'deb'} Tested, ignored
+$cfg{test}{postupload}{'changes'} Tested, ignored
+$cfg{test}{postupload}{'sourcepackage'} Tested, ignored
+$cfg{test}{postupload}{'package'} Tested, ignored
+$cfg{test}{postupload}{'file'} Tested, ignored
+
+In dupload 2.4, with Joey Hess' patch :
+
+$preupload{'deb'}        Tested, works
+$preupload{'changes'}  Tested, works
+$preupload{'sourcepackage'}  Tested, works
+$preupload{'package'} Tested, works
+$preupload{'file'}   Tested, works
+
+$postupload{'deb'}        Tested, works
+$postupload{'changes'}   Tested, works
+$postupload{'sourcepackage'}  Tested, works
+$postupload{'package'} Tested, works
+$postupload{'file'}   Tested, works
+
+$cfg{test}{preupload}{'deb'} Tested, ignored
+$cfg{test}{preupload}{'changes'} Tested, works
+$cfg{test}{preupload}{'sourcepackage'} Tested, ignored
+$cfg{test}{preupload}{'package'} Tested, ignored
+$cfg{test}{preupload}{'file'} Tested, ignored
+
+$cfg{test}{postupload}{'deb'} Tested, ignored
+$cfg{test}{postupload}{'changes'} Tested, works
+$cfg{test}{postupload}{'sourcepackage'} Tested, work
+$cfg{test}{postupload}{'package'} Tested, ignored
+$cfg{test}{postupload}{'file'} Tested, ignored
+
+In dupload 2.4-FINAL:
+
+Everything works
+
+

@@ -1,0 +1,4 @@
+I hope to enhance the hook system to run Perl code as well as
+shell commands and to rewrite several dupload features, such as
+announcements, as hooks.
+

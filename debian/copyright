@@ -1,15 +1,17 @@
 This is dupload, utility to upload debian packages, made and
-maintained by Heiko Schlittermann <heiko@lotte.sax.de>.
+formerly maintained by Heiko Schlittermann <heiko@lotte.sax.de>.
+The maintainer is presently Stephane Bortzmeyer <bortzmeyer@debian.org>.
 
 The latest source can always be found at
-ftp://ftp.debian.org/debian/dists/unstable/main/source/utils/ .
+ftp://ftp.debian.org/debian/dists/unstable/main/source/devel/ .
 
-Copyright 1996, 1997 Heiko Schlittermann.  dupload is free
-software;  see the GNU General Public Licence version 2 or
-later for copying conditions. There is no warranty.
+Copyright 1996, 1997 Heiko Schlittermann.  
+Starting from 2.0, copyright © 1999 Stephane Bortzmeyer.
+dupload is free software;  see the GNU General Public Licence 
+version 2 or later for copying conditions. There is no warranty.
 
 On Debian GNU/Linux systems, the complete text of the GNU General
-Public License can be found in /usr/doc/copyright/GPL.
+Public License can be found in /usr/share/common-licenses/GPL.
 
 I've taken these two modules from the mirror package:
 - dupload-ftp.pl is (according to a notice in the first lines of
@@ -18,3 +20,8 @@ I've taken these two modules from the mirror package:
   A.Macpherson@bnr.co.uk for multi-homed hosts.
 - lchat.pl is (according to the lchat module) by Randal L. Schwartz
   et al.  
+
+They are no longer used by dupload (since version 2.0) and so their
+copyright no longer matters. On the other hand, dupload now depends
+(but does not include) libnet-perl. See its copyright in 
+/usr/doc/libnet-perl/copyright.

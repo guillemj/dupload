@@ -1,0 +1,215 @@
+=head1 NAME
+
+dupload.conf - Configuration file for dupload
+
+=head1 DESCRIPTION
+
+The configuration file is rather straight forward perl code as it's
+included by the B<dupload> script via C<do $config>.  I<The config file
+is read as perl code!>
+
+It must begins with C<package config;> because C<config> is the namespace
+expected by B<dupload>.
+
+It contains associative arrays, each indexed by the nickname (see B<--to>
+option of B<dupload>), for the following items: 
+
+For examples of the configuration please refer to the global configuration file
+F</etc/dupload.conf>.
+
+=over 4
+
+=item B<fqdn> [required]
+
+FQDN of the nickname, the name we try to ftp to;
+
+=item B<method> [optional]
+
+The transfer method, "ftp" is default.  Alternativly you can use
+E<quot>scpE<quot> or E<quot>scpbE<quot>.
+For B<scp> no password is required. However, you have to setup the remote
+and local host to establish a scp/ssh/slogin connection only using
+F<.shosts/.rhosts> or the files in F<~/.ssh/>. 
+If you don't want or cannot do that,
+you may find the B<scpb> more convenient since it uploads in batch, limiting
+the number of questions.
+
+
+=item B<login> [optional]
+
+The account name to log into the ftp server, default is 
+E<quot>anonymousE<quot>, should work with fire wall logins too;
+
+=item B<incoming> [required]
+
+incoming directory, the directory we try to upload to;
+
+=item B<queuedir> [optional]
+
+the directory we move the uploaded files to (after successful upload to
+I<incoming>;
+
+=item B<mailto> [optional]
+
+where to send the announcement about stable/unstable packages;
+
+=item B<mailtx> [optional]
+
+where to send the announcement about experimental packages;
+
+=item B<cc> [optional]
+
+carbon copy address for the announcement;
+
+=item B<fullname> [optional]
+
+your fullname that should appear in the announcement;
+(If you leave this empty as well as the B<visibledomain> it
+depends on you MTA ... usually the MTA should choose the
+fullname from the GCOS field in F</etc/passwd>.)
+ 
+
+=item B<visibleuser> [optional]
+
+your username that should appear in the announcement, defaults to
+C<getlogin()>;
+
+=item B<visiblename> [optional]
+
+the domainname that appears as the part right of the B<@> in the I<from>-part
+of the announcement, defaults to the value your local MTA likes;
+
+=item B<passive> [optional]
+
+uses the passive mode for FTP transfers. Since B<dupload> uses Net::FTP,
+you can also use the environment variable FTP_PASSIVE.
+
+=item B<dinstall_runs> [optional]
+
+if set, tells B<dupload> that the remote host runs dinstall (or equivalent)
+so that B<dupload>, when it recognizes a changelog format >= 1.6, do not
+send announcement mail.
+
+=item B<archive> [optional]
+
+if set to false (0), adds a "X-No-Archive: yes" header in the announcement.
+The default is true (1).
+
+=back
+
+The configuration files also contain global (to every host) variables:
+
+=over 4
+
+=item B<default_host> [optional]
+
+a string which is the default host to upload to.
+
+=item B<no_parentheses_to_fullname> [optional]
+
+if set to true (1), prevents B<dupload> to add parentheses around the 
+full name when making mail announcements. 
+
+=back
+
+=head1 HOOKS
+
+Hooks are a powerful way to add actions which will be run before or
+after a dupload (like the preinst and postinst script of B<dpkg>).
+
+You have two sort of hooks: pre-upload and post-upload. Both are simple
+shell commands (executed by C<sh -c> so you can use any shell tricks).
+Pre-uploads are
+always run (even in dry mode) and stop B<dupload> if they fail
+(failure being mesured by the hook's exit status). Post-uploads
+are only run when you are not in dry mode and only if the uploading succeeded.
+
+Both sorts of hooks are run for a given category: changes, sourcepackage, 
+package, file or deb. 
+
+=over 4
+
+=item changes
+
+This hook is run once per "changes" file (given as an argument to B<dupload>)
+with the filename as its parameter.
+
+=item sourcepackage
+
+This hook is run once per "changes" file 
+with the source package name and its version as its two parameters.
+
+=item package
+
+This hook is run once per binary package (a "deb" file) with
+the package name and its version as its two parameters.
+
+=item file
+
+This hook is run once per uploaded file, with the file name as its parameter.
+
+=item deb
+
+This hook is run once per binary package (a "deb" file) with
+the filename as its parameter.
+
+=back
+
+=head2 Syntax
+
+Hooks are defined in two Perl hashes, C<%preupload> and C<%postupload>, each indexed
+by category. In addition to the global hashes, each host entry has two fields
+with the same names, for the host-specific hooks.
+
+The shell command will be substituted first: %1 will be replace by the first
+argument, etc.
+
+=head2 Per-host or global hooks
+
+A hook can be global (for all the hosts) or it can be for a specific host.
+If there is no specific hook, for a given category, the global one is used.
+
+=head2 Examples
+
+This one runs B<lintian> before uploading. It is global and guarantee
+that you will always upload lintian-free packages (thanks to B<lintian>
+return status).
+
+     $preupload{'deb'} = 'lintian -v -i %1';
+
+This one just display the name and versions of successfully uploaded packages.
+
+     $postupload{'package'} = 'echo PACKAGE %1 %2 uploaded';
+
+Unlike the two others, this one is specific to one host, master.
+
+     $cfg{master}{preupload}{'changes'} = "echo Uploading %1";
+
+
+=head1 LOCATION
+
+The configuration is searched as following:
+
+	/etc/dupload.conf
+	~/.dupload.conf
+	./dupload.conf
+
+The latest entries override the former.
+
+=head1 ENVIRONMENT VARIABLES
+
+Those of Net::FTP for the FTP method:
+
+ FTP_FIREWALL
+ FTP_PASSIVE
+
+=head1 AUTHOR
+
+Heiko Schlittermann <heiko@lotte.sax.de>
+ 
+Stephane Bortzmeyer <bortzmeyer@debian.org>
+
+
+
+
+

@@ -1,3 +1,132 @@
+dupload (2.4.0.9) frozen; urgency=low
+
+  * Non-maintainer upload.
+  * Uploaded to frozen only, with the one new feature that 2.4.1 added
+    removed, so it can pass the release managers scrutiny.
+  * Lintian clean.
+    * Ported to debhelper.
+    * FHS 2.1 compliant
+    * Upgraded standards version.
+  * Fixed typo in warning message.
+  * Don't upload files that have already been uploaded when processing
+    multiple .changes.
+  * Don't log a successful upload for scpb until the upload has
+    finished.
+  * When cc'ing, display the address that the email is cc'd to.
+  * Only wishlist bugs now remain on dupload.  :)
+
+ -- Adam Heath <doogie@debian.org>  Fri, 28 Jan 2000 06:22:31 -0600
+
+dupload (2.4) unstable; urgency=low
+
+  * Patch (both from Joey Hess <joey@kitenet.net> and myself) to fix hooks.
+    Hooks are now seriously tested. Closes: #43644 
+  * $dinstall_runs is now set for every host which transfers to master.
+    Closes #43722.
+  * The fact that the "scpb" method is the recommened one is now clear
+    in dupload(1). Closes #42342.
+	
+ -- Stephane Bortzmeyer <bortzmeyer@debian.org>  Mon, 30 Aug 1999 12:46:56 +0200
+
+dupload (2.3) unstable; urgency=low
+
+  * --help option. Closes #39901
+  * An entry for non-us. Closes #39707
+  * Complies with the new Perl policy. Closes #40563
+
+ -- Stephane Bortzmeyer <bortzmeyer@debian.org>  Wed,  7 Jul 1999 14:17:15 +0200
+
+dupload (2.2) unstable; urgency=low
+
+  * A completely new system to run pre and post-upload scripts: hooks.
+    Now, you can run any shell command before uploading (uploading will
+    be cancelled if they fail) and after successful uploading.
+    See dupload.conf(5). Closes #34883 and, I hope, almost all the future
+    wishlists "Can you add such and such in dupload" :-)
+  * Small improvment to the automatic changelog detection code. Closes 
+    #39072
+  * Several cleanings of the source code and dependencies, thanks to 
+    Julian Gilbey <J.D.Gilbey@qmw.ac.uk> 
+  * New upload queue samosa.debian.org. Closes #38838
+
+ -- Stephane Bortzmeyer <bortzmeyer@debian.org>  Thu,  3 Jun 1999 11:26:03 +0200
+
+dupload (2.1) unstable; urgency=low
+
+  * Recognizes the new (1.6) changelog format and, if used and if the
+    per-host variable dinstall_runs is set, do not send mail uselessly.
+    Patch by Brian Almeida <bma@debian.org>. Closes #35308
+  * Implements --quiet. Patch by Julian Gilbey <J.D.Gilbey@qmw.ac.uk>
+  * Adds a new line to the .upload file to record successful uploading. 
+    Patch by Julian Gilbey <J.D.Gilbey@qmw.ac.uk>. Closes #34209
+  * New global configuration variable default_host. --to is no longer
+    mandatory. Closes #34208 and probably #31684 by a side-effect.
+  * New option --mailonly for unconditionnal announcements. Closes
+    #31616
+  * Allows a new global configuration variable to suppress
+    parentheses around full names. Closes #16685
+  * ssh no longer requires X forwarding. Closes #38061
+  * dupload(5) -> dupload.conf(5) and updated. Closes #35643
+  * Fatal error handling rewritten: util.pm suppressed but it is not
+    a complete return to pre-2.0: fatal() now uses caller() instead
+    of croaking (patch by Julian Gilbey <J.D.Gilbey@qmw.ac.uk>).
+    Closes #35626 and #35625 by a side-effect.
+  * Properly documents the extra 'announce' files. Closes #26685
+  * Japanese upload queue added. Closes #37803
+  * Mode-optimization for ssh (do not remote-chmod if the mode is already
+    correct) now works also for the 'scpb' method. Allows to close #13243,
+    longest dupload bug ever, 604 days old.
+  * Announcements are sent according to the Debian Developer's Reference and
+    documented as such (there is nothing in the Policy Manual about 
+    announcements). Closes #37521
+  * New way to set the passive mode. Should close #36087
+  * Copyright updated (again, pre-2.0 souvenirs). Closes #35603
+  * Moved to subsection 'devel'. Closes #35602
+  * Various typos fixed, as well as errors in the documentation
+    (mostly pre-2.0 souvenirs).	Closes #35518
+
+ -- Stephane Bortzmeyer <bortzmeyer@debian.org>  Thu, 20 May 1999 09:23:58 +0200
+
+dupload (2.0) unstable; urgency=low
+
+  * New dependencies: recommends a mail-transport-agent (the 
+    announcement is really important) and suggests lintian
+    (see #34883).
+  * When using SSH, do not chmod on the remote host if the local mode
+    is already 0644. Half-closes #13243.
+  * Patch from Chris Waters <xtifr@dsp.net> to prevent emacs from
+    showing password. Closes #34248.
+  * scpb method documented.
+  * --nomail now works according to the documentation (running
+    dupload again sends the announce). Closes #31616, #32977.
+  * New configuration file options, "archive" (the announcement)
+    and "passive" (for FTP).
+  * Do not ask for password when doing a dry run. Closes #31597
+  * Routines that croak() are now in a separate package, to avoid
+    displaying the stack, with its passwords. Thanks to 
+    Guy Decoux <decoux@moulon.inra.fr>. Closes #10003
+  * New dupload.conf. Closes #34943
+  * Now uses Net::FTP module instead of a custom FTP module. And
+    depends on libnet-perl. Uses better error messages. Closes 
+    #28283, #7541, #33437
+
+ -- Stephane Bortzmeyer <bortzmeyer@debian.org>  Thu, 25 Mar 1999 15:47:39 +0100
+d
+dupload (1.17) unstable; urgency=low
+
+  * Ability to add a "X-No-Archive: yes" header. Closes #33896
+  * Now does correct computations on kilobytes. Closes #31955
+  * Default method for master is now scp/ssh. Closes #16241
+  * New (undocumented) method "scpb" by Guy Maor <maor@ece.utexas.edu>.
+    Closes #13383
+  * Do not display all parameters (including password) when failing to log
+    in. Closes #31216
+  * Cc: now works. Closes #19034
+  * Accept quotes in full names. Closes #13120
+  * New maintainer.
+
+ -- Stephane Bortzmeyer <bortzmeyer@debian.org>  Sat, 27 Feb 1999 21:44:13 +0100
+
 dupload (1.16.4) frozen unstable; urgency=low
 
   * Non-maintainer upload

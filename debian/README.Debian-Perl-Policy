@@ -1,0 +1,3 @@
+The dependency on perl|perl5 is a temporary workaround for
+the new (july 1999) Perl policy. dupload will depend on perl5 only
+when no one no longer uses 'slink'.

@@ -16,63 +16,56 @@
 package=dupload
 
 r=debian/tmp
+
 deb=$(r)/DEBIAN
-doc=$(r)/usr/doc/$(package)
-man=$(r)/usr/man
-exm=$(r)/usr/doc/examples/$(package)
+prefix=$(r)/usr
+doc=$(prefix)/share/doc/$(package)
+man=$(prefix)/share/man
+exm=$(doc)/examples
 
 build:  # debian/changelog
-	$(checkdir)
+	dh_testdir
 	$(MAKE) prefix=/usr
-	touch build
+	touch $@
 
 clean:
-	$(checkdir)
+	dh_testdir
 	$(MAKE) clean
-	-rm -f build
-	-rm -rf *~ debian/tmp debian/*~ debian/files*
+	rm -f build
+	dh_clean
 
-binary-indep:	checkroot build 
-	$(checkdir)
-	-rm -rf debian/tmp
+binary-indep:	build
+	dh_testdir
+	dh_testroot
+	dh_clean -k
+
 	# Debian control area
-	install -d $(deb)
-	install -m644 debian/conffiles $(deb)
+	dh_installdirs -pdupload etc
+
 	# Binary
-	$(MAKE) prefix=$(r)/usr install
+	$(MAKE) prefix=$(prefix) mandir=$(prefix)/share/man install
 	# Config file
-	install -d $(r)/etc
 	install -m644 dupload.conf $(r)/etc
-	cd $(man) && gzip -v9 */*
+
+	# Link for the old name of dupload.conf.5
+	dh_link -pdupload usr/share/man/man5/dupload.conf.5.gz usr/share/man/man5/dupload.5.gz
 	# Docs
-	install -d $(doc)
-	install -m644 debian/changelog $(doc)
-	cd $(doc) && gzip -v9 changelog* 
-	install -m644 debian/copyright $(doc)
-	dpkg-gencontrol
-	chown -R root.root $(r)
-	chmod -R u=rwX,go=rX $(r)
-	dpkg --build $(r) ..
-
-define checkdir
-	test -f dupload.pl -a -f debian/rules
-endef
-
-# Below here is fairly generic really
-
-#debian/changelog:	debian/changelog.in
-#	sed -e "s/=D=/`822-date`/" <$< >$@,$$$$ \
-#	&& { mv -f $@,$$$$ $@ } ;\
-#	rm -f $@,$$$$ }
-#	chmod a-w $@
+	dh_installchangelogs -i
+	dh_installdocs -i
+	dh_installdeb -i
+	dh_compress -i
+	dh_fixperms -i
+	dh_gencontrol -i
+	dh_builddeb -i
 
 binary:		binary-indep binary-arch
 
-source diff:
-	@echo >&2 'source and diff are obsolete - use dpkg-source -b'; false
-
-checkroot:
-	$(checkdir)
-	test root = "`whoami`"
-
 .PHONY: binary binary-arch binary-indep clean checkroot
+
+
+
+
+## Local Variables: ##
+## mode:makefile ##
+## End: ##
+
