@@ -1,6 +1,6 @@
 =head1 NAME
 
-dupload - utility to upload debian packages
+dupload - utility to upload Debian packages
 
 =head1 SYNOPSIS
 
@@ -8,37 +8,35 @@ B<dupload> [I<options>] [I<changes_file> | I<dir>] ...
 
 =head1 DESCRIPTION
 
-B<dupload> is written for Debian maintainers. It should make uploads
-to the common maintainer sites (B<chiark> for Europe, B<master> for
-North America) somewhat easier. At least for chiark the upload procedure
-is somewhat error prone (upload to Incoming/, move it to queue/ ...).
+B<dupload> is a tool that enables Debian developers to easily upload their
+packages to the Debian archive. At least for chiark the upload procedure
+is somewhat error prone (upload to Incoming/, move it to queue/).
 
-B<dupload> processes the non-option arguments as follows: If the
-argument isn't readable, its fatal (but see the --keep option). If it's
-readable and is a file, consider it as a F<.changes> (warn if not ending
-in .changes) file, if it's readable and is a directory, try to find a
-Z<>F<.changes> file in this directory.
+B<dupload> checks each non-option argument to find readable files or
+directories. It parses the files as F<.changes> files, or tries to find
+such files in the given directories.
 
-Further processing is done chdir'ed into the directories of the 
-changes files.
+B<dupload> will warn if the name of the file doesn't end with
+E<quot>.changesE<quot>. Further processing is done chdir'ed into the
+directories of the changes files.
 
-The files listed in each changes file (with their md5 sums) are
-candidates to be uploaded. Now B<dupload> tests the md5 sum for each
-file in turn. A md5 sum mismatch is considered as fatal. If gone so
-far, B<dupload> checks the F<.upload> file with the basename of the
-F<.changes> file. If the file to be uploaded is found as already
-uploaded to the host specified, it gets removed from the joblist. After
-building the joblist, B<dupload> tries to connect the ftp server and
-upload. Just after each file uploaded and possibly renamed, an entry in
-the logfile is written. If all files of a package are processed, the
-Z<>.changes file is mailed to the announcement address.  If files with
-Z<> F<package>.announce, F<package_UPSTREAM>.announce, or
-Z<> F<package_UPSTREAM-DEBIAN>.announce exist, these files get
-prepended to the announcement. 
+B<dupload> tests the MD5 sum for each file listed in the F<.changes> file,
+and fails if it finds a mismatch. If all this goes well, B<dupload> checks
+if there is an F<.upload> file with the basename of the F<.changes> file.
+If the file to be uploaded is recorded to have already been uploaded to the
+specified host, it is skipped.
 
-UPSTREAM and DEBIAN are to be replaced with actual versions numbers.
-Example with the B<foobar> package, upstream version 3.14, Debian
-version 2:
+After the list of files to upload is finished, B<dupload> tries to connect
+to the server and upload. Each successfully uploaded file is recorded in the
+F<.upload> log file.
+
+If all files of a package are processed, the .changes file is mailed to the
+announcement address specified in the configuration file.  If files with
+Z<> F<package>.announce, F<package_UPSTREAMVER>.announce, or
+Z<> F<package_UPSTREAMVER-DEBIANREV>.announce exist, these files get
+prepended to the announcement. UPSTREAMVER and DEBIANREV are to be replaced
+with actual version numbers. For example, if your package is called
+B<foobar>, has upstream version 3.14, and Debian revision 2:
 
 If you only want the announcement to be made with only ONE upload,
 you name it foobar_3.14-2.announce.
@@ -51,14 +49,14 @@ foobar.announce.
 
 
 B<Please note:>
-Some mail readers (as elm w/ pgp extensions) doesn't show mail contents
+Some mail readers (like elm w/ PGP extensions) don't show mail contents
 outside of the signed part of a message.
 
-=head2 Login and Password
+=head2 Login and password
 
-If no login is supplied in the configuration file,
+If no login (username) is defined in the configuration file,
 E<quot>anonymousE<quot> is used.  The password is derived from your
-login name and your hostname, usual for anonymous ftp logins.
+login name and your hostname, which is common for anonymous FTP logins.
 For anonymous logins only, you can provide the "password" in
 the configuration file.
 
@@ -66,17 +64,20 @@ For logins other than E<quot>anonymousE<quot>, you're asked for
 the password.  For security reasons there's no way to supply it via
 the commandline or the environment.
 
-=head2 SCP / FTP
+=head2 FTP / scp / rsync
 
-The default transfer method is FTP.  As alternate method SCP/SSH is
-supported.  For SCP/SSH the default login is taken from your 
-local user name.  The SCP/SSH method only works, if no password
-is required (see B<ssh>(1)). For security reasons (FTP transmits the
-password in clear), it is recommended to use SCP (yes, I know it is 
-non-free.) 
+The default transfer method is FTP.  Alternative methods are scp/SSH
+and rsync/SSH.  For scp and rsync, the default login is taken
+from your local user name.
 
-When you use SCP, it is recommended to set the "method" keyword to
+The scp/SSH method only works properly if no password is required
+(see B<ssh>(1)).
+When you use scp, it is recommended to set the "method" keyword to
 "scpb", which will transfer all files in a batch.
+
+If you are using an upload queue, use FTP because it's fast.
+If you are using an authenticated host, B<always> use scp or rsync
+via SSH, because FTP transmits the password in clear text.
 
 =head1 OPTIONS
 
@@ -84,15 +85,21 @@ When you use SCP, it is recommended to set the "method" keyword to
 
 =item B<-d> B<--debug> [I<level>]
 
-Switch on more verbose output from the ftp module.
+Enable more verbose output from the FTP module.
 
 =item B<-f> B<--force>
 
-Upload, regardless of the already logged transfers.
+Upload regardless of the transfers logged as already completed.
 
 =item B<-k> B<--keep>
 
-Keep going, skip broken (due to md5sum mismatches) packages.
+Keep going, skipping packages whose MD5sums don't match.
+
+=item B<-c> B<--configfile>
+
+Read the file ./dupload.conf (if it exists). B<Warning>: this is a
+security risk if you are in a directory where other people can write.
+That's why it is not the default (unlike the previous versions).
 
 =item B<--no> 
 
@@ -101,40 +108,40 @@ what we would do.
 
 =item B<--nomail>
 
-Supress announcement for this run.  You can send it later by just
-calling dupload again w/o this option.
+Supress announcement for this run. You can send it later by just
+calling dupload again w/o this option. Note that this option is by
+default implied for all hosts with the "dinstall_runs" option set to 1.
 
 =item B<--mailonly>
 
-Sets dry mode, as if B<--no> has been specified and sends the announcement 
-inconditionally. It does not upload. Useful,for example, after a manual
-upload for whatever reason.
+Acts as if B<--no> has been specified and but sends the announcements,
+unconditionally.
 
 =item B<--noarchive>
 
-Adds a "X-No-Archive: yes" header so the announcement will not be 
+Adds a "X-No-Archive: yes" header so that the announcement will not be
 archived. You can use the per-host "archive" option in the configuration
 file.
 
 =item B<-p> B<--print>
 
-Print the E<quot>databaseE<quot> as read from the config files
-and exit.  If a host is specified via option B<--to>, only this
-hosts entry is displayed.
+Print the E<quot>databaseE<quot> as read from the config files and exit.
+If a host is specified via option B<--to>, only this host's entry is
+displayed.
 
 =item B<-q> B<--quiet>
 
-Be quiet. Do not spit so many messages.
+Be quiet, i.e. supress normal output.
 
 =item B<-t> B<--to> I<nickname> B<optional>
 
 Upload to I<nickname>'d host.  I<nickname> is the key for doing lookups
-in the config file. You can use the "default_host" configuration variable
+in the config file. You can use the "default_host" configuration option
 to specify a host without B<--to>.
 
 =item B<-V> B<--Version>
 
-Print version and exit.
+Prints version and exits.
 
 =back
 
@@ -147,62 +154,34 @@ order, overriding each other):
 
 	/etc/dupload.conf
 	~/.dupload.conf
-	./dupload.conf
 
 =head2 Other
 
-The various Debian files as with the extensions .dsc, .changes, .deb,
-Z<>.orig.tar.gz, .diff.gz, the logfile of B<dupload>:
-I<package_version-debian>.upload, and a additional announcement files
-I<package.announce>, I<package_upstream.announce>, and
-I<package_upstream-debian.announce>.
+Various Debian package files are used by B<dupload>: .dsc, .changes, .deb,
+Z<>.orig.tar.gz, .diff.gz
 
-=head2 Announcement-Policy
+B<dupload> itself writes the log file I<package_version-debian>.upload,
+and the additional announcement files I<package.announce>,
+I<package_upstreamver.announce>, and I<package_upstreamver-debianrev.announce>.
 
-According to the Debian Developer's Reference, announcements are sent 
-as follows:
+=head2 Announcement addresses
 
-=over 8
-
-=item stable
-
-debian-changes@lists.debian.org
-
-=item unstable, experimental, frozen
-
-debian-devel-changes@lists.debian.org
-
-=back
+By default, the announcement addresses are unset because dinstall sends
+mails instead.
 
 =head1 BUGS
 
-B<dupload> is tested on B<Debian GNU/Linux> systems only.  But it
-shouldn't require too much effort to make it run under others systems
-too, it is perl.
-
-=head1 HISTORY/ORIGIN
-
-The dupload-ftp.pl is (according to a notice in the first lines
-of the module) mostly by Lee McLoughlin <lmjm@doc.ic.ac.uk> based
-on original version by Alan R. Martello <al@ee.pitt.edu> And by
-A.Macpherson@bnr.co.uk for multi-homed hosts. lchat.pl is (according to
-the lchat module) by Randal L. Schwartz et al.  I've taken these two
-modules from the mirror package.
-
-Starting with B<dupload> 2.0, B<dupload> no longer uses its own
-FTP module but rely on the standard Perl module, Net::FTP, in
-libnet.
+B<dupload> is tested on B<Debian> systems only. It shouldn't require too
+much effort to make it run under others systems, though, it's written in
+Perl.
 
 =head1 AUTHOR/COPYRIGHT
 
-Copyright 1996 Heiko Schlittermann.  B<dupload> is free
-software;  see the GNU General Public Licence version 2 or
+Copyright 1996 Heiko Schlittermann, 1999 Stephane Bortzmeyer
+
+B<dupload> is free software; see the GNU General Public Licence version 2 or
 later for copying conditions. There is B<no> warranty.
-
-
-Heiko Schlittermann <heiko@lotte.sax.de>
 
 =head1 SEE ALSO
 
 B<dupload.conf>(5)
-

@@ -1,21 +1,74 @@
-dupload (2.4.0.9) frozen; urgency=low
+dupload (2.5) unstable; urgency=high
+
+  * New maintainer, closes: #141847, #55691, #55752.
+  * Reduced priority of the mail stuff because it's no longer used by
+    default, closes: #109260. dupload will now just warn (or be quiet)
+    about the lack of /usr/sbin/sendmail.
+  * Remove the .upload file when a batch method fails, which really
+    closes: #44624.
+  * No longer displays the statistics if they weren't calculated,
+    closes: #57868.
+  * Fixed .changes file check to ignore regexps, closes: #69383.
+  * Check if the configuration file has any contents before trying to
+    load it, closes: #86120.
+  * Renamed Build-Depends into Build-Depends-Indep, closes: #92168.
+  * Replaced the note in the configuration file to explain the situation
+    with master.debian.org, closes: #112822. I'd rather not warn, because
+    if someone really wants to use it still they'll get spurious warnings.
+  * Removed giano from the configuration file, closes: #122777.
+  * Use the host FQDN instead of the host nickname in .upload files,
+    closes: #133286.
+  * Proofreading in the manual pages. Ugh!
+  * Removed a bunch of implied stuff from the default configuration file.
+    Removed mention of debian*-changes mailing lists because we no longer
+    want/allow dupload mails to them.
+    Added anonymous-ftp-master host definition.
+  * Polishing in the packaging.
+  * Removed fucked up makefile commands that overwrote my dupload with the
+    contents of dupload.pl for no actual practical purpose. Fuck.
+  * Removed checking of the Format: field in the changes file for >= 1.6,
+    since the fact dinstall's mails started somewhere at about the same time
+    is not really related. Simply respect the $dinstall_runs variable which
+    is set for all the default Debian hosts in the configuration file.
+
+ -- Josip Rodin <jrodin@jagor.srce.hr>  Wed, 10 Apr 2002 18:01:26 +0200
+
+dupload (2.4.3) frozen unstable; urgency=high
+
+  * No longer reads (by default) a configuration file in the current
+    directory. Although not formally reported as a bug, it is a serious
+    security hole.
+
+ -- Stephane Bortzmeyer <bortzmeyer@debian.org>  Fri, 13 Apr 2001 20:37:47 +0200
+
+dupload (2.4.2) frozen unstable; urgency=low
+
+  * New configuration file (ftp-master, anonymous non-US).
+    Closes: #63809, #64003, #92418, #78829
+  * Small documentation bug about ssh. Closes: #63660
+  * Build dependencies. Closes: #70279
+	
+ -- Stephane Bortzmeyer <bortzmeyer@debian.org>  Tue, 10 Apr 2001 20:47:05 +0200
+
+dupload (2.4.1) frozen unstable; urgency=low
 
   * Non-maintainer upload.
-  * Uploaded to frozen only, with the one new feature that 2.4.1 added
-    removed, so it can pass the release managers scrutiny.
   * Lintian clean.
     * Ported to debhelper.
     * FHS 2.1 compliant
     * Upgraded standards version.
-  * Fixed typo in warning message.
+  * Added support for rsync, modeled after scpb.  Patch from Adam Heath
+    <doogie@debian.org>
+  * Fixed typo in warning message.  Closes: #48812.
   * Don't upload files that have already been uploaded when processing
-    multiple .changes.
-  * Don't log a successful upload for scpb until the upload has
-    finished.
-  * When cc'ing, display the address that the email is cc'd to.
+    multiple .changes.  Closes: #53273.
+  * Don't log a successful upload for scpb/rsync until the upload has
+    finished.  Closes: #44624, #48577.
+  * When cc'ing, display the address that the email is cc'd to.  Closes:
+    #52840.
   * Only wishlist bugs now remain on dupload.  :)
 
- -- Adam Heath <doogie@debian.org>  Fri, 28 Jan 2000 06:22:31 -0600
+ -- Adam Heath <doogie@debian.org>  Wed, 19 Jan 2000 22:52:27 -0600
 
 dupload (2.4) unstable; urgency=low
 

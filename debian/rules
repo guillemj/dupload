@@ -1,29 +1,9 @@
 #!/usr/bin/make -f
-# Sample debian.rules file - for dupload
-# Copyright 1994,1995 by Ian Jackson.
-# I hereby give you perpetual unlimited permission to copy,
-# modify and relicense this file, provided that you do not remove
-# my name from the file itself.  (I assert my moral right of
-# paternity under the Copyright, Designs and Patents Act 1988.)
-# This file may have to be extensively modified
 
-# There used to be `source' and `diff' targets in this file, and many
-# packages also had `changes' and `dist' targets.  These functions
-# have been taken over by dpkg-source, dpkg-genchanges and
-# dpkg-buildpackage in a package-independent way, and so these targets
-# are obsolete.
+tmp := debian/tmp
 
-package=dupload
-
-r=debian/tmp
-
-deb=$(r)/DEBIAN
-prefix=$(r)/usr
-doc=$(prefix)/share/doc/$(package)
-man=$(prefix)/share/man
-exm=$(doc)/examples
-
-build:  # debian/changelog
+build: build-stamp
+build-stamp:
 	dh_testdir
 	$(MAKE) prefix=/usr
 	touch $@
@@ -31,41 +11,26 @@ build:  # debian/changelog
 clean:
 	dh_testdir
 	$(MAKE) clean
-	rm -f build
-	dh_clean
+	dh_clean build
 
-binary-indep:	build
+binary: binary-indep binary-arch
+
+binary-indep: DH_OPTIONS=-i
+binary-indep: build
 	dh_testdir
 	dh_testroot
 	dh_clean -k
+	$(MAKE) prefix=$(tmp)/usr mandir=$(tmp)/usr/share/man install
+	dh_installdirs etc
+	install -m644 dupload.conf $(tmp)/etc
+# Link for the old name of dupload.conf.5
+	ln -s dupload.conf.5.gz $(tmp)/usr/share/man/man5/dupload.5.gz
+	dh_installdocs CREDITS TODO
+	dh_installchangelogs
+	dh_compress
+	dh_fixperms
+	dh_installdeb
+	dh_gencontrol
+	dh_builddeb
 
-	# Debian control area
-	dh_installdirs -pdupload etc
-
-	# Binary
-	$(MAKE) prefix=$(prefix) mandir=$(prefix)/share/man install
-	# Config file
-	install -m644 dupload.conf $(r)/etc
-
-	# Link for the old name of dupload.conf.5
-	dh_link -pdupload usr/share/man/man5/dupload.conf.5.gz usr/share/man/man5/dupload.5.gz
-	# Docs
-	dh_installchangelogs -i
-	dh_installdocs -i
-	dh_installdeb -i
-	dh_compress -i
-	dh_fixperms -i
-	dh_gencontrol -i
-	dh_builddeb -i
-
-binary:		binary-indep binary-arch
-
-.PHONY: binary binary-arch binary-indep clean checkroot
-
-
-
-
-## Local Variables: ##
-## mode:makefile ##
-## End: ##
-
+.PHONY: build clean binary binary-arch binary-indep

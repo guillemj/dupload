@@ -1,114 +1,125 @@
 =head1 NAME
 
-dupload.conf - Configuration file for dupload
+dupload.conf - configuration file for dupload
 
 =head1 DESCRIPTION
 
-The configuration file is rather straight forward perl code as it's
+The configuration file is rather straight forward Perl code as it's
 included by the B<dupload> script via C<do $config>.  I<The config file
-is read as perl code!>
+is read as Perl code!>
 
-It must begins with C<package config;> because C<config> is the namespace
-expected by B<dupload>.
+Any B<dupload.conf> must begin with C<package config;> because C<config> is
+the namespace expected by B<dupload>.
+
+For examples of the configuration please refer to the global configuration
+file F</etc/dupload.conf>.
 
 It contains associative arrays, each indexed by the nickname (see B<--to>
 option of B<dupload>), for the following items: 
-
-For examples of the configuration please refer to the global configuration file
-F</etc/dupload.conf>.
 
 =over 4
 
 =item B<fqdn> [required]
 
-FQDN of the nickname, the name we try to ftp to;
+The fully qualified domain name (FQDN) of the nickname.
 
 =item B<method> [optional]
 
-The transfer method, "ftp" is default.  Alternativly you can use
-E<quot>scpE<quot> or E<quot>scpbE<quot>.
-For B<scp> no password is required. However, you have to setup the remote
-and local host to establish a scp/ssh/slogin connection only using
-F<.shosts/.rhosts> or the files in F<~/.ssh/>. 
-If you don't want or cannot do that,
-you may find the B<scpb> more convenient since it uploads in batch, limiting
-the number of questions.
+The transfer method. The available methods are: E<quot>ftpE<quot>
+(which is the default), E<quot>scpE<quot>, E<quot>scpbE<quot> and
+E<quot>rsyncE<quot> (over SSH).
 
+If you are using an upload queue, use FTP because it's fast.
+If you are using an authenticated host, B<always> use scp or rsync
+via SSH, because FTP transmits the password in clear text.
+
+For B<scp> and B<rsync> to work properly, you have to setup the remote
+and local host to establish a ssh/slogin connection using F<.shosts/.rhosts>
+or the files in F<~/.ssh/>. If you don't want or can't do that,
+you may find the B<scpb> more convenient since it uploads in batch,
+reducing the number of password prompts.
+
+The only major caveat of the rsync and scpb options is that the files are
+processed in a batch mode, i.e. not separately, so in case of an error
+B<dupload> won't be able to detect which part of the transfer failed, and
+just delete the B<.upload> file completely.
 
 =item B<login> [optional]
 
-The account name to log into the ftp server, default is 
-E<quot>anonymousE<quot>, should work with fire wall logins too;
+The account name used to log into the FTP server. The default is 
+E<quot>anonymousE<quot>, should work with firewall logins too.
 
 =item B<incoming> [required]
 
-incoming directory, the directory we try to upload to;
+Incoming directory, the directory we try to upload to.
 
 =item B<queuedir> [optional]
 
-the directory we move the uploaded files to (after successful upload to
-I<incoming>;
+The directory we move the uploaded files to (after successful upload to
+I<incoming>. Usually necessary only with some special upload queues.
 
 =item B<mailto> [optional]
 
-where to send the announcement about stable/unstable packages;
+Email address where the announcement about stable packages is sent.
 
 =item B<mailtx> [optional]
 
-where to send the announcement about experimental packages;
+Email address where the announcement about unstable and experimental
+packages is sent.
 
 =item B<cc> [optional]
 
-carbon copy address for the announcement;
+Email address where to send a copy address of the announcement.
 
 =item B<fullname> [optional]
 
-your fullname that should appear in the announcement;
-(If you leave this empty as well as the B<visibledomain> it
-depends on you MTA ... usually the MTA should choose the
-fullname from the GCOS field in F</etc/passwd>.)
- 
+Your full name, one that should appear in the announcement;
+
+If you leave this setting empty, the default will depend on your mail
+system. Usually the full name will be copied from the GCOS field in
+F</etc/passwd>.
 
 =item B<visibleuser> [optional]
 
-your username that should appear in the announcement, defaults to
-C<getlogin()>;
+Your username that should appear in the announcement. Defaults to
+C<getlogin()>.
 
 =item B<visiblename> [optional]
 
-the domainname that appears as the part right of the B<@> in the I<from>-part
-of the announcement, defaults to the value your local MTA likes;
+The host/domain name that appears as the part to the right of the B<@>
+character in the I<from>-part of the announcement. Defaults to the value
+your local MTA likes.
 
 =item B<passive> [optional]
 
-uses the passive mode for FTP transfers. Since B<dupload> uses Net::FTP,
+Set the passive mode for FTP transfers. Since B<dupload> uses Net::FTP,
 you can also use the environment variable FTP_PASSIVE.
 
 =item B<dinstall_runs> [optional]
 
-if set, tells B<dupload> that the remote host runs dinstall (or equivalent)
-so that B<dupload>, when it recognizes a changelog format >= 1.6, do not
-send announcement mail.
+Tells B<dupload> that the remote host runs dinstall (or equivalent)
+so that B<dupload> won't send a duplicate announcement mail.
+The default is 0 (false), set it to 1 to enable it.
 
 =item B<archive> [optional]
 
-if set to false (0), adds a "X-No-Archive: yes" header in the announcement.
-The default is true (1).
+If set to 0 (false), adds a "X-No-Archive: yes" header in the announcement.
+The default is 1 (true).
 
 =back
 
-The configuration files also contain global (to every host) variables:
+The configuration files also contain the following global variables:
 
 =over 4
 
 =item B<default_host> [optional]
 
-a string which is the default host to upload to.
+The default host to upload to. The default value of this variable is unset.
 
 =item B<no_parentheses_to_fullname> [optional]
 
-if set to true (1), prevents B<dupload> to add parentheses around the 
-full name when making mail announcements. 
+Prevents B<dupload> to add parentheses around the full name when making
+mail announcements. Default is 0 (false), set it to 1 to enable it.
 
 =back
 
@@ -192,7 +203,6 @@ The configuration is searched as following:
 
 	/etc/dupload.conf
 	~/.dupload.conf
-	./dupload.conf
 
 The latest entries override the former.
 
@@ -208,8 +218,3 @@ Those of Net::FTP for the FTP method:
 Heiko Schlittermann <heiko@lotte.sax.de>
  
 Stephane Bortzmeyer <bortzmeyer@debian.org>
-
-
-
-
-
