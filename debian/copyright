@@ -1,9 +1,10 @@
 This is dupload, utility to upload debian packages, made and formerly
 maintained by Heiko Schlittermann. It was previously maintained by
-Stephane Bortzmeyer. Current maintainer is Josip Rodin <jrodin@jagor.srce.hr>.
+Stephane Bortzmeyer.
+Current maintainer is Josip Rodin <joy-packages@debian.org>.
 
 The latest source can always be found at the mirrors of:
-	http://ftp.debian.org/debian/pool/main/d/dupload/
+	http://http.us.debian.org/debian/pool/main/d/dupload/
 
 Copyright (C) 1996, 1997 Heiko Schlittermann
 Copyright (C) 1999 Stephane Bortzmeyer

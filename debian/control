@@ -1,9 +1,10 @@
 Source: dupload
 Section: devel
 Priority: optional
-Maintainer: Josip Rodin <jrodin@jagor.srce.hr>
-Standards-Version: 3.5.6
-Build-Depends-Indep: perl, debhelper
+Maintainer: Josip Rodin <joy-packages@debian.org>
+Standards-Version: 3.6.1
+Build-Depends: debhelper (>= 4)
+Build-Depends-Indep: perl, libnet-perl
 
 Package: dupload
 Architecture: all
@@ -11,8 +12,9 @@ Depends: perl (>= 5.003), libnet-perl
 Recommends: ssh
 Suggests: lintian, mail-transport-agent
 Description: utility to upload Debian packages
- This script will automagically upload Debian packages to a remote host
- with a Debian upload queue. The default host is configurable, along with
- a lot of other things. All uploads are logged.
+ dupload will automagically upload Debian packages to a remote host
+ with a Debian upload queue. The default host is configurable,
+ along with the upload method and a lot of other things.
+ All uploads are logged.
  .
  It's intended only for Debian package maintainers.

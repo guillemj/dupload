@@ -26,6 +26,10 @@ if there is an F<.upload> file with the basename of the F<.changes> file.
 If the file to be uploaded is recorded to have already been uploaded to the
 specified host, it is skipped.
 
+B<dupload> will stop and verify if it sees you try to upload a package with
+a non-US Section field to a host that is neither non-us.debian.org,
+security.debian.org nor has the "nonus" option set to 1.
+
 After the list of files to upload is finished, B<dupload> tries to connect
 to the server and upload. Each successfully uploaded file is recorded in the
 F<.upload> log file.

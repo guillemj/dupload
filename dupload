@@ -23,7 +23,7 @@ use Net::FTP;
 use English;
 
 # more or less configurable constants
-my $version = "2.5";
+my $version = "2.6";
 my $progname = basename($0);
 my $user = getlogin() || $ENV{LOGNAME} || $ENV{USER};
 my $myhost = `hostname --fqdn`; chomp $myhost;
@@ -56,7 +56,9 @@ my (@changes,	# the files we'll have to read from
     $mailonly,
     $fqdn, 		# per host
     $server,
-    $dinstall_runs, $passive,
+    $dinstall_runs,
+    $nonus,
+    $passive,
     $nomail, $archive, $noarchive,
     %preupload, %postupload,
     $result,
@@ -66,7 +68,9 @@ my (@changes,	# the files we'll have to read from
     $fullname,
     %files, %package, %version, %arch,	# per job
     %dir, %changes, %log, %announce,    # ...
-    %extra);
+    %extra,
+    $suspicious_but_proceed,
+);
 
 ### Prototypes
 sub configure(@);	# reads the config file(s)
@@ -121,7 +125,7 @@ configure("./dupload.conf") if $configfile;
 
 # only info or version?
 info($host), exit 0 if $::opt_print;
-p("$progname Version: $version\n"), exit 0 if 
+p("$progname version: $version\n"), exit 0 if 
     ($::opt_Version or $::opt_version);
 
 if ($::opt_help) {
@@ -147,6 +151,7 @@ $host or fatal("Need host to upload to.  (See --to option or the default_host co
   $mailtx = $nick->{mailtx} || $mailto;
   $cc = $nick->{cc};
   $dinstall_runs = $nick->{dinstall_runs};
+  $nonus = $nick->{nonus};
   $passive = $nick->{passive}; 
   if ($passive and ($method ne "ftp")) { 
       fatal ("Passive mode is only for FTP ($host)");
@@ -186,6 +191,8 @@ $host or fatal("Need host to upload to.  (See --to option or the default_host co
 }
 
 # Command-line options have precedence over configuration files:
+
+($mailto || $mailtx) or p "dupload note: no announcement will be sent.\n";
 
 $noarchive = $::opt_noarchive || (! $archive);
 
@@ -292,7 +299,7 @@ PACKAGE: foreach my $change (@changes) {
 	open(C, "<$cf") or fatal("Can't read $cf: $!\n");
 	while (<C>) { 
 		chomp;
-		/^changes:\s+/i and $fields{changes}++;
+		/^changes:\s*/i and $fields{changes}++;
 		/^architecture:\s+/i and chomp($arch{$job} = $'), next;
 		/^distribution:\s+/i and do { $_ = " $'";
 			/\Wstable/i and $mailto{$mailto}++;
@@ -301,7 +308,7 @@ PACKAGE: foreach my $change (@changes) {
 			/\Wexperimental/i and $mailto{$mailtx}++;
 			next;
 		};
-		/^files:\s/i and last; 
+		/^files:\s*$/i and last; 
 	}
 	foreach (keys %mailto) {
 		my $k = $_;  
@@ -395,6 +402,17 @@ PACKAGE: foreach my $change (@changes) {
 			}
 		}
 		if ($file =~ /\.deb$/) {
+			# non-US sanity check
+			if ((`dpkg -I $file | grep '^ Section:'` =~ /non-US/i) &&
+			    ($fqdn !~ /(non-us|security).debian.org/i) && !$nonus) {
+				if (!defined($suspicious_but_proceed) &&
+                                    $suspicious_but_proceed !~ /^y/i) {
+					print "Looks like you're uploading non-US packages to a normal upload queue.\n";
+					print "Are you sure you want to proceed? ";
+					$suspicious_but_proceed = <STDIN>;
+					die "Aborting upload.\n" unless $suspicious_but_proceed =~ /^y/i;
+				}
+			}
 			push @all_the_debs, $file;
 			my ($binary_package, $version, $garbage) = split ('_', $file);
 			$binary_package = basename($binary_package);
@@ -821,6 +839,7 @@ cc            : $r->{cc}
 passive FTP   : $r->{passive}
 dinstall runs : $r->{dinstall_runs}
 archive mail  : $r->{archive}
+non-US        : $r->{nonus}
 
 xxx
 	}

@@ -1,3 +1,40 @@
+dupload (2.6.3) unstable; urgency=medium
+
+  * Fixed package build directory to actually include the contents
+    in the .deb (d'oh!), closes: #212093.
+
+ -- Josip Rodin <joy-packages@debian.org>  Mon, 22 Sep 2003 11:39:54 +0200
+
+dupload (2.6.2) unstable; urgency=low
+
+  * Added security.debian.org:/org/security.debian.org/queue/unchecked
+    to the config file.
+  * Properly detects Changes and Files multi-line tags, thanks to
+    Matthias Urlichs, closes: #195903.
+  * Added testing to the list of accepted distributions because of
+    mini-dinstall, by request of Bruno Rodrigues, closes: #179711.
+  * Added the delayed upload stuff from the Developer's Reference
+    to the config file, but renamed the DELAY variable to DEBDELAY
+    to cause less namespace pollution, closes: #146840.
+
+ -- Josip Rodin <joy-packages@debian.org>  Tue, 16 Sep 2003 12:40:59 +0200
+
+dupload (2.6.1) unstable; urgency=low
+
+  * Ignore uploads to security.debian.org in the non-US sanity check,
+    and introduce a "nonus" flag for hosts to be able to force this,
+    closes: #164320.
+
+ -- Josip Rodin <jrodin@jagor.srce.hr>  Fri, 11 Oct 2002 20:37:07 +0200
+
+dupload (2.6) unstable; urgency=low
+
+  * Added libnet-perl into Build-Depends, closes: #147530.
+  * Added back the $mailto || $mailtx warning.
+  * Added the non-US sanity check, closes: #103525.
+
+ -- Josip Rodin <jrodin@jagor.srce.hr>  Thu, 11 Apr 2002 21:02:39 +0200
+
 dupload (2.5) unstable; urgency=high
 
   * New maintainer, closes: #141847, #55691, #55752.

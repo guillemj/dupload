@@ -101,6 +101,12 @@ Tells B<dupload> that the remote host runs dinstall (or equivalent)
 so that B<dupload> won't send a duplicate announcement mail.
 The default is 0 (false), set it to 1 to enable it.
 
+=item B<nonus> [optional]
+
+Tells B<dupload> that the remote host is a valid destination for packages
+with non-US in their Section field, so that B<dupload> doesn't warn about it.
+The default is 0 (false), set it to 1 to enable it.
+
 =item B<archive> [optional]
 
 If set to 0 (false), adds a "X-No-Archive: yes" header in the announcement.
