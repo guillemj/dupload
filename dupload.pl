@@ -263,7 +263,7 @@ PACKAGE: foreach (@changes) {
 				next PACKAGE;
 			};
 			p ", md5sum ok";
-			if (!$force && @done && grep(/^u ${file}/, @done)) {
+			if (!$force && @done && grep(/^u \Q${file}\E/, @done)) {
 				p ", already done for $host";
 			} else {
 				push @files, $file;
@@ -382,15 +382,15 @@ JOB: foreach (keys %files) {
 	}
 
 	if ($announce{$job}) {
-		p "\n announcing to $announce{$job}";
-		if (!$dry) {
-			open(M, "|$sendmail -f $visibleuser"
+		my $sendmail_cmd = "|$sendmail -f $visibleuser"
 					. ($visiblename  ? "\@$visiblename" : "") 
 					. ($fullname  ? " -F '($fullname)'" : "")
-					. " $announce{$job}")
-				or fatal("Can't pipe to $sendmail $!\n");
+					. " $announce{$job}";
+		p "\n announcing to $announce{$job}";
+		if (!$dry) {
+			open(M, $sendmail_cmd) or fatal("Can't pipe to $sendmail $!\n");
 		} else {
-			p "\n+ announce to $announce{$job}\n";
+			p "\n+ announce to $announce{$job} using command ``$sendmail_cmd''\n";
 			open(M, ">&STDOUT");
 		}
 
@@ -481,11 +481,13 @@ xxx
 ### Read the configuration
 sub configure(@) {
 	my @conffiles = @_;
+	my @read = ();
 	foreach (@conffiles) { 
-		-r or splice(@conffiles, $_, 1), next; 
+		-r or next; 
 		do $_ or fatal("$@\n");
+		push @read, $_;
 	}
-	@conffiles or fatal("No configuration files\n");
+	@read or fatal("No configuration files\n");
 }
 
 ### Die

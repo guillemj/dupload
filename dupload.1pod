@@ -78,6 +78,11 @@ Keep going, skip broken (due to md5sum mismatches) packages.
 Dry run, no files are changed, no upload is attempted, only tell
 what we would do.
 
+=item B<--nomail>
+
+Supress announcement for this run.  You can send it later by just
+calling dupload again w/o this option.
+
 =item B<-p> B<--print>
 
 Print the E<quot>databaseE<quot> as read from the config files

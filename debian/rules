@@ -47,7 +47,7 @@ binary-indep:	checkroot build
 	# Docs
 	install -d $(doc)
 	install -m644 debian/changelog $(doc)
-	ln -sf ../copyright/GPL $(doc)/copyright
+	ln -sf ../copyright/GPL.gz $(doc)/copyright.gz
 	cd $(doc) && gzip -v9 changelog* 
 	dpkg-gencontrol
 	chown -R root.root $(r)

@@ -1,3 +1,24 @@
+dupload (1.16) unstable; urgency=low
+
+  * small enhancement from Rob Browning <rlb@cs.utexas.edu> for
+    dry run and sendmail command
+  * read local config files too (should fix bug #7539
+  * upload queue in erlangen (germany) added
+  * handle odd characters in package names (1st try)
+
+ -- Heiko Schlittermann <heiko@lotte.sax.de>  Fri, 29 Aug 1997 22:27:35 +0200
+
+dupload (1.15) stable unstable; urgency=low
+
+  * fixed bug regarding ``+'' in package names (#????)
+  * Updated man page to real life:
+    visiblename (!) is the real name of the ``visibledomain''
+    config directive. (#????)
+  * Option for suppressing mail added (#7771)
+  * Point to global config as example for local config (#8826).
+
+ -- Heiko Schlittermann <heiko@lotte.sax.de>  Wed, 25 Jun 1997 21:32:06 +0200
+
 dupload (1.14) stable unstable; urgency=low
 
   * copyright refers no to /usr/doc/copyright (bug #7199)

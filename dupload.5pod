@@ -11,6 +11,9 @@ is read as perl code!>
 It contains associative arrays, each indexed by the nickname (see B<--to>
 option of B<dupload>), for the following items: 
 
+For examples of the configuration please refer to the global configuration file
+F</etc/dupload.conf>.
+
 =over 4
 
 =item B<fqdn> [required]
@@ -60,12 +63,12 @@ depends on you MTA ... usually the MTA should choose the
 fullname from the GCOS field in F</etc/passwd>.)
  
 
-=item B<visiblename> [optional]
+=item B<visibleuser> [optional]
 
 your username that should appear in the announcement, defaults to
 I<getlogin()>;
 
-=item B<visibledomain> [optional]
+=item B<visiblename> [optional]
 
 the domainname that appears as the part right of the B<@> in the I<from>-part
 of the announcement, defaults to the value your local MTA likes;
