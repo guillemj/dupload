@@ -1,0 +1,40 @@
+
+--- dupload.orig        Fri Aug 29 15:57:45 1997
++++ dupload     Thu Dec  3 00:14:11 1998
+@@ -88,7 +88,7 @@
+        debug:i 
+        force keep no 
+        to=s print 
+-       quiet Version
++       quiet Version nomail
+ ) or fatal("Bad Options\n");
+ 
+ $dry = defined($::opt_no);
+@@ -96,6 +96,10 @@
+ $keep = $::opt_keep || $keep;
+ $host = $::opt_to;
+ $force = $::opt_force || $force;
++$nomail = $::opt_nomail;
++
++if ($dry) { p("Dry run\n") };
++if ($nomail) { p("No announcment will be sent\n") };
+ 
+ # only info or version?
+ info($host), exit 0 if $::opt_print;
+@@ -216,6 +220,8 @@
+                };
+                /^files:\s/i and last; 
+        }
++
++    if (!$nomail) {
+        foreach (keys %mailto) {
+                my $k = $_;
+                p "\n  announce ($cf) to $k";
+@@ -225,6 +231,7 @@
+                        p " will be sent";
+                }
+        }
++    }
+ 
+        # search for extra announcement files
+        foreach ("${package}", 

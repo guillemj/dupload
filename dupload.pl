@@ -86,9 +86,9 @@ configure(
 $Getopt::Long::ignorecase = 0;
 GetOptions qw(
 	debug:i 
-	force keep no 
+	force keep no nomail
 	to=s print 
-	quiet Version
+       quiet Version
 ) or fatal("Bad Options\n");
 
 $dry = defined($::opt_no);
@@ -96,6 +96,7 @@ $debug = $::opt_debug || $debug;
 $keep = $::opt_keep || $keep;
 $host = $::opt_to;
 $force = $::opt_force || $force;
+$nomail = $::opt_nomail || 0;
 
 # only info or version?
 info($host), exit 0 if $::opt_print;
@@ -211,20 +212,23 @@ PACKAGE: foreach (@changes) {
 			/\Wcontrib/i and $mailto{$mailto}++;
 			/\Wnon-free/i and $mailto{$mailto}++;
 			/\Wunstable/i and $mailto{$mailtx}++;
+                       /\Wfrozen/i and $mailto{$mailtx}++;
 			/\Wexperimental/i and $mailto{$mailtx}++;
 			next;
 		};
 		/^files:\s/i and last; 
 	}
 	foreach (keys %mailto) {
-		my $k = $_;
-		p "\n  announce ($cf) to $k";
-		if (grep(/^a .*\s${k}\s/, @done)) { p " already done"; }
-		else { 
-			$announce{$job} = join(" ", $announce{$job}, $_);
-			p " will be sent";
-		}
-	}
+		my $k = $_;  
+                if (! $nomail) {
+		    p "\n  announce ($cf) to $k";
+		    if (grep(/^a .*\s${k}\s/, @done)) { p " already done"; }
+                    else { 
+                       $announce{$job} = join(" ", $announce{$job}, $_);
+                       p " will be sent";
+		   }
+                }
+        }
 
 	# search for extra announcement files
 	foreach ("${package}", 
@@ -328,8 +332,10 @@ JOB: foreach (keys %files) {
 		$t = time();
 		if ($method eq "ftp") {
 			if (!$dry) {
-				ftp::put($file, $file) or ftp::delete($file) 
-					or fatal("Can't upload $file\n");
+                               unless (ftp::put($file, $file)) {
+					ftp::delete($file) ;
+					fatal("Can't upload $file\n");
+				}
 				$t = time() - $t;
 			} else {
 				p "\n+ ftp::put($file)";
@@ -337,14 +343,14 @@ JOB: foreach (keys %files) {
 			}
 		} elsif ($method eq "scp") {
 			if (!$dry) {
-				system("scp $file $login\@$fqdn:$incoming");
+				system("scp -q $file $login\@$fqdn:$incoming");
 				fatal("scp $file failed\n") if $?;
 				$t = time() - $t;
 				system("ssh -l $login $fqdn chmod 0644 $incoming/$file");
 				fatal("ssh ... chmod 0644 failed\n") if $?;
 			} else {
-				p "\n+ scp $file $login\@$fqdn:$incoming";
-				p "ssh -l $login $fqdn chmod 0644 $incoming/$file";
+				p "\n+ scp -q $file $login\@$fqdn:$incoming";
+				p "\n+ ssh -l $login $fqdn chmod 0644 $incoming/$file";
 				$t = 1;
 			}
 		}
@@ -381,7 +387,7 @@ JOB: foreach (keys %files) {
 		}
 	}
 
-	if ($announce{$job}) {
+	if ($announce{$job} and (! $nomail)) {
 		my $sendmail_cmd = "|$sendmail -f $visibleuser"
 					. ($visiblename  ? "\@$visiblename" : "") 
 					. ($fullname  ? " -F '($fullname)'" : "")

@@ -1,3 +1,39 @@
+dupload (1.16.4) frozen unstable; urgency=low
+
+  * Non-maintainer upload
+  * Added dupload.conf entry for ftp://ftp3.linux.it/pub/Linux/UploadQueue/ 
+  * Made appropriate /usr/doc/dupload/copyright file,
+    which fixes #14390, #24699, #29766.
+  * Fixed the section/priority according to the overriding Packages file
+  * Suggests: mail-transport-agent (because of the announcing feature)
+
+ -- Josip Rodin <jrodin@jagor.srce.hr>  Mon, 11 Jan 1999 00:22:13 +0100
+
+dupload (1.16.3) unstable; urgency=low
+
+  * Non-maintainer upload
+  * Implemented the --nomail option. Closes #18512
+
+ -- Stephane Bortzmeyer <bortzmeyer@debian.org>  Tue,  5 Jan 1999 10:10:51 +0100
+
+dupload (1.16.2) frozen unstable; urgency=medium
+
+  * Non-maintainer release.
+  * Fix brokenness in last NMU using patch from Martin Bialasinski
+    posted to debian-devel.
+  * Add patch from Bug#23927 (sends mail for frozen-only uploads).
+  * Use scp -q, as scp's progress display does not mesh nicely with
+    dupload's output.
+
+ -- Joel Klecker <espy@debian.org>  Sun, 20 Dec 1998 05:38:45 -0800
+
+dupload (1.16.1) frozen unstable; urgency=low
+
+  * Non-maintainer upload
+  * Fix logic error in uploading using FTP (Bug# 30202)
+
+ -- Wichert Akkerman <wakkerma@debian.org>  Fri, 18 Dec 1998 16:13:35 +0100
+
 dupload (1.16) unstable; urgency=low
 
   * small enhancement from Rob Browning <rlb@cs.utexas.edu> for

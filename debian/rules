@@ -21,7 +21,7 @@ doc=$(r)/usr/doc/$(package)
 man=$(r)/usr/man
 exm=$(r)/usr/doc/examples/$(package)
 
-build:  debian/changelog
+build:  # debian/changelog
 	$(checkdir)
 	$(MAKE) prefix=/usr
 	touch build
@@ -47,8 +47,8 @@ binary-indep:	checkroot build
 	# Docs
 	install -d $(doc)
 	install -m644 debian/changelog $(doc)
-	ln -sf ../copyright/GPL.gz $(doc)/copyright.gz
 	cd $(doc) && gzip -v9 changelog* 
+	install -m644 debian/copyright $(doc)
 	dpkg-gencontrol
 	chown -R root.root $(r)
 	chmod -R u=rwX,go=rX $(r)
@@ -60,11 +60,11 @@ endef
 
 # Below here is fairly generic really
 
-debian/changelog:	debian/changelog.in
-	sed -e "s/=D=/`822-date`/" <$< >$@,$$$$ \
-	&& { mv -f $@,$$$$ $@ } ;\
-	rm -f $@,$$$$ }
-	chmod a-w $@
+#debian/changelog:	debian/changelog.in
+#	sed -e "s/=D=/`822-date`/" <$< >$@,$$$$ \
+#	&& { mv -f $@,$$$$ $@ } ;\
+#	rm -f $@,$$$$ }
+#	chmod a-w $@
 
 binary:		binary-indep binary-arch
 
