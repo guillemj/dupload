@@ -1,0 +1,13 @@
+Source: dupload
+Section: misc
+Priority: extra
+Maintainer: Heiko Schlittermann <heiko@lotte.sax.de>
+Standards-Version: 2.1.0.0
+
+Package: dupload
+Architecture: all
+Depends: perl (>= 5), dpkg
+Description: Utility to upload debian packages.
+ This script will automagically upload debian packages to a master
+ or a transfer host, log the upload and send mail about the upload
+ of a package.  It's intended for debian maintainer only.

@@ -1,0 +1,160 @@
+=head1 NAME
+
+dupload - utility to upload debian packages
+
+=head1 SYNOPSIS
+
+B<dupload> [I<options>] [I<changes_file> | I<dir>] ...
+
+=head1 DESCRIPTION
+
+B<dupload> is written for Debian maintainers. It should make uploads
+to the common maintainer sites (B<chiark> for Europe, B<master> for
+North America) somewhat easier. At least for chiark the upload procedure
+is somewhat error prone (upload to Incoming/, move it to queue/ ...).
+
+B<dupload> processes the non-option arguments as follows: If the
+argument isn't readable, its fatal (but see the --keep option). If it's
+readable and is a file, consider it as a F<.changes> (warn if not ending
+in .changes) file, if it's readable and is a directory, try to find a
+Z<>F<.changes> file in this directory.
+
+Further processing is done chdir'ed into the directories of the 
+changes files.
+
+The files listed in each changes file (with their md5 sums) are
+canditates to be uploaded. Now B<dupload> tests the md5 sum for each
+file in turn. A md5 sum mismatch is considered as fatal. If gone so
+far, B<dupload> checks the F<.upload> file with the basename of the
+F<.changes> file. If the file to be uploaded is found as already
+uploaded to the host specified, it gets removed from the joblist. After
+building the joblist, B<dupload> tries to connect the ftp server and
+upload. Just after each file uploaded and possibly renamed, an entry in
+the logfile is written. If all files of a package are processed, the
+Z<>.changes file is mailed to the announcement address.  If files with
+Z<> F<package>.announce, F<package_upstream>.announce, or
+Z<> F<package_upstream-debian>.announce exist, these files get
+prepended to the announcement.
+
+B<Please note:>
+Some mail readers (as elm w/ pgp extensions) doesn't show mail contents
+outside of the signed part of a message.
+
+=head2 Login and Password
+
+If no login is supplied in the configuration file,
+E<quot>anonymousE<quot> is used.  The password is derived from your
+login name and your hostname, usual for anonymous ftp logins.
+
+For logins other than E<quot>anonymousE<quot>, you're asked for 
+the password.  For security reasons there's no way to supply it via
+the commandline or the environment.
+
+=head2 SCP / FTP
+
+The default transfer method is FTP.  As alternate method SCP/SSH is
+supported.  For SCP/SSH the default login is taken from your 
+local user name.  The SCP/SSH method only works, if no password
+is required (see B<ssh>(1)).
+
+=head1 OPTIONS
+
+=over 12
+
+=item B<-d> B<--debug> [I<level>]
+
+Switch on more verbose output from the ftp and chat modules.
+
+=item B<-f> B<--force>
+
+Upload, regardless of the already logged transfers.
+
+=item B<-k> B<--keep>
+
+Keep going, skip broken (due to md5sum mismatches) packages.
+
+=item B<-n> B<--no>
+
+Dry run, no files are changed, no upload is attempted, only tell
+what we would do.
+
+=item B<-p> B<--print>
+
+Print the E<quot>databaseE<quot> as read from the config files
+and exit.  If a host is specified via option B<--to>, only this
+hosts entry is displayed.
+
+=item B<-t> B<--to> I<nickname> B<required>
+
+Upload to I<nickname>'d host.  I<nickname> is the key for doing lookups
+in the config file.
+
+=item B<-V> B<--Version>
+
+Print version and exit.
+
+=back
+
+=head1 FILES
+
+=head2 Configuration
+
+The configuration files are searched as follows (and read in this
+order, overriding each other):
+
+	/etc/dupload.conf
+	~/.dupload.conf
+	./dupload.conf
+
+=head2 Other
+
+The various Debian files as with the extensions .dsc, .changes, .deb,
+Z<>.orig.tar.gz, .diff.gz, the logfile of B<dupload>:
+I<package_version-debian>.upload, and a additional announcement files
+I<package.announce>, I<package_upstream.announce>, and
+I<package_upstream-debian.announce>.
+
+=head2 Announcement-Policy
+
+According to the policy manual announcements are sent as follows:
+
+=over 8
+
+=item stable, non-free, contrib
+
+debian-changes@lists.debian.org
+
+=item unstable, experimental
+
+debian-devel-changes@lists.debian.org
+
+=back
+
+=head1 BUGS
+
+B<dupload> is tested on B<Debian GNU/Linux> systems only.  But it
+shouldn't require too much effort to make it run under others systems
+too, it is perl.
+
+=head1 HISTORY/ORIGIN
+
+The dupload-ftp.pl is (according to a notice in the first lines
+of the module) mostly by Lee McLoughlin <lmjm@doc.ic.ac.uk> based
+on original version by Alan R. Martello <al@ee.pitt.edu> And by
+A.Macpherson@bnr.co.uk for multi-homed hosts. lchat.pl is (according to
+the lchat module) by Randal L. Schwartz et al.  I've taken these two
+modules from the mirror package.
+
+=head1 AUTHOR/COPYRIGHT
+
+Copyright 1996 Heiko Schlittermann.  B<dupload> is free
+software;  see the GNU General Public Licence version 2 or
+later for copying conditions. There is B<no> warranty.
+
+
+Heiko Schlittermann <heiko@lotte.sax.de>
+
+=head1 SEE ALSO
+
+B<dupload>(5)
+

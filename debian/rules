@@ -1,0 +1,78 @@
+#!/usr/bin/make -f
+# Sample debian.rules file - for dupload
+# Copyright 1994,1995 by Ian Jackson.
+# I hereby give you perpetual unlimited permission to copy,
+# modify and relicense this file, provided that you do not remove
+# my name from the file itself.  (I assert my moral right of
+# paternity under the Copyright, Designs and Patents Act 1988.)
+# This file may have to be extensively modified
+
+# There used to be `source' and `diff' targets in this file, and many
+# packages also had `changes' and `dist' targets.  These functions
+# have been taken over by dpkg-source, dpkg-genchanges and
+# dpkg-buildpackage in a package-independent way, and so these targets
+# are obsolete.
+
+package=dupload
+
+r=debian/tmp
+deb=$(r)/DEBIAN
+doc=$(r)/usr/doc/$(package)
+man=$(r)/usr/man
+exm=$(r)/usr/doc/examples/$(package)
+
+build:  debian/changelog
+	$(checkdir)
+	$(MAKE) prefix=/usr
+	touch build
+
+clean:
+	$(checkdir)
+	$(MAKE) clean
+	-rm -f build
+	-rm -rf *~ debian/tmp debian/*~ debian/files*
+
+binary-indep:	checkroot build 
+	$(checkdir)
+	-rm -rf debian/tmp
+	# Debian control area
+	install -d $(deb)
+	install -m644 debian/conffiles $(deb)
+	# Binary
+	$(MAKE) prefix=$(r)/usr install
+	# Config file
+	install -d $(r)/etc
+	install -m644 dupload.conf $(r)/etc
+	cd $(man) && gzip -v9 */*
+	# Docs
+	install -d $(doc)
+	install -m644 debian/changelog $(doc)
+	ln -sf ../copyright/GPL $(doc)/copyright
+	cd $(doc) && gzip -v9 changelog* 
+	dpkg-gencontrol
+	chown -R root.root $(r)
+	chmod -R u=rwX,go=rX $(r)
+	dpkg --build $(r) ..
+
+define checkdir
+	test -f dupload.pl -a -f debian/rules
+endef
+
+# Below here is fairly generic really
+
+debian/changelog:	debian/changelog.in
+	sed -e "s/=D=/`822-date`/" <$< >$@,$$$$ \
+	&& { mv -f $@,$$$$ $@ } ;\
+	rm -f $@,$$$$ }
+	chmod a-w $@
+
+binary:		binary-indep binary-arch
+
+source diff:
+	@echo >&2 'source and diff are obsolete - use dpkg-source -b'; false
+
+checkroot:
+	$(checkdir)
+	test root = "`whoami`"
+
+.PHONY: binary binary-arch binary-indep clean checkroot

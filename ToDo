@@ -1,0 +1,11 @@
+* scp package<...> master.debian.org:Incoming
+* file locking for *.upload files
+
+* change logfile format
+  uploaded file_1.1-2_all.deb nic <date>
+  announce file_1.1-2 address, ... <date>
+
+done: u file_1.1-2_all.deb nick <date>
+	...
+      a file ...
+
