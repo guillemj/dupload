@@ -40,6 +40,7 @@ my $host = undef;				# target host
 my $method = "ftp";				# transfer method
 my $login = "anonymous";		# default login
 my $passwd = "$user\@$myhost";	# ...
+my $options = "";	# extra options for rsync or scp
 
 my $sendmail = "/usr/sbin/sendmail";
 
@@ -144,6 +145,7 @@ $host or fatal("Need host to upload to.  (See --to option or the default_host co
 {
   my $nick = $config::cfg{$host};
   $method = $nick->{method} || $method;
+  $options = $nick->{options} || $options;
   $fqdn = $nick->{fqdn} or fatal("Nothing known about host $host\n");
   $incoming = $nick->{incoming} or fatal("No Incoming dir\n");
   $queuedir = $nick->{queuedir};
@@ -513,7 +515,7 @@ JOB: foreach (keys %files) {
 		} elsif ($method eq "scp") {
                         $mode = (stat($file))[2];
 			unless ($dry) {
-				system("scp -p -q $file $login\@$fqdn:$incoming");
+				system("scp -p -q $options $file $login\@$fqdn:$incoming");
 				fatal("scp $file failed\n") if $?;
 				$t = time() - $t;
                                 # Small optimization
@@ -522,7 +524,7 @@ JOB: foreach (keys %files) {
 				    fatal("ssh ... chmod 0644 failed\n") if $?;
                                 }
 			} else {
-				p "\n+ scp -p -q $file $login\@$fqdn:$incoming";
+				p "\n+ scp -p -q $options $file $login\@$fqdn:$incoming";
                                 if ($mode != 33188) { # rw-r--r-- aka 0644
                                      p "\n+ ssh -x -l $login $fqdn chmod 0644 $incoming/$file";
                                 }
@@ -591,7 +593,7 @@ JOB: foreach (keys %files) {
 			"'";
 		unless ($dry) {
 			p "\n";
-			system("scp $scpfiles $login\@$fqdn:$incoming");
+			system("scp $options $scpfiles $login\@$fqdn:$incoming");
 			if ($?) {
 				unlink $log{$job};
 				fatal("scp $scpfiles failed\n");
@@ -601,7 +603,7 @@ JOB: foreach (keys %files) {
 			}
 			fatal("$cmd failed\n") if $?;
 		} else {
-			p "\n+ scp $scpfiles $login\@$fqdn:$incoming";
+			p "\n+ scp $options $scpfiles $login\@$fqdn:$incoming";
 			p "\n+ $cmd";
 		}
 		$allfiles = $scpfiles;
@@ -613,7 +615,7 @@ JOB: foreach (keys %files) {
 			"'";
 		unless ($dry) {
 			p "\n";
-			system("rsync --partial -zave ssh -x $rsyncfiles $login" . "@" . "$fqdn:$incoming");
+			system("rsync --partial -zave ssh $options -x $rsyncfiles $login" . "@" . "$fqdn:$incoming");
 			if ($?) {
 				unlink $log{$job};
 				fatal("rsync $rsyncfiles failed\n");
@@ -623,7 +625,7 @@ JOB: foreach (keys %files) {
 			}
 			fatal("$cmd failed\n") if $?;
 		} else {
-			p "\n+ rsync --partial -zave ssh -x $rsyncfiles $login" . "@" . "$fqdn:$incoming";
+			p "\n+ rsync --partial -zave ssh $options -x $rsyncfiles $login" . "@" . "$fqdn:$incoming";
 			p "\n+ $cmd";
 		}
 		$allfiles = $rsyncfiles;

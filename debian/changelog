@@ -1,3 +1,35 @@
+dupload (2.6.3.1) unstable; urgency=low
+
+  * NMU to remove obsolete queues, based on 
+    http://www.debian.org/doc/developers-reference/ch-pkgs.en.html
+    and
+    http://lists.debian.org/debian-devel/2004/debian-devel-200401/msg01950.html>
+    also cleaned up the bug list.
+  * Removed non-functioning upload queues: anonymous-non-us, non-us,
+    chiark, erlangen, uk, jp, and samosa. (Closes #222938, #229744)
+  * Added notes extracted from the Developer's reference regarding 
+    uploads to security and commented out these entries to prevent
+    developers from uploading there unintentionally. (Closes: #251286)
+  * Added a default configuration for uploading to mentors.debian.net
+    (Closes: #226101)
+  * Changed default (commented) upload queue to be anonymous-ftp-master
+  * Use Goswin's patch to add an 'options' field in the configuration file
+    which can be used to setup --progress and -L in rsync calls, or 
+    additional options to SSH if needed (Closes: #98949, #319910, #225400)
+  * Check the .changes signature using gpg or pgp (if available) in order to
+    prevent unsigned uploads. This is active by default for GPG but can be 
+    disabled in dupload.conf at will. Also, added two new simple scripts
+    gpg-check and pgp-check to provide a wrapper to the check so that the
+    error message in case of a failure is more user-friendly. I've implemented
+    this as hooks rather than as new code in dupload to allow users to
+    customise as needed. Note: DSC files are not checked since that should
+    be done in a separate hook (and there is none for those files).
+    (Closes: #54344, #56877, #65630, #101882)
+  * Related to the above add references to the preupload/postupload hooks
+    in the dupload.conf file.
+
+ -- Javier Fernandez-Sanguino Pen~a <jfs@computer.org>  Tue, 26 Jul 2005 23:45:04 +0200
+
 dupload (2.6.3) unstable; urgency=medium
 
   * Fixed package build directory to actually include the contents

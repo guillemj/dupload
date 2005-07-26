@@ -7,6 +7,7 @@ version = $(shell LC_ALL=C dpkg-parsechangelog|grep '^Version'|sed 's/^.*:[ \t]*
 MAN1 = dupload.1
 MAN5 = dupload.conf.5
 MAN = $(MAN1) $(MAN5)
+EXTRA_FILES = gpg-check pgp-check
 
 prefix = /usr/local
 confdir = /etc
@@ -14,6 +15,7 @@ bindir = $(prefix)/bin
 mandir = $(prefix)/man
 man1dir = $(mandir)/man1
 man5dir = $(mandir)/man5
+extradir = $(prefix)/share/dupload
 
 INSTALL = install
 POD2MAN = pod2man
@@ -26,10 +28,11 @@ inst_data = $(INSTALL) -m 644
 all: dupload $(MAN)
 
 install:	all
-	$(mkdirhier) $(bindir) $(man1dir) $(man5dir)
+	$(mkdirhier) $(bindir) $(man1dir) $(man5dir) $(extradir)
 	$(inst_script) dupload $(bindir)
 	$(inst_data) $(MAN1) $(man1dir)
 	$(inst_data) $(MAN5) $(man5dir)
+	$(inst_script) $(EXTRA_FILES) $(extradir)
 	@echo; echo "** You should install dupload.conf to $(confdir)"; echo
 
 clean:

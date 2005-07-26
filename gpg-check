@@ -1,0 +1,22 @@
+#!/bin/sh
+# Verify that a changes has been signed and that the signatures are good
+# (using GPG)
+
+FILE=$1
+# If no gpg is found just exit
+[ ! -x "`which gpg`" ] && exit 0
+# If the file is not found just exit with error
+[ ! -r "$FILE" ] && exit 2
+
+echo -n Checking signatures before upload...
+
+# Use the exit status to determine if the signature is ok or not
+if ! gpg --verify "$FILE" >/dev/null 2>&1 ; then
+	echo "GPG verification of $FILE failed!"
+	exit 1
+fi
+
+echo ...signatures are ok
+
+exit 0
+
