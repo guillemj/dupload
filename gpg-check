@@ -11,9 +11,19 @@ FILE=$1
 echo -n Checking signatures before upload...
 
 # Use the exit status to determine if the signature is ok or not
-if ! gpg --verify "$FILE" >/dev/null 2>&1 ; then
+gpg --verify "$FILE" >/dev/null 2>&1
+ret=$?
+if [ $ret -eq 1 ]; then
 	echo "GPG verification of $FILE failed!"
 	exit 1
+elif [ $ret -eq 2 ]; then
+	if grep -- '-----BEGIN PGP' "$FILE" >/dev/null 2>&1; then
+		echo "GPG signature couldn't be checked, probably because of missing key"
+		exit 0
+	else
+		echo "GPG signature is missing"
+		exit 1
+	fi
 fi
 
 echo ...signatures are ok

@@ -1,3 +1,12 @@
+dupload (2.6.3.2) unstable; urgency=low
+
+  * NMU during BSP.
+  * Try to differentiate between different gpg --verify error reasons
+    to allow uploads from hosts where the public key is not available.
+    (Closes: #321126)
+
+ -- Frank Lichtenheld <djpig@debian.org>  Sat,  6 Aug 2005 20:14:23 +0200
+
 dupload (2.6.3.1) unstable; urgency=low
 
   * NMU to remove obsolete queues, based on 
@@ -6,7 +15,7 @@ dupload (2.6.3.1) unstable; urgency=low
     http://lists.debian.org/debian-devel/2004/debian-devel-200401/msg01950.html>
     also cleaned up the bug list.
   * Removed non-functioning upload queues: anonymous-non-us, non-us,
-    chiark, erlangen, uk, jp, and samosa. (Closes #222938, #229744)
+    chiark, erlangen, uk, jp, and samosa. (Closes: #222938, #229744)
   * Added notes extracted from the Developer's reference regarding 
     uploads to security and commented out these entries to prevent
     developers from uploading there unintentionally. (Closes: #251286)
