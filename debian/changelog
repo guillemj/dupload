@@ -1,3 +1,22 @@
+dupload (2.6.3.3) unstable; urgency=low
+
+  * NMU (with maintainers consent)
+  * Recommend openssh-client instead of ssh, keep ssh as alternative
+    for now. Reported by Aaron Schrab (Closes: #387678)
+  * Setting $default_host from a local dupload.conf is now possible
+    again. Reported by martin f krafft (Closes: #249341)
+  * Add empty binary-arch target in debian/rules. Reported by
+    Aurelien Jarno (Closes: #395593)
+  * Treat DEBDELAY=0 correctly. Patch by Matej Vela (Closes: #356780)
+  * Fix headers of man pages. Reported by Denis Barbier (Closes: #222934)
+  * Update location of security upload queues. Reported by adrian
+    (Closes: #345078)
+  * Fix move of files to the queuedir. Patch by Bob Proulx
+    (Closes: #279308)
+  * Remove build-stamp in debian/rules' clean target
+
+ -- Frank Lichtenheld <djpig@debian.org>  Sat, 11 Nov 2006 21:17:38 +0100
+
 dupload (2.6.3.2) unstable; urgency=low
 
   * NMU during BSP.

@@ -45,7 +45,8 @@ dupload:
 
 %:	%pod
 	$(POD2MAN) \
-	  --section=$(notdir $@) \
+	  --section=$(subst .,,$(suffix $@)) \
+	  --name=$$(echo $(basename $@) | perl -pe '$$_=uc') \
 	  --center="Debian Project" \
 	  --date="`LC_ALL=C date '+%B %Y'`" \
 	  --release="dupload $(version)" \

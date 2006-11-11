@@ -51,8 +51,7 @@ my (@changes,	# the files we'll have to read from
     @all_the_debs,      # ... we installed (for postupload processing)
     %all_packages,      # All Debian binary packages we installed 
                         # (for postupload processing)
-    $scpfiles,
-    $rsyncfiles,
+    $copiedfiles,
     $dry,		# if do-nothing
     $mailonly,
     $fqdn, 		# per host
@@ -109,6 +108,9 @@ GetOptions qw(
        quiet Version version
 ) or fatal("Bad Options\n");
 
+$configfile = $::opt_configfile || $configfile;
+configure("./dupload.conf") if $configfile;
+
 $dry = defined($::opt_no);
 $mailonly = defined($::opt_mailonly);
 if ($mailonly) {
@@ -116,13 +118,10 @@ if ($mailonly) {
 }
 $debug = $::opt_debug || $debug;
 $keep = $::opt_keep || $keep;
-$configfile = $::opt_configfile || $configfile;
 $host = $::opt_to || $config::default_host;
 $force = $::opt_force || $force;
 $nomail = $::opt_nomail || 0;
 $quiet = $::opt_quiet;
- 
-configure("./dupload.conf") if $configfile;
 
 # only info or version?
 info($host), exit 0 if $::opt_print;
@@ -474,8 +473,7 @@ JOB: foreach (keys %files) {
 	my $mode;
 	my $batchmode;
 	my $allfiles;
-	$scpfiles = "";
-	$rsyncfiles = "";
+	$copiedfiles = "";
 
 	my ($package, $version, $arch) = (split("_", $job, 3));
 	my ($upstream, $debian) = (split("-", $version, 2));
@@ -531,7 +529,7 @@ JOB: foreach (keys %files) {
 				$t = 1;
 			}
                 } elsif ($method eq "scpb") {
-                	$scpfiles .= "$file ";
+                	$copiedfiles .= "$file ";
 			$mode = (stat($file))[2];
 			# Small optimization
 			if ($mode != 33188) { # rw-r--r-- aka 0644
@@ -540,7 +538,7 @@ JOB: foreach (keys %files) {
 			$t = 1;
 			$batchmode = 1;
                 } elsif ($method eq "rsync") {
-			$rsyncfiles .= "$file ";
+			$copiedfiles .= "$file ";
 			$mode = (stat($file))[2];
 			# Small optimization
 			if ($mode != 33188) { # rw-r--r-- aka 0644
@@ -587,48 +585,53 @@ JOB: foreach (keys %files) {
 		}
 	}
 # and now the batch mode uploads
+	my $needcmd = 0;
+	my $cmd = "ssh -x -l $login $fqdn 'cd $incoming;";
+	if ($wrong_mode) {
+		$cmd .= "chmod 0644 $copiedfiles;";
+		$needcmd = 1;
+	}
+	if (length($queuedir) > 0) {
+		$cmd .= "mv $copiedfiles $queuedir;";
+		$needcmd = 1;
+	}
+	$cmd .= "'";
 	if ($method eq "scpb") {
-		my $cmd = "ssh -x -l $login $fqdn 'cd $incoming;chmod 0644 $scpfiles;".
-			($queuedir ? "mv $scpfiles $queuedir" : "").
-			"'";
 		unless ($dry) {
 			p "\n";
-			system("scp $options $scpfiles $login\@$fqdn:$incoming");
+			system("scp $options $copiedfiles $login\@$fqdn:$incoming");
 			if ($?) {
 				unlink $log{$job};
-				fatal("scp $scpfiles failed\n");
+				fatal("scp $copiedfiles failed\n");
 			}
-			if ($wrong_mode) {
+			if ($needcmd) {
 				system($cmd);
 			}
 			fatal("$cmd failed\n") if $?;
 		} else {
-			p "\n+ scp $options $scpfiles $login\@$fqdn:$incoming";
+			p "\n+ scp $options $copiedfiles $login\@$fqdn:$incoming";
 			p "\n+ $cmd";
 		}
-		$allfiles = $scpfiles;
+		$allfiles = $copiedfiles;
         }
 
 	if ($method eq "rsync") {
-		my $cmd = "ssh -x -l $login $fqdn 'cd $incoming;chmod 0644 $rsyncfiles".
-			($queuedir ? ";mv $rsyncfiles $queuedir" : "").
-			"'";
 		unless ($dry) {
 			p "\n";
-			system("rsync --partial -zave ssh $options -x $rsyncfiles $login" . "@" . "$fqdn:$incoming");
+			system("rsync --partial -zave ssh $options -x $copiedfiles $login" . "@" . "$fqdn:$incoming");
 			if ($?) {
 				unlink $log{$job};
-				fatal("rsync $rsyncfiles failed\n");
+				fatal("rsync $copiedfiles failed\n");
 			}
-			if ($wrong_mode) {
+			if ($needcmd) {
 				system($cmd);
 			}
 			fatal("$cmd failed\n") if $?;
 		} else {
-			p "\n+ rsync --partial -zave ssh $options -x $rsyncfiles $login" . "@" . "$fqdn:$incoming";
+			p "\n+ rsync --partial -zave ssh $options -x $copiedfiles $login" . "@" . "$fqdn:$incoming";
 			p "\n+ $cmd";
 		}
-		$allfiles = $rsyncfiles;
+		$allfiles = $copiedfiles;
 	}
 	if ($batchmode) {
 		unless ($dry) {

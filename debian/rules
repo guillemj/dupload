@@ -13,9 +13,13 @@ build-stamp:
 clean:
 	dh_testdir
 	$(MAKE) clean
+	rm -f build-stamp
 	dh_clean build
 
 binary: binary-indep binary-arch
+
+binary-arch:
+# do nothing here
 
 binary-indep: DH_OPTIONS=-i
 binary-indep: build
