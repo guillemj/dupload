@@ -298,18 +298,39 @@ PACKAGE: foreach my $change (@changes) {
 	# distribution code and the files
 	# avoid duplicate mail addressees
 	open(C, "<$cf") or fatal("Can't read $cf: $!\n");
+	my ($field);
 	while (<C>) { 
 		chomp;
-		/^changes:\s*/i and $fields{changes}++;
-		/^architecture:\s+/i and chomp($arch{$job} = $'), next;
+		/^changes:\s*/i and do {
+		    $fields{changes}++;
+		    $field = undef;
+		    next;
+		};
+		/^architecture:\s+/i and do {
+		    chomp($arch{$job} = "$'");
+		    $field = undef;
+		    next;
+		};
 		/^distribution:\s+/i and do { $_ = " $'";
 			/\Wstable/i and $mailto{$mailto}++;
 			/\Wunstable/i and $mailto{$mailtx}++;
-			/\Wfrozen/i and $mailto{$mailtx}++;
 			/\Wexperimental/i and $mailto{$mailtx}++;
+			/\WUNRELEASED/ and fatal "distribution: UNRELEASED";
+			$field = undef;
 			next;
 		};
-		/^files:\s*$/i and last; 
+		/^(files|checksums-(?:sha1|sha256)):\s*$/i and do {
+		    $field = lc $1;
+		    push @{$fields{$field}}, $' if $';
+		    next;
+		};
+		/^\s+/ and $field and do {
+		    push @{$fields{$field}}, $' if $';
+		    next;
+		};
+		/^[\w.-]+:/ and do {
+		    $field = undef;
+		};
 	}
 	foreach (keys %mailto) {
 		my $k = $_;  
@@ -336,38 +357,69 @@ PACKAGE: foreach my $change (@changes) {
 		$extra{$job} = [@extra];
 	}
 
-	# read the files from the changes file
-	while (<C>) {
+	my %checksums;
+	foreach my $alg (qw(sha1 sha256)) {
+	    foreach (@{$fields{"checksums-$alg"}}) {
 		chomp;
-		/^ / and do { 
-			my ($md5, $size, $sect, $pri, $file) = split; 
-			$md5{$file} = $md5;
+		my ($chksum, $size, $file) = split;
+		$checksums{$file}{$alg} = $chksum;
+		if (exists $checksums{$file}{size}
+		    and $checksums{$file}{size} != $size) {
+		    fatal "differing sizes for file $file: $size != $checksums{$file}{size}";
 		}
+		$checksums{$file}{size} = $size;
+	    }
+	}
+	foreach (@{$fields{files}}) {
+	    chomp;
+	    my ($chksum, $size, undef, undef, $file) = split;
+	    $checksums{$file}{md5} = $chksum;
+	    if (exists $checksums{$file}{size}
+		and $checksums{$file}{size} != $size) {
+		fatal "differing sizes for file $file: $size != $checksums{$file}{size}";
+	    }
+	    $checksums{$file}{size} = $size;
 	}
 	close(C);
-	%md5 && $fields{changes} or p(": not a changes file ]\n"), next PACKAGE;
+	%checksums && $fields{changes} or p(": not a changes file ]\n"), next PACKAGE;
 
 	# test the md5sums
-	foreach (keys %md5) {
-			my $file = $_;
-			p "\n $file";
-			if (-r $file) { $_ = `md5sum $file`; $_ = (split)[0]; }
-			else { print ": $!"; $_ = ""; }
-			$md5{$file} eq $_ or do {
-				$keep or fatal("MD5sum mismatch for $file\n");
-				w("MD5sum mismatch for $file",
-					", skipping $job\n");
-				push @skipped, $cf;
-				next PACKAGE;
-			};
-			p ", md5sum ok";
-			if (!$force && @done && grep(/^u \Q${file}\E/, @done)) {
-				p ", already done for $host";
-			} else {
-				push @files, $file;
-			}
-			next; 
-	};
+	foreach my $file (keys %checksums) {
+	    p "\n $file";
+	    if ($checksums{$file}{size} != -s $file) {
+		$keep or fatal("Size mismatch for $file\n");
+		w("Size mismatch for $file, skipping $job\n");
+		push @skipped, $cf;
+		next PACKAGE;
+	    }
+	    p ", size ok";
+
+	    foreach my $alg (qw(md5 sha1 sha256)) {
+		next unless $checksums{$file}{$alg};
+
+		if (-r $file) {
+		    $_ = `${alg}sum $file`;
+		    $_ = (split)[0];
+		} else {
+		    print ": $!";
+		    $_ = "";
+		}
+
+		$checksums{$file}{$alg} eq $_ or do {
+		    $keep or fatal(uc($alg)."sum mismatch for $file\n");
+		    w(uc($alg)."sum mismatch for $file, skipping $job\n");
+		    push @skipped, $cf;
+		    next PACKAGE;
+		};
+		p ", ${alg}sum ok";
+	    }
+	    if (!$force && @done && grep(/^u \Q${file}\E/, @done)) {
+		p ", already done for $host";
+	    } else {
+		push @files, $file;
+	    }
+	    next;
+	}
 
 	# The changes file itself
 	p "\n $cf ok";

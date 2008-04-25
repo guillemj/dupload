@@ -1,3 +1,19 @@
+dupload (2.6.3.4) unstable; urgency=low
+
+  * Non-maintainer upload (Closes: #477220)
+  * Update mentors.debian.net configuration. Patch by Charles Plessy.
+    (Closes: #226101)
+  * Add volatile configuration. (Closes: #420693)
+  * Add backports.org configuration.
+  * Abort upload if distribution is UNRELEASED. (Closes: #384703)
+    (also remove support for "frozen")
+  * Add support for parsing and testing new checksums-* fields.
+    dupload will not complain if the fields are absent.
+    (Closes: #473518)
+  * Check file sizes, too. (Closes: #360161)
+
+ -- Frank Lichtenheld <djpig@debian.org>  Fri, 25 Apr 2008 23:51:29 +0200
+
 dupload (2.6.3.3) unstable; urgency=low
 
   * NMU (with maintainers consent)

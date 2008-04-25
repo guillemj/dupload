@@ -20,7 +20,7 @@ B<dupload> will warn if the name of the file doesn't end with
 E<quot>.changesE<quot>. Further processing is done chdir'ed into the
 directories of the changes files.
 
-B<dupload> tests the MD5 sum for each file listed in the F<.changes> file,
+B<dupload> tests the available checksums and size for each file listed in the F<.changes> file,
 and fails if it finds a mismatch. If all this goes well, B<dupload> checks
 if there is an F<.upload> file with the basename of the F<.changes> file.
 If the file to be uploaded is recorded to have already been uploaded to the
@@ -97,7 +97,7 @@ Upload regardless of the transfers logged as already completed.
 
 =item B<-k> B<--keep>
 
-Keep going, skipping packages whose MD5sums don't match.
+Keep going, skipping packages whose checksums don't match.
 
 =item B<-c> B<--configfile>
 
