@@ -1,3 +1,15 @@
+dupload (2.6.4) unstable; urgency=low
+
+  * Add myself to Uploaders with Josip's approval
+    + acknowledge NMUs 
+  * Make a few clean-ups I refrained from in the NMUs:
+    + Increase debhelper compat level to 5
+    + Add some missing dh_* calls (md5sums and installman)
+    + Use dh_install and dh_link instead of install and ln
+    + Bump Standards-Version to 3.7.3 (no changes)
+
+ -- Frank Lichtenheld <djpig@debian.org>  Fri, 02 May 2008 13:43:03 +0200
+
 dupload (2.6.3.4) unstable; urgency=low
 
   * Non-maintainer upload (Closes: #477220)
@@ -16,7 +28,7 @@ dupload (2.6.3.4) unstable; urgency=low
 
 dupload (2.6.3.3) unstable; urgency=low
 
-  * NMU (with maintainers consent)
+  * NMU (with maintainers consent) (Closes: #398135)
   * Recommend openssh-client instead of ssh, keep ssh as alternative
     for now. Reported by Aaron Schrab (Closes: #387678)
   * Setting $default_host from a local dupload.conf is now possible

@@ -2,8 +2,9 @@ Source: dupload
 Section: devel
 Priority: optional
 Maintainer: Josip Rodin <joy-packages@debian.org>
-Standards-Version: 3.6.1
-Build-Depends: debhelper (>= 4)
+Uploaders: Frank Lichtenheld <djpig@debian.org>
+Standards-Version: 3.7.3
+Build-Depends: debhelper (>= 5)
 Build-Depends-Indep: perl, libnet-perl
 
 Package: dupload
