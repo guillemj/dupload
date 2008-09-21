@@ -3,13 +3,13 @@ Section: devel
 Priority: optional
 Maintainer: Josip Rodin <joy-packages@debian.org>
 Uploaders: Frank Lichtenheld <djpig@debian.org>
-Standards-Version: 3.7.3
+Standards-Version: 3.8.0
 Build-Depends: debhelper (>= 5)
 Build-Depends-Indep: perl, libnet-perl
 
 Package: dupload
 Architecture: all
-Depends: perl (>= 5.003), libnet-perl
+Depends: perl, libnet-perl
 Recommends: openssh-client | ssh
 Suggests: lintian, mail-transport-agent
 Description: utility to upload Debian packages

@@ -1,3 +1,19 @@
+dupload (2.6.6) unstable; urgency=low
+
+  * Update definitions for ftp-master, anonymous-ftp-master and
+    delayed to use ssh.upload.debian.org and ftp.upload.debian.org.
+    (Closes: #499637)
+
+ -- Frank Lichtenheld <djpig@debian.org>  Sun, 21 Sep 2008 18:24:34 +0200
+
+dupload (2.6.5) unstable; urgency=low
+
+  * Update definition of DELAYED queue to use ssh-delayed.upload.debian.org.
+  * Bump Standards-Version to 3.8.0 (no changes).
+  * Drop versioning from Perl dependency, even bo fulfilled it.
+
+ -- Frank Lichtenheld <djpig@debian.org>  Fri, 12 Sep 2008 04:35:31 +0200
+
 dupload (2.6.4) unstable; urgency=low
 
   * Add myself to Uploaders with Josip's approval
