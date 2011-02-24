@@ -1,0 +1,36 @@
+# Debian GNU/Linux dupload(1) completion
+# Original file:
+#   Debian GNU/Linux dput(1) completion
+#   Copyright 2002 Roland Mas <lolando@debian.org>
+# Modified for dupload(1)
+#   Paul Evans <leonerd@leonerd.org.uk>
+
+have dupload &&
+_dupload()
+{
+    local cur prev options paroptions special i delayed_options hosts
+    
+    COMPREPLY=()
+    cur=${COMP_WORDS[COMP_CWORD]}
+    prev=${COMP_WORDS[COMP_CWORD-1]}
+    options='-c --configfile -d --debug -f --force -k --keep --no --nomail \
+        --mailonly --noarchive -p --print -q --quiet -t --to -V -Version'
+
+    case $prev in
+	--config|-c)
+	    COMPREPLY=( $( compgen -o filenames -G "$cur*" ) )
+	    ;;
+	*)
+	    COMPREPLY=( $(
+		    compgen -G "${cur}*.changes"
+		    compgen -G "${cur}*.asc"
+		    compgen -G "${cur}*.sig"
+		    compgen -W "$options" | grep "^$cur"
+		) )
+	    ;;
+    esac
+
+    return 0
+
+}
+[ "$have" ] && complete -F _dupload -o filenames dupload

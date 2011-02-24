@@ -95,6 +95,11 @@ your local MTA likes.
 Set the passive mode for FTP transfers. Since B<dupload> uses Net::FTP,
 you can also use the environment variable FTP_PASSIVE.
 
+=item B<options> [optional]
+
+String that will be added verbatim to the command line of any
+scp or rsync calls done. 
+
 =item B<dinstall_runs> [optional]
 
 Tells B<dupload> that the remote host runs dinstall (or equivalent)

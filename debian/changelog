@@ -1,3 +1,17 @@
+dupload (2.7.0) unstable; urgency=low
+
+  * Bump Standards-Version to 3.9.1 (no changes)
+  * Convert debian/rules to use dh
+  * Update config for backports uploads.
+    (Closes: #595734, #595737)
+  * Add bash-completion support, thanks to Paul Evans.
+    (Closes: #514774)
+  * Fix broken link in dupload.conf for security upload
+    documentation, thanks to Niko Tyni. (Closes: #507249)
+  * Document "options" host option. (Closes: #604014)
+
+ -- Frank Lichtenheld <djpig@debian.org>  Thu, 24 Feb 2011 01:02:00 +0100
+
 dupload (2.6.6) unstable; urgency=low
 
   * Update definitions for ftp-master, anonymous-ftp-master and
