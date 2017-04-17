@@ -46,10 +46,10 @@ dupload:
 %:	%pod
 	$(POD2MAN) \
 	  --section=$(subst .,,$(suffix $@)) \
-	  --name=$$(echo $(basename $@) | perl -pe '$$_=uc') \
+	  --name=$(basename $@) \
 	  --center="Debian Project" \
-	  --date="`LC_ALL=C date '+%B %Y'`" \
-	  --release="dupload $(version)" \
+	  --date="`LC_ALL=C date '+%F'`" \
+	  --release="$(version)" \
 	    $< >,$@ && mv -f ,$@ $@; \
 	  rm -f ,$@
 
