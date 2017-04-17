@@ -21,6 +21,10 @@ dupload (2.8.0) UNRELEASED; urgency=medium
   * Simplify Version field fetching with new dpkg-parsechangelog -S option.
   * Reflow and improve package description.
   * Remove stray "d" inbetween changelog entries.
+  * Update and unify copyright and license information.
+    - Remove AUTHOR sections from man pages.
+    - Expand license text in file headers.
+    - Update copyright holder notices.
 
  -- Guillem Jover <guillem@debian.org>  Mon, 06 Mar 2017 17:19:17 +0100
 

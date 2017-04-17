@@ -1,6 +1,6 @@
 # Makefile for dupload
-# Copyright (C) 1996 Heiko Schlittermann
-# Copyright (C) 2002 Josip Rodin
+# Copyright © 1996 Heiko Schlittermann
+# Copyright © 2002 Josip Rodin
 
 version = $(shell dpkg-parsechangelog -SVersion)
 
