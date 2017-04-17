@@ -5,6 +5,8 @@ dupload (2.8.0) UNRELEASED; urgency=medium
   * Bump Standards-Version to 3.9.8.
   * Switch debian/copyright to machine-readable format.
   * Wrap and sort fields in debian/control.
+  * Swap dh arguments to pass $@ first, required by newer debhelper
+    compatibility levels.
 
  -- Guillem Jover <guillem@debian.org>  Mon, 06 Mar 2017 17:19:17 +0100
 
