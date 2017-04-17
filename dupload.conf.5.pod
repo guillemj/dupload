@@ -33,7 +33,7 @@ For examples of the configuration please refer to the global configuration
 file F</etc/dupload.conf>.
 
 It contains associative arrays, each indexed by the nickname (see B<--to>
-option of B<dupload>), for the following items: 
+option of B<dupload>), for the following items:
 
 =over 4
 
@@ -64,7 +64,7 @@ just delete the B<.upload> file completely.
 
 =item B<login> [optional]
 
-The account name used to log into the FTP server. The default is 
+The account name used to log into the FTP server. The default is
 E<quot>anonymousE<quot>, should work with firewall logins too.
 
 =item B<incoming> [required]
@@ -116,7 +116,7 @@ you can also use the environment variable FTP_PASSIVE.
 =item B<options> [optional]
 
 String that will be added verbatim to the command line of any
-scp or rsync calls done. 
+scp or rsync calls done.
 
 =item B<dinstall_runs> [optional]
 
@@ -158,8 +158,8 @@ always run (even in dry mode) and stop B<dupload> if they fail
 (failure being mesured by the hook's exit status). Post-uploads
 are only run when you are not in dry mode and only if the uploading succeeded.
 
-Both sorts of hooks are run for a given category: changes, sourcepackage, 
-package, file or deb. 
+Both sorts of hooks are run for a given category: changes, sourcepackage,
+package, file or deb.
 
 =over 4
 
@@ -170,7 +170,7 @@ with the filename as its parameter.
 
 =item sourcepackage
 
-This hook is run once per "changes" file 
+This hook is run once per "changes" file
 with the source package name and its version as its two parameters.
 
 =item package

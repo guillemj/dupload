@@ -2,6 +2,7 @@ dupload (2.9.0) UNRELEASED; urgency=medium
 
   * Update the TODO list.
   * Rename man pages to from Npod to N.pod extensions.
+  * Remove trailing whitespace.
 
  -- Guillem Jover <guillem@debian.org>  Sun, 28 May 2017 03:50:00 +0200
 
@@ -106,7 +107,7 @@ dupload (2.6.5) unstable; urgency=low
 dupload (2.6.4) unstable; urgency=low
 
   * Add myself to Uploaders with Josip's approval
-    + acknowledge NMUs 
+    + acknowledge NMUs
   * Make a few clean-ups I refrained from in the NMUs:
     + Increase debhelper compat level to 5
     + Add some missing dh_* calls (md5sums and installman)
@@ -161,24 +162,24 @@ dupload (2.6.3.2) unstable; urgency=low
 
 dupload (2.6.3.1) unstable; urgency=low
 
-  * NMU to remove obsolete queues, based on 
+  * NMU to remove obsolete queues, based on
     https://www.debian.org/doc/developers-reference/ch-pkgs.en.html
     and
     https://lists.debian.org/debian-devel/2004/debian-devel-200401/msg01950.html>
     also cleaned up the bug list.
   * Removed non-functioning upload queues: anonymous-non-us, non-us,
     chiark, erlangen, uk, jp, and samosa. (Closes: #222938, #229744)
-  * Added notes extracted from the Developer's reference regarding 
+  * Added notes extracted from the Developer's reference regarding
     uploads to security and commented out these entries to prevent
     developers from uploading there unintentionally. (Closes: #251286)
   * Added a default configuration for uploading to mentors.debian.net
     (Closes: #226101)
   * Changed default (commented) upload queue to be anonymous-ftp-master
   * Use Goswin's patch to add an 'options' field in the configuration file
-    which can be used to setup --progress and -L in rsync calls, or 
+    which can be used to setup --progress and -L in rsync calls, or
     additional options to SSH if needed (Closes: #98949, #319910, #225400)
   * Check the .changes signature using gpg or pgp (if available) in order to
-    prevent unsigned uploads. This is active by default for GPG but can be 
+    prevent unsigned uploads. This is active by default for GPG but can be
     disabled in dupload.conf at will. Also, added two new simple scripts
     gpg-check and pgp-check to provide a wrapper to the check so that the
     error message in case of a failure is more user-friendly. I've implemented
@@ -303,7 +304,7 @@ dupload (2.4.1) frozen unstable; urgency=low
 dupload (2.4) unstable; urgency=low
 
   * Patch (both from Joey Hess <joey@kitenet.net> and myself) to fix hooks.
-    Hooks are now seriously tested. Closes: #43644 
+    Hooks are now seriously tested. Closes: #43644
   * $dinstall_runs is now set for every host which transfers to master.
     Closes #43722.
   * The fact that the "scpb" method is the recommened one is now clear
@@ -326,10 +327,10 @@ dupload (2.2) unstable; urgency=low
     be cancelled if they fail) and after successful uploading.
     See dupload.conf(5). Closes #34883 and, I hope, almost all the future
     wishlists "Can you add such and such in dupload" :-)
-  * Small improvment to the automatic changelog detection code. Closes 
+  * Small improvment to the automatic changelog detection code. Closes
     #39072
-  * Several cleanings of the source code and dependencies, thanks to 
-    Julian Gilbey <J.D.Gilbey@qmw.ac.uk> 
+  * Several cleanings of the source code and dependencies, thanks to
+    Julian Gilbey <J.D.Gilbey@qmw.ac.uk>
   * New upload queue samosa.debian.org. Closes #38838
 
  -- Stephane Bortzmeyer <bortzmeyer@debian.org>  Thu,  3 Jun 1999 11:26:03 +0200
@@ -340,7 +341,7 @@ dupload (2.1) unstable; urgency=low
     per-host variable dinstall_runs is set, do not send mail uselessly.
     Patch by Brian Almeida <bma@debian.org>. Closes #35308
   * Implements --quiet. Patch by Julian Gilbey <J.D.Gilbey@qmw.ac.uk>
-  * Adds a new line to the .upload file to record successful uploading. 
+  * Adds a new line to the .upload file to record successful uploading.
     Patch by Julian Gilbey <J.D.Gilbey@qmw.ac.uk>. Closes #34209
   * New global configuration variable default_host. --to is no longer
     mandatory. Closes #34208 and probably #31684 by a side-effect.
@@ -360,7 +361,7 @@ dupload (2.1) unstable; urgency=low
     correct) now works also for the 'scpb' method. Allows to close #13243,
     longest dupload bug ever, 604 days old.
   * Announcements are sent according to the Debian Developer's Reference and
-    documented as such (there is nothing in the Policy Manual about 
+    documented as such (there is nothing in the Policy Manual about
     announcements). Closes #37521
   * New way to set the passive mode. Should close #36087
   * Copyright updated (again, pre-2.0 souvenirs). Closes #35603
@@ -372,7 +373,7 @@ dupload (2.1) unstable; urgency=low
 
 dupload (2.0) unstable; urgency=low
 
-  * New dependencies: recommends a mail-transport-agent (the 
+  * New dependencies: recommends a mail-transport-agent (the
     announcement is really important) and suggests lintian
     (see #34883).
   * When using SSH, do not chmod on the remote host if the local mode
@@ -386,11 +387,11 @@ dupload (2.0) unstable; urgency=low
     and "passive" (for FTP).
   * Do not ask for password when doing a dry run. Closes #31597
   * Routines that croak() are now in a separate package, to avoid
-    displaying the stack, with its passwords. Thanks to 
+    displaying the stack, with its passwords. Thanks to
     Guy Decoux <decoux@moulon.inra.fr>. Closes #10003
   * New dupload.conf. Closes #34943
   * Now uses Net::FTP module instead of a custom FTP module. And
-    depends on libnet-perl. Uses better error messages. Closes 
+    depends on libnet-perl. Uses better error messages. Closes
     #28283, #7541, #33437
 
  -- Stephane Bortzmeyer <bortzmeyer@debian.org>  Thu, 25 Mar 1999 15:47:39 +0100
@@ -413,7 +414,7 @@ dupload (1.17) unstable; urgency=low
 dupload (1.16.4) frozen unstable; urgency=low
 
   * Non-maintainer upload
-  * Added dupload.conf entry for ftp://ftp3.linux.it/pub/Linux/UploadQueue/ 
+  * Added dupload.conf entry for ftp://ftp3.linux.it/pub/Linux/UploadQueue/
   * Made appropriate /usr/doc/dupload/copyright file,
     which fixes #14390, #24699, #29766.
   * Fixed the section/priority according to the overriding Packages file
@@ -514,8 +515,8 @@ dupload (1.8) experimental; urgency=low
   * scp is supported now
   * address of chiark matches changed reality again
   * avoid duplicate announcements
-  * extra announcement file name had typo 
-  * now looking for following extra files 
+  * extra announcement file name had typo
+  * now looking for following extra files
     - package.announce
     - package_version.announce
     - package_version-debian.announce
