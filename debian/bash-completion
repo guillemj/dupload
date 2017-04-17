@@ -1,6 +1,6 @@
-# Debian GNU/Linux dupload(1) completion
+# Debian dupload(1) completion
 # Original file:
-#   Debian GNU/Linux dput(1) completion
+#   Debian dput(1) completion
 #   Copyright 2002 Roland Mas <lolando@debian.org>
 # Modified for dupload(1)
 #   Paul Evans <leonerd@leonerd.org.uk>
