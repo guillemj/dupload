@@ -43,14 +43,14 @@ install:	all
 	@echo; echo "** You should install dupload.conf to $(confdir)"; echo
 
 clean:
-	rm -f core *.[0-9]pod.* *~ $(MAN)
+	rm -f core *.[0-9].pod.* *~ $(MAN)
 
 .PHONY: dupload
 dupload:
 	perl -c $@
 	perl -c dupload.conf
 
-%:	%pod
+%:	%.pod
 	$(POD2MAN) \
 	  --section=$(subst .,,$(suffix $@)) \
 	  --name=$(basename $@) \
