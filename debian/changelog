@@ -18,6 +18,7 @@ dupload (2.8.0) UNRELEASED; urgency=medium
   * Remove notion that being written in perl is a bug from man page.
   * Fix various typos.
   * Improve man page metadata.
+  * Simplify Version field fetching with new dpkg-parsechangelog -S option.
 
  -- Guillem Jover <guillem@debian.org>  Mon, 06 Mar 2017 17:19:17 +0100
 

@@ -2,7 +2,7 @@
 # Copyright (C) 1996 Heiko Schlittermann
 # Copyright (C) 2002 Josip Rodin
 
-version = $(shell LC_ALL=C dpkg-parsechangelog|grep '^Version'|sed 's/^.*:[ \t]*//')
+version = $(shell dpkg-parsechangelog -SVersion)
 
 MAN1 = dupload.1
 MAN5 = dupload.conf.5
