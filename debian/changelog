@@ -8,6 +8,8 @@ dupload (2.8.0) UNRELEASED; urgency=medium
   * Swap dh arguments to pass $@ first, required by newer debhelper
     compatibility levels.
   * Switch to debhelper compatibility level 9.
+  * Change “Debian GNU/Linux” references to Debian.
+  * Mark package as Multi-Arch foreign.
 
  -- Guillem Jover <guillem@debian.org>  Mon, 06 Mar 2017 17:19:17 +0100
 

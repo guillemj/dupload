@@ -13,6 +13,7 @@ Build-Depends-Indep:
 
 Package: dupload
 Architecture: all
+Multi-Arch: foreign
 Depends:
  ${misc:Depends},
  ${perl:Depends},
