@@ -57,7 +57,6 @@ my (@changes,	# the files we'll have to read from
     $fqdn, 		# per host
     $server,
     $dinstall_runs,
-    $nonus,
     $passive,
     $nomail, $archive, $noarchive,
     %preupload, %postupload,
@@ -69,7 +68,6 @@ my (@changes,	# the files we'll have to read from
     %files, %package, %version, %arch,	# per job
     %dir, %changes, %log, %announce,    # ...
     %extra,
-    $suspicious_but_proceed,
 );
 
 ### Prototypes
@@ -152,7 +150,6 @@ $host or fatal("Need host to upload to.  (See --to option or the default_host co
   $mailtx = $nick->{mailtx} || $mailto;
   $cc = $nick->{cc};
   $dinstall_runs = $nick->{dinstall_runs};
-  $nonus = $nick->{nonus};
   $passive = $nick->{passive}; 
   if ($passive and ($method ne "ftp")) { 
       fatal ("Passive mode is only for FTP ($host)");
@@ -455,17 +452,6 @@ PACKAGE: foreach my $change (@changes) {
 			}
 		}
 		if ($file =~ /\.deb$/) {
-			# non-US sanity check
-			if ((`dpkg -I $file | grep '^ Section:'` =~ /non-US/i) &&
-			    ($fqdn !~ /(non-us|security).debian.org/i) && !$nonus) {
-				if (!defined($suspicious_but_proceed) &&
-                                    $suspicious_but_proceed !~ /^y/i) {
-					print "Looks like you're uploading non-US packages to a normal upload queue.\n";
-					print "Are you sure you want to proceed? ";
-					$suspicious_but_proceed = <STDIN>;
-					die "Aborting upload.\n" unless $suspicious_but_proceed =~ /^y/i;
-				}
-			}
 			push @all_the_debs, $file;
 			my ($binary_package, $version, $garbage) = split ('_', $file);
 			$binary_package = basename($binary_package);
@@ -896,7 +882,6 @@ cc            : $r->{cc}
 passive FTP   : $r->{passive}
 dinstall runs : $r->{dinstall_runs}
 archive mail  : $r->{archive}
-non-US        : $r->{nonus}
 
 xxx
 	}
