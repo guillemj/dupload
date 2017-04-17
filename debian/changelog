@@ -19,6 +19,7 @@ dupload (2.8.0) UNRELEASED; urgency=medium
   * Fix various typos.
   * Improve man page metadata.
   * Simplify Version field fetching with new dpkg-parsechangelog -S option.
+  * Reflow and improve package description.
 
  -- Guillem Jover <guillem@debian.org>  Mon, 06 Mar 2017 17:19:17 +0100
 

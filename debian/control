@@ -23,10 +23,9 @@ Recommends:
 Suggests:
  lintian,
  mail-transport-agent,
-Description: utility to upload Debian packages
- dupload will automagically upload Debian packages to a remote host
- with a Debian upload queue. The default host is configurable,
- along with the upload method and a lot of other things.
- All uploads are logged.
+Description: Debian package upload tool
+ dupload will automagically upload Debian packages to a remote host with
+ a Debian upload queue. The default host is configurable, along with the
+ upload method and a lot of other things. All uploads are logged.
  .
- It's intended only for Debian package maintainers.
+ It is intended mainly for people maintaining Debian packages.
