@@ -3,6 +3,7 @@ dupload (2.9.0) UNRELEASED; urgency=medium
   * Update the TODO list.
   * Rename man pages to from Npod to N.pod extensions.
   * Remove trailing whitespace.
+  * Remove PGP support, we always have GnuPG now.
 
  -- Guillem Jover <guillem@debian.org>  Sun, 28 May 2017 03:50:00 +0200
 
