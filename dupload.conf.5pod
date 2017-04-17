@@ -202,7 +202,7 @@ Unlike the two others, this one is specific to one host, master.
      $cfg{master}{preupload}{'changes'} = "echo Uploading %1";
 
 
-=head1 LOCATION
+=head1 FILES
 
 The configuration is searched as following:
 
@@ -211,7 +211,7 @@ The configuration is searched as following:
 
 The latest entries override the former.
 
-=head1 ENVIRONMENT VARIABLES
+=head1 ENVIRONMENT
 
 Those of Net::FTP for the FTP method:
 
