@@ -11,6 +11,7 @@ dupload (2.8.0) UNRELEASED; urgency=medium
   * Change “Debian GNU/Linux” references to Debian.
   * Mark package as Multi-Arch foreign.
   * Remove support for obsolete non-US section.
+  * Update default list of sources files used in man page.
 
  -- Guillem Jover <guillem@debian.org>  Mon, 06 Mar 2017 17:19:17 +0100
 

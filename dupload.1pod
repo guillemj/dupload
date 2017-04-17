@@ -158,7 +158,7 @@ order, overriding each other):
 =head2 Other
 
 Various Debian package files are used by B<dupload>: .dsc, .changes, .deb,
-Z<>.orig.tar.gz, .diff.gz
+Z<>.orig.tar.*, .debian.tar.*, .diff.*
 
 B<dupload> itself writes the log file I<package_version-debian>.upload,
 and the additional announcement files I<package.announce>,
