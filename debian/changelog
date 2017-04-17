@@ -4,6 +4,7 @@ dupload (2.8.0) UNRELEASED; urgency=medium
     with the agreement of previous maintainer, Josip Rodin.
   * Bump Standards-Version to 3.9.8.
   * Switch debian/copyright to machine-readable format.
+  * Wrap and sort fields in debian/control.
 
  -- Guillem Jover <guillem@debian.org>  Mon, 06 Mar 2017 17:19:17 +0100
 

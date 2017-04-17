@@ -4,14 +4,24 @@ Priority: optional
 Maintainer: Dpkg Developers <debian-dpkg@lists.debian.org>
 Uploaders: Guillem Jover <guillem@debian.org>
 Standards-Version: 3.9.8
-Build-Depends: debhelper (>= 7.0.50~), bash-completion
-Build-Depends-Indep: perl, libnet-perl
+Build-Depends:
+ debhelper (>= 7.0.50~),
+ bash-completion,
+Build-Depends-Indep:
+ perl,
+ libnet-perl,
 
 Package: dupload
 Architecture: all
-Depends: ${perl:Depends}, libnet-perl, ${misc:Depends}
-Recommends: openssh-client | ssh
-Suggests: lintian, mail-transport-agent
+Depends:
+ ${misc:Depends},
+ ${perl:Depends},
+ libnet-perl,
+Recommends:
+ openssh-client | ssh,
+Suggests:
+ lintian,
+ mail-transport-agent,
 Description: utility to upload Debian packages
  dupload will automagically upload Debian packages to a remote host
  with a Debian upload queue. The default host is configurable,
