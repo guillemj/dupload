@@ -25,6 +25,7 @@ dupload (2.8.0) UNRELEASED; urgency=medium
     - Remove AUTHOR sections from man pages.
     - Expand license text in file headers.
     - Update copyright holder notices.
+  * Remove commented out code.
 
  -- Guillem Jover <guillem@debian.org>  Mon, 06 Mar 2017 17:19:17 +0100
 

@@ -22,12 +22,6 @@
 #
 # see dupload(1) for help.
 
-#BEGIN { 
-#	$ENV{PERL_INC} # for my tests only
-#		and unshift @INC, $ENV{PERL_INC};
-#	unshift @INC, ""; 
-#}
-
 use strict;
 use 5.003; # Because of the prototypes
 use Cwd;
