@@ -31,7 +31,7 @@ repl_script = sed -i \
 	-e "s:^my \$$version = '.*';:my \$$version = '$(version)';:" \
 	$(nil)
 
-all: dupload $(MAN)
+all: $(MAN)
 
 install:	all
 	$(mkdirhier) $(bindir) $(man1dir) $(man5dir) $(extradir)
@@ -45,10 +45,10 @@ install:	all
 clean:
 	rm -f core *.[0-9].pod.* *~ $(MAN)
 
-.PHONY: dupload
-dupload:
-	perl -c $@
-	perl -c dupload.conf
+.PHONY: check
+
+check:
+	PERL5LIB=lib prove
 
 %:	%.pod
 	$(POD2MAN) \
