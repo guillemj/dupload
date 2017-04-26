@@ -20,6 +20,7 @@ dupload (2.8.0) UNRELEASED; urgency=medium
   * Improve man page metadata.
   * Simplify Version field fetching with new dpkg-parsechangelog -S option.
   * Reflow and improve package description.
+  * Remove stray "d" inbetween changelog entries.
 
  -- Guillem Jover <guillem@debian.org>  Mon, 06 Mar 2017 17:19:17 +0100
 
@@ -344,7 +345,7 @@ dupload (2.0) unstable; urgency=low
     #28283, #7541, #33437
 
  -- Stephane Bortzmeyer <bortzmeyer@debian.org>  Thu, 25 Mar 1999 15:47:39 +0100
-d
+
 dupload (1.17) unstable; urgency=low
 
   * Ability to add a "X-No-Archive: yes" header. Closes #33896
