@@ -14,6 +14,7 @@ dupload (2.8.0) UNRELEASED; urgency=medium
   * Update default list of sources files used in man page.
   * Use more standard section names in man page.
   * Remove reference to long-removed chiark queue from man page.
+  * Remove ancient comment about signed mails on broken MUAs from man page.
 
  -- Guillem Jover <guillem@debian.org>  Mon, 06 Mar 2017 17:19:17 +0100
 

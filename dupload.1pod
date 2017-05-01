@@ -46,11 +46,6 @@ version, name it foobar_3.14.announce.
 If you want it made with B<every> upload of a given package, name it
 foobar.announce.
 
-
-B<Please note:>
-Some mail readers (like elm w/ PGP extensions) don't show mail contents
-outside of the signed part of a message.
-
 =head2 Login and password
 
 If no login (username) is defined in the configuration file,
