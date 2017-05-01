@@ -102,7 +102,7 @@ what we would do.
 
 =item B<--nomail>
 
-Supress announcement for this run. You can send it later by just
+Suppress announcement for this run. You can send it later by just
 calling dupload again w/o this option. Note that this option is by
 default implied for all hosts with the "dinstall_runs" option set to 1.
 
@@ -125,7 +125,7 @@ displayed.
 
 =item B<-q> B<--quiet>
 
-Be quiet, i.e. supress normal output.
+Be quiet, i.e., suppress normal output.
 
 =item B<-t> B<--to> I<nickname> B<optional>
 

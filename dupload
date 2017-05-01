@@ -195,7 +195,7 @@ $host or fatal("Need host to upload to.  (See --to option or the default_host co
 $noarchive = $::opt_noarchive || (! $archive);
 
 # get the changes file names
-@ARGV or push @ARGV, ".";	# use currend dir if no args
+@ARGV or push @ARGV, ".";	# use current dir if no args
 foreach (@ARGV) {
 	my @f = undef;
 	-r $_ or fatal("Can't read $_: $!\n");
@@ -229,8 +229,8 @@ p("\n");
 
 select((select(STDOUT), $| = 1)[0]);
 
-# parse the changes files and update some 
-# hashs, indexed by the jobname: 
+# parse the changes files and update some
+# hashes, indexed by the jobname:
 #  %job - the files to be uploaded
 #  %log - the logfile name
 #  %dir - where the files are located
@@ -864,7 +864,7 @@ sub ftp_open($$$) {
 		or fatal("Can't set binary type\n");
 }
 
-### Display what whe know ...
+### Display what we know ...
 sub info($) {
 	my ($host) = @_;
 
