@@ -28,6 +28,7 @@ dupload (2.8.0) UNRELEASED; urgency=medium
   * Remove commented out code.
   * Drop obsolete volatile queue. Closes: #661376
     Thanks to Sebastian Andrzej Siewior <sebastian@breakpoint.cc>.
+  * Fix indentation for bpo queue.
 
  -- Guillem Jover <guillem@debian.org>  Mon, 06 Mar 2017 17:19:17 +0100
 
