@@ -135,10 +135,24 @@ p("$progname version: $version\n"), exit 0 if
     ($::opt_Version or $::opt_version);
 
 if ($::opt_help) {
-    p ("Usage: $progname --to HOST FILE.changes ...\n" .
-       "\tUploads the files listed in the above '.changes' to the\n".
-       "\thost HOST.\n" .
-       "\tSee dupload(1) for details.\n");
+    p (
+"Usage: $progname [<options>...] [<changes-file|directory>...]\n" .
+"\n" .
+"Options:\n" .
+"  -t, --to <nickname>      Upload to <nickname>'s host.\n" .
+"  -f, --force              Upload even if a previous upload is present.\n" .
+"  -k, --keep               Keep going, ignore packages with wrong checksums\n" .
+"      --no                 Dry run.\n" .
+"      --nomail             Suppress mail announcment for this run.\n" .
+"      --mailonly           Dry run, except that mail announcment is sent.\n" .
+"      --noarchive          Mark the mail announcment to not be archived.\n" .
+"  -p, --print              Print the configuration file.\n" .
+"  -c, --configfile         Read dupload.conf from the current directory.\n" .
+"  -q, --quiet              Enable quiet mode.\n" .
+"  -d, --debug [<level>]    Enable debug output from the FTP module.\n" .
+"      --help               Print this help message.\n" .
+"  -V, --Version            Print program version.\n"
+);
     exit 0;
 }
 

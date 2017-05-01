@@ -22,7 +22,7 @@ dupload - Debian package upload tool
 
 =head1 SYNOPSIS
 
-B<dupload> [I<options>] [I<changes_file> | I<dir>] ...
+B<dupload> [I<options>...] [I<changes-file|directory>...]
 
 =head1 DESCRIPTION
 
@@ -95,19 +95,19 @@ via SSH, because FTP transmits the password in clear text.
 
 =over 12
 
-=item B<-d> B<--debug> [I<level>]
+=item B<-d>, B<--debug> [I<level>]
 
 Enable more verbose output from the FTP module.
 
-=item B<-f> B<--force>
+=item B<-f>, B<--force>
 
 Upload regardless of the transfers logged as already completed.
 
-=item B<-k> B<--keep>
+=item B<-k>, B<--keep>
 
 Keep going, skipping packages whose checksums don't match.
 
-=item B<-c> B<--configfile>
+=item B<-c>, B<--configfile>
 
 Read the file ./dupload.conf (if it exists). B<Warning>: this is a
 security risk if you are in a directory where other people can write.
@@ -135,23 +135,27 @@ Adds a "X-No-Archive: yes" header so that the announcement will not be
 archived. You can use the per-host "archive" option in the configuration
 file.
 
-=item B<-p> B<--print>
+=item B<-p>, B<--print>
 
 Print the E<quot>databaseE<quot> as read from the config files and exit.
 If a host is specified via option B<--to>, only this host's entry is
 displayed.
 
-=item B<-q> B<--quiet>
+=item B<-q>, B<--quiet>
 
 Be quiet, i.e., suppress normal output.
 
-=item B<-t> B<--to> I<nickname> B<optional>
+=item B<-t>, B<--to> I<nickname>
 
 Upload to I<nickname>'d host.  I<nickname> is the key for doing lookups
 in the config file. You can use the "default_host" configuration option
 to specify a host without B<--to>.
 
-=item B<-V> B<--Version>
+=item B<--help>
+
+Prints the program usage message and exits.
+
+=item B<-V>, B<--Version>
 
 Prints version and exits.
 
@@ -173,8 +177,8 @@ Various Debian package files are used by B<dupload>: .dsc, .changes, .deb,
 Z<>.orig.tar.*, .debian.tar.*, .diff.*
 
 B<dupload> itself writes the log file I<package_version-debian>.upload,
-and the additional announcement files I<package.announce>,
-I<package_upstreamver.announce>, and I<package_upstreamver-debianrev.announce>.
+and the additional announcement files I<package>.announce,
+I<package_upstreamver>.announce, or I<package_upstreamver-debianrev>.announce.
 
 =head2 Announcement addresses
 
