@@ -15,6 +15,7 @@ dupload (2.8.0) UNRELEASED; urgency=medium
   * Use more standard section names in man page.
   * Remove reference to long-removed chiark queue from man page.
   * Remove ancient comment about signed mails on broken MUAs from man page.
+  * Remove notion that being written in perl is a bug from man page.
 
  -- Guillem Jover <guillem@debian.org>  Mon, 06 Mar 2017 17:19:17 +0100
 

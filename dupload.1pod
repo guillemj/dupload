@@ -166,8 +166,7 @@ mails instead.
 =head1 BUGS
 
 B<dupload> is tested on B<Debian> systems only. It shouldn't require too
-much effort to make it run under others systems, though, it's written in
-Perl.
+much effort to make it run under others systems, though.
 
 =head1 AUTHOR/COPYRIGHT
 
