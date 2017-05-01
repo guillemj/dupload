@@ -13,6 +13,7 @@ dupload (2.8.0) UNRELEASED; urgency=medium
   * Remove support for obsolete non-US section.
   * Update default list of sources files used in man page.
   * Use more standard section names in man page.
+  * Remove reference to long-removed chiark queue from man page.
 
  -- Guillem Jover <guillem@debian.org>  Mon, 06 Mar 2017 17:19:17 +0100
 

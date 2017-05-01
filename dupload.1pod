@@ -9,8 +9,7 @@ B<dupload> [I<options>] [I<changes_file> | I<dir>] ...
 =head1 DESCRIPTION
 
 B<dupload> is a tool that enables Debian developers to easily upload their
-packages to the Debian archive. At least for chiark the upload procedure
-is somewhat error prone (upload to Incoming/, move it to queue/).
+packages to the Debian archive.
 
 B<dupload> checks each non-option argument to find readable files or
 directories. It parses the files as F<.changes> files, or tries to find
