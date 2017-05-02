@@ -1,4 +1,4 @@
-dupload (2.8.0) UNRELEASED; urgency=medium
+dupload (2.8.0) unstable; urgency=medium
 
   * Take over maintainersip as part of the Dpkg Developers umbrella,
     with the agreement of previous maintainer, Josip Rodin.
@@ -36,7 +36,7 @@ dupload (2.8.0) UNRELEASED; urgency=medium
   * Replace the inline version at install time, to guarantee we always
     have an up-to-date version string.
 
- -- Guillem Jover <guillem@debian.org>  Mon, 06 Mar 2017 17:19:17 +0100
+ -- Guillem Jover <guillem@debian.org>  Tue, 02 May 2017 02:59:21 +0200
 
 dupload (2.7.0) unstable; urgency=low
 
