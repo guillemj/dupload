@@ -33,6 +33,8 @@ dupload (2.8.0) UNRELEASED; urgency=medium
     Thanks to Adam Borowski <kilobyte@angband.pl>.
   * Add a vim modeline to the configuration file.
   * Improve usage description in program --help output and man page.
+  * Replace the inline version at install time, to guarantee we always
+    have an up-to-date version string.
 
  -- Guillem Jover <guillem@debian.org>  Mon, 06 Mar 2017 17:19:17 +0100
 

@@ -31,7 +31,7 @@ use Net::FTP;
 use English;
 
 # more or less configurable constants
-my $version = "2.6";
+my $version = '2.x';
 my $progname = basename($0);
 my $user = getlogin() || $ENV{LOGNAME} || $ENV{USER};
 my $myhost = `hostname --fqdn`; chomp $myhost;

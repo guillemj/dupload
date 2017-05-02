@@ -25,11 +25,16 @@ inst_script = $(INSTALL) -m 755
 inst_lib = $(INSTALL) -m 644
 inst_data = $(INSTALL) -m 644
 
+repl_script = sed -i \
+	-e "s:^my \$$version = '.*';:my \$$version = '$(version)';:" \
+	$(nil)
+
 all: dupload $(MAN)
 
 install:	all
 	$(mkdirhier) $(bindir) $(man1dir) $(man5dir) $(extradir)
 	$(inst_script) dupload $(bindir)
+	$(repl_script) $(bindir)/dupload
 	$(inst_data) $(MAN1) $(man1dir)
 	$(inst_data) $(MAN5) $(man5dir)
 	$(inst_script) $(EXTRA_FILES) $(extradir)
