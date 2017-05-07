@@ -26,15 +26,15 @@ B<dupload> [I<options>...] [I<changes-file|directory>...]
 
 =head1 DESCRIPTION
 
-B<dupload> is a tool that enables Debian developers to easily upload their
-packages to the Debian archive.
+B<dupload> is a tool that enables people maintaining Debian packages to
+easily upload them to a Debian repository.
 
 B<dupload> checks each non-option argument to find readable files or
 directories. It parses the files as F<.changes> files, or tries to find
 such files in the given directories.
 
 B<dupload> will warn if the name of the file doesn't end with
-E<quot>.changesE<quot>. Further processing is done chdir'ed into the
+E<quot>.changesE<quot>. Further processing is done changing into the
 directories of the changes files.
 
 B<dupload> tests the available checksums and size for each file listed in the F<.changes> file,
@@ -47,22 +47,32 @@ After the list of files to upload is finished, B<dupload> tries to connect
 to the server and upload. Each successfully uploaded file is recorded in the
 F<.upload> log file.
 
-If all files of a package are processed, the .changes file is mailed to the
+If all files of a package are processed, the F<.changes> file is mailed to the
 announcement address specified in the configuration file.  If files with
 Z<> F<package>.announce, F<package_UPSTREAMVER>.announce, or
 Z<> F<package_UPSTREAMVER-DEBIANREV>.announce exist, these files get
-prepended to the announcement. UPSTREAMVER and DEBIANREV are to be replaced
-with actual version numbers. For example, if your package is called
+prepended to the announcement. I<UPSTREAMVER> and I<DEBIANREV> are to be
+replaced with actual version numbers. For example, if your package is called
 B<foobar>, has upstream version 3.14, and Debian revision 2:
+
+=over 2
+
+=item *
 
 If you only want the announcement to be made with only ONE upload,
 you name it foobar_3.14-2.announce.
 
+=item *
+
 If you want it to be made with every upload of a particular upstream
 version, name it foobar_3.14.announce.
 
+=item *
+
 If you want it made with B<every> upload of a given package, name it
 foobar.announce.
+
+=back
 
 =head2 Login and password
 
