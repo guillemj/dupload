@@ -9,7 +9,6 @@ Build-Depends:
  bash-completion,
 Build-Depends-Indep:
  perl,
- libnet-perl,
 
 Package: dupload
 Architecture: all
@@ -17,7 +16,6 @@ Multi-Arch: foreign
 Depends:
  ${misc:Depends},
  ${perl:Depends},
- libnet-perl,
 Recommends:
  openssh-client | ssh,
 Suggests:
