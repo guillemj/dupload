@@ -3,6 +3,8 @@ dupload (2.8.1) UNRELEASED; urgency=medium
   * Remove dependencies on libnet-perl, now a virtual package provided
     by perl-modules.
   * Use the changelog timestamp to generate reproducible man pages.
+  * Clarify that the default OpenPGP check can be disabled with a
+    host-specific hook. Closes: #326947
 
  -- Guillem Jover <guillem@debian.org>  Sun, 07 May 2017 01:59:11 +0200
 
