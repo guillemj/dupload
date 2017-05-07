@@ -3,6 +3,8 @@
 # Copyright © 2002 Josip Rodin
 
 version = $(shell dpkg-parsechangelog -SVersion)
+reltime = $(shell dpkg-parsechangelog -STimestamp)
+mandate = $(shell LC_ALL=C date '+%F' --date="@$(reltime)")
 
 MAN1 = dupload.1
 MAN5 = dupload.conf.5
@@ -53,7 +55,7 @@ dupload:
 	  --section=$(subst .,,$(suffix $@)) \
 	  --name=$(basename $@) \
 	  --center="Debian Project" \
-	  --date="`LC_ALL=C date '+%F'`" \
+	  --date="$(mandate)" \
 	  --release="$(version)" \
 	    $< >,$@ && mv -f ,$@ $@; \
 	  rm -f ,$@
