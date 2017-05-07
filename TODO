@@ -1,8 +1,42 @@
-dupload to-do file
-------------------
+dupload TODO
+------------
 
-I hope to enhance the hook system to run Perl code as well as
-shell commands and to rewrite several dupload features, such as
-announcements, as hooks.
+* Improve hook system:
+  - Rewrite several dupload features, such as announcements, as hooks.
+  - Make it possible to run perl modules in addition to shell commands.
+  - Make it possible to specify a list of hooks per category, so that one can
+    do «$preupload{changes} = [ 'check-a %1', 'check-b %1' ];» where all
+    hooks must pass. Preserve backwards compatibility.
+  - Move distribution check to be a pre-defiend hook, or a vendor hook or
+    similar.
 
- -- Stephane Bortzmeyer
+* Refactor uploader methods into Perl modules.
+
+* Add new uploader methods:
+  - local upload support, so that we can do easy automated testing.
+  - FTP via HTTP proxy.
+  - HTTP, HTTPS.
+  - SFTP.
+
+* Switch to use libdpkg-perl Perl modules.
+
+* Add a new command to generate DAK or archive specific control commands,
+  possible names, could be drecall, dacl, etc.
+
+* Use the dpkg vendor system to select default configurations and hosts.
+  - Create new /etc/dupload.conf.d/<vendor>.conf style loading, perhaps?
+  - dinstall_run could be implicitly set for Debian vendor.
+  - Improve mailto/mailtx mess, it should be vendor and/or host specific,
+    not a global hardcoded handling thing.
+
+* Add archive attribute information so that additional checks or features
+  can be enabled on those.
+
+* Add a hook that requests confirmation for the Debian security hosts, so
+  that these can be uncommented by default, and the hook removed or overridden
+  in a local config, instead of needing to copy&paste the entire entries.
+
+* Obsolete --configfile, and transition to require a filename argument to use.
+
+* Think about switching from a perl "config" to a proper declarative config
+  format.
