@@ -1,4 +1,4 @@
-dupload (2.8.1) UNRELEASED; urgency=medium
+dupload (2.8.1) unstable; urgency=medium
 
   * Remove dependencies on libnet-perl, now a virtual package provided
     by perl-modules.
@@ -7,7 +7,7 @@ dupload (2.8.1) UNRELEASED; urgency=medium
     host-specific hook. Closes: #326947
   * Improve man page wording and formatting.
 
- -- Guillem Jover <guillem@debian.org>  Sun, 07 May 2017 01:59:11 +0200
+ -- Guillem Jover <guillem@debian.org>  Thu, 18 May 2017 05:35:40 +0200
 
 dupload (2.8.0) unstable; urgency=medium
 
