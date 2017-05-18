@@ -1,3 +1,9 @@
+dupload (2.8.2) UNRELEASED; urgency=medium
+
+  * Set TZ to UTC when calling pod2man, to get reproducible man pages.
+
+ -- Guillem Jover <guillem@debian.org>  Thu, 18 May 2017 13:41:10 +0200
+
 dupload (2.8.1) unstable; urgency=medium
 
   * Remove dependencies on libnet-perl, now a virtual package provided
