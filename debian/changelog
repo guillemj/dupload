@@ -1,3 +1,10 @@
+dupload (2.8.3) UNRELEASED; urgency=medium
+
+  * Use the new domain name (ftp.security.upload.debian.org) for the
+    Debian security ftp queue. Closes: #863350
+
+ -- Guillem Jover <guillem@debian.org>  Sat, 27 May 2017 05:41:38 +0200
+
 dupload (2.8.2) unstable; urgency=medium
 
   * Set TZ to UTC when calling pod2man, to get reproducible man pages.
