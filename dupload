@@ -130,7 +130,7 @@ $nomail = $::opt_nomail || 0;
 $quiet = $::opt_quiet;
 
 # only info or version?
-info($host), exit 0 if $::opt_print;
+info($::opt_to), exit 0 if $::opt_print;
 p("$progname version: $version\n"), exit 0 if
     ($::opt_Version or $::opt_version);
 
