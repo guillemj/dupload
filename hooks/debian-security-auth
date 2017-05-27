@@ -1,0 +1,34 @@
+#!/bin/sh
+
+changes="$1"
+
+set -e
+
+cat <<'WARN'
+
+Warning: Do NOT upload packages to the security upload queue
+(oldstable-security, stable-security, etc.) without prior authorization
+from the Debian security team. For more information, please read:
+
+  <https://www.debian.org/doc/developers-reference/pkgs.html#bug-security>
+
+If you have been authorized, you can either disable this hook, or reply to
+the following prompt with the exact text presented within parenthesis.
+
+WARN
+
+auth='Yes, I am authorized'
+
+read -p "Are you authorized to upload ($auth)? " prompt
+
+if [ "$prompt" = "$auth" ]; then
+  echo "Authorized, proceeding with the upload."
+  echo
+else
+  echo "Not authorized, aborting the upload." >&2
+  echo
+  exit 1
+fi
+
+# Chain the GnuPG check, so that we can override the default global hook.
+/usr/share/dupload/gpg-check "$changes"
