@@ -5,6 +5,7 @@ dupload (2.8.3) UNRELEASED; urgency=medium
   * Use /srv instead of /org for the Debian security scp queue.
   * Add new ftp.eu.upload.debian.org upload queue.
   * Add new ftp.security.upload.debian.org unembargoed queue.
+  * Use https:// instead of http:// everywhere.
 
  -- Guillem Jover <guillem@debian.org>  Sat, 27 May 2017 05:41:38 +0200
 
@@ -154,9 +155,9 @@ dupload (2.6.3.2) unstable; urgency=low
 dupload (2.6.3.1) unstable; urgency=low
 
   * NMU to remove obsolete queues, based on 
-    http://www.debian.org/doc/developers-reference/ch-pkgs.en.html
+    https://www.debian.org/doc/developers-reference/ch-pkgs.en.html
     and
-    http://lists.debian.org/debian-devel/2004/debian-devel-200401/msg01950.html>
+    https://lists.debian.org/debian-devel/2004/debian-devel-200401/msg01950.html>
     also cleaned up the bug list.
   * Removed non-functioning upload queues: anonymous-non-us, non-us,
     chiark, erlangen, uk, jp, and samosa. (Closes: #222938, #229744)
