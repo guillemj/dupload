@@ -1,8 +1,8 @@
-dupload (2.8.4) UNRELEASED; urgency=medium
+dupload (2.8.4) unstable; urgency=medium
 
   * Revert debhelper compatibility level bump for stretch release.
 
- -- Guillem Jover <guillem@debian.org>  Sat, 27 May 2017 05:53:17 +0200
+ -- Guillem Jover <guillem@debian.org>  Sun, 28 May 2017 03:28:00 +0200
 
 dupload (2.8.3) unstable; urgency=medium
 
