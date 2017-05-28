@@ -7,6 +7,8 @@ dupload (2.9.3) UNRELEASED; urgency=medium
   * Add configuration stanza for Debian Ports archive.
     Prompted by Manuel A. Fernandez Montecelo <mafm@debian.org>.
   * Check the distribution values one at a time.
+  * Add new configuration options (distwhitelist and distblacklist) to
+    check for the distributions (not) allowed per host.
 
  -- Guillem Jover <guillem@debian.org>  Sun, 14 Oct 2018 12:52:36 +0200
 

@@ -85,6 +85,16 @@ Incoming directory, the directory we try to upload to.
 The directory we move the uploaded files to (after successful upload to
 I<incoming>. Usually necessary only with some special upload queues.
 
+=item B<distwhitelist> [optional]
+
+The regex of the distributions allowed for this host. This check is done
+against the B<Distribution> field in the F<.changes> file.
+
+=item B<distblacklist> [optional]
+
+The regex of the distributions disallowed for this host. This check is done
+against the B<Distribution> field in the F<.changes> file.
+
 =item B<mailto> [optional]
 
 Email address where the announcement about stable packages is sent.

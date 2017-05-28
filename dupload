@@ -104,6 +104,8 @@ my %postupload;
 my $result;
 my $incoming;
 my $queuedir;
+my $distwhitelist;
+my $distblacklist;
 my $mailto;
 my $mailtx;
 my $cc;
@@ -262,6 +264,8 @@ $host or fatal('Need host to upload to. (See --to option or the default_host con
     $fqdn = $myhost if $method eq 'copy';
     $incoming = $nick->{incoming} or fatal('No incoming directory');
     $queuedir = $nick->{queuedir};
+    $distwhitelist = $nick->{distwhitelist};
+    $distblacklist = $nick->{distblacklist};
     $mailto = $nick->{mailto};
     $mailtx = $nick->{mailtx} || $mailto;
     $cc = $nick->{cc};
@@ -446,6 +450,10 @@ PACKAGE: foreach my $change (@changes) {
                 }
                 if ($dist =~ m/^UNRELEASED/) {
                     fatal('distribution: UNRELEASED');
+                }
+                if ((defined $distblacklist and $dist =~ m/$distblacklist/) or
+                    (defined $distwhitelist and $dist !~ m/$distwhitelist/)) {
+                    fatal("distribution '$dist' not allowed");
                 }
             }
             $field = undef;
@@ -1030,6 +1038,8 @@ sub info($)
         info_field('login', $r->{login});
         info_field('incoming', $r->{incoming});
         info_field('queuedir', $r->{queuedir});
+        info_field('dist whitelist', $r->{distwhitelist});
+        info_field('dist blacklist', $r->{distblacklist});
         info_field('mail to', $r->{mailto});
         info_field('mail to x', $r->{mailtx});
         info_field('cc', $r->{cc});
