@@ -7,8 +7,6 @@ dupload TODO
   - Make it possible to specify a list of hooks per category, so that one can
     do «$preupload{changes} = [ 'check-a %1', 'check-b %1' ];» where all
     hooks must pass. Preserve backwards compatibility.
-  - Move distribution check to be a pre-defined hook, or a vendor hook or
-    similar.
 
 * Refactor uploader methods into Perl modules.
 

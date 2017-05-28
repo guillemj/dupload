@@ -9,6 +9,8 @@ dupload (2.9.3) UNRELEASED; urgency=medium
   * Check the distribution values one at a time.
   * Add new configuration options (distwhitelist and distblacklist) to
     check for the distributions (not) allowed per host.
+  * Move the UNRELEASED distribution check into the distblacklist
+    configuration variable. Closes: #479831
 
  -- Guillem Jover <guillem@debian.org>  Sun, 14 Oct 2018 12:52:36 +0200
 

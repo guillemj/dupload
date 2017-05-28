@@ -448,9 +448,6 @@ PACKAGE: foreach my $change (@changes) {
                 if ($mailtx and $dist =~ m/^experimental/) {
                     $mailto{$mailtx}++;
                 }
-                if ($dist =~ m/^UNRELEASED/) {
-                    fatal('distribution: UNRELEASED');
-                }
                 if ((defined $distblacklist and $dist =~ m/$distblacklist/) or
                     (defined $distwhitelist and $dist !~ m/$distwhitelist/)) {
                     fatal("distribution '$dist' not allowed");
