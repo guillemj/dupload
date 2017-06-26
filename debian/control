@@ -5,7 +5,7 @@ Maintainer: Dpkg Developers <debian-dpkg@lists.debian.org>
 Uploaders: Guillem Jover <guillem@debian.org>
 Vcs-Browser: https://anonscm.debian.org/cgit/dpkg/dupload.git
 Vcs-Git: https://anonscm.debian.org/git/dpkg/dupload.git
-Standards-Version: 3.9.8
+Standards-Version: 4.0.0
 Build-Depends:
  debhelper (>= 9),
  bash-completion,

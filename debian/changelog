@@ -2,6 +2,7 @@ dupload (2.9.0) UNRELEASED; urgency=medium
 
   * Update the TODO list.
   * Add Vcs-Browser and Vcs-Git fields to debian/control.
+  * Bump Standards-Version to 4.0.0 (no changes needed).
   * Rename man pages to from Npod to N.pod extensions.
   * Remove trailing whitespace.
   * Remove PGP support, we always have GnuPG now.
