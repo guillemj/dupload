@@ -23,7 +23,9 @@
 # see dupload(1) for help.
 
 use strict;
+use warnings;
 use 5.003; # Because of the prototypes
+
 use Cwd;
 use Getopt::Long;
 use File::Basename;
