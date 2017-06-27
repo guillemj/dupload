@@ -107,6 +107,22 @@ configure(
 	"/etc/dupload.conf",
 	$ENV{HOME} && "$ENV{HOME}/.dupload.conf");
 
+our $opt_Version;
+our $opt_configfile;
+our $opt_debug;
+our $opt_force;
+our $opt_help;
+our $opt_host;
+our $opt_keep;
+our $opt_mailonly;
+our $opt_no;
+our $opt_noarchive;
+our $opt_nomail;
+our $opt_print;
+our $opt_quiet;
+our $opt_to;
+our $opt_version;
+
 $Getopt::Long::ignorecase = 0;
 GetOptions qw(
 	debug:i
@@ -122,31 +138,31 @@ GetOptions qw(
 ) or fatal("Bad Options\n");
 
 # Handle deprecated configfile option.
-$configfile = $::opt_configfile // $configfile;
+$configfile = $opt_configfile // $configfile;
 if (length $configfile == 0) {
     w("--configfile without a filename is a security risk and is deprecated\n");
     $configfile = './dupload.conf';
 }
 configure($configfile) if defined $configfile;
 
-$dry = defined($::opt_no);
-$mailonly = defined($::opt_mailonly);
+$dry = defined $opt_no;
+$mailonly = defined $opt_mailonly;
 if ($mailonly) {
     $dry = 1;
 }
-$debug = $::opt_debug || $debug;
-$keep = $::opt_keep || $keep;
-$host = $::opt_to || $config::default_host;
-$force = $::opt_force || $force;
-$nomail = $::opt_nomail || 0;
-$quiet = $::opt_quiet;
+$debug = $opt_debug || $debug;
+$keep = $opt_keep || $keep;
+$host = $opt_to || $config::default_host;
+$force = $opt_force || $force;
+$nomail = $opt_nomail || 0;
+$quiet = $opt_quiet;
 
 # only info or version?
-info($::opt_to), exit 0 if $::opt_print;
+info($opt_to), exit 0 if $opt_print;
 p("$progname version: $version\n"), exit 0 if
-    ($::opt_Version or $::opt_version);
+    ($opt_Version or $opt_version);
 
-if ($::opt_help) {
+if ($opt_help) {
     p (
 "Usage: $progname [<options>...] [<changes-file|directory>...]\n" .
 "\n" .
@@ -226,7 +242,7 @@ $host or fatal("Need host to upload to.  (See --to option or the default_host co
 
 ($mailto || $mailtx) or p "dupload note: no announcement will be sent.\n";
 
-$noarchive = $::opt_noarchive || (! $archive);
+$noarchive = $opt_noarchive || (! $archive);
 
 # get the changes file names
 @ARGV or push @ARGV, ".";	# use current dir if no args
