@@ -36,7 +36,5 @@ dupload TODO
   that these can be uncommented by default, and the hook removed or overridden
   in a local config, instead of needing to copy&paste the entire entries.
 
-* Obsolete --configfile, and transition to require a filename argument to use.
-
 * Think about switching from a perl "config" to a proper declarative config
   format.

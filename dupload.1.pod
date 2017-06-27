@@ -117,11 +117,14 @@ Upload regardless of the transfers logged as already completed.
 
 Keep going, skipping packages whose checksums don't match.
 
-=item B<-c>, B<--configfile>
+=item B<-c>, B<--configfile> [I<filename>]
 
-Read the file ./dupload.conf (if it exists). B<Warning>: this is a
-security risk if you are in a directory where other people can write.
-That's why it is not the default (unlike the previous versions).
+Read the file I<filename> or F<./dupload.conf> (if it exists and no argument
+is provided).
+
+B<Warning>: Using this option without a I<filename> argument is deprecated
+(as of dupload 2.9.0) because it is a security risk if you are in a directory
+where other people can write. The argument will become mandatory in the future.
 
 =item B<--no>
 

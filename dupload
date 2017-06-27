@@ -41,8 +41,11 @@ my $debug = 0;	# for somewhat more verbose output from the ftp module
 my $force = 0;	# do it, even when already done
 my $keep = 0;   # keep going, even if checksum errors
 my $quiet = 0;	# don't talk too much
-my $configfile = 0; # By default, we do NOT read ./dupload.conf, for
-		    # security resons
+
+# Specifies an alternative configuration file to read.
+# For backwards compatibility, an empty string means to load ./dupload.conf,
+# which is a security risk that we'll warn about as deprecated.
+my $configfile = undef;
 
 my $host = undef;				# target host
 my $method = "ftp";				# transfer method
@@ -108,14 +111,23 @@ $Getopt::Long::ignorecase = 0;
 GetOptions qw(
 	debug:i
 	help
-	force keep configfile no nomail noarchive
+	force keep
+    configfile:s
+    no
+    nomail
+    noarchive
 	mailonly
 	to=s print
        quiet Version version
 ) or fatal("Bad Options\n");
 
-$configfile = $::opt_configfile || $configfile;
-configure("./dupload.conf") if $configfile;
+# Handle deprecated configfile option.
+$configfile = $::opt_configfile // $configfile;
+if (length $configfile == 0) {
+    w("--configfile without a filename is a security risk and is deprecated\n");
+    $configfile = './dupload.conf';
+}
+configure($configfile) if defined $configfile;
 
 $dry = defined($::opt_no);
 $mailonly = defined($::opt_mailonly);

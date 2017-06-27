@@ -9,6 +9,8 @@ dupload (2.9.0) UNRELEASED; urgency=medium
   * Do not consider the default_host as the only host to dump on --print.
   * Add a new default hook to ask whether the user has been authorized to
     do Debian security uploads, and enable all security queues by default.
+  * Add support for specifying a filename argument to --configfile, and
+    deprecate using it without the argument due to being a security risk.
 
  -- Guillem Jover <guillem@debian.org>  Sun, 28 May 2017 03:50:00 +0200
 
