@@ -797,7 +797,7 @@ exit 0;
 
 ###
 sub announce_if_necessary ($) {
-    my ($job) = @_[0];
+    my ($job) = @_;
     my ($opt_fullname) = " -F '($fullname)'";
     my ($msg);
     if ($announce{$job} and (! $nomail)) {
