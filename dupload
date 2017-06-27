@@ -103,6 +103,11 @@ unless (-x $sendmail) {
 }
 
 ### Main
+$config::default_host = undef;
+$config::no_parentheses_to_fullname = undef;
+$config::postupload = undef;
+$config::preupload = undef;
+
 configure(
 	"/etc/dupload.conf",
 	$ENV{HOME} && "$ENV{HOME}/.dupload.conf");
