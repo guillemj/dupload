@@ -18,6 +18,7 @@ dupload (2.9.0) UNRELEASED; urgency=medium
     - Declare dupload.conf configuration variables.
     - Use strict and warnings in dupload and dupload.conf.
     - Remove ancient perl version requirement.
+    - Replace hard tabs with 4 spaces.
 
  -- Guillem Jover <guillem@debian.org>  Sun, 28 May 2017 03:50:00 +0200
 
