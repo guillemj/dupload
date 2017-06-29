@@ -663,10 +663,11 @@ JOB: foreach (keys %files) {
         }
 
         p ", ok";
-# the batch methods don't produce the $t statistic, so filter on that
-        p (sprintf " (${t} s, %.2f kB/s)", $size / 1024 / ($t || 1)) unless ($batchmode);
 
         unless ($batchmode) {
+            # The batch methods do not produce the $t statistic.
+            p(sprintf " (${t} s, %.2f kB/s)", $size / 1024 / ($t || 1));
+
             unless ($dry) {
                 open(L, ">>$log{$job}") or w "Can't open $log{$job}: $!\n";
                 print L "u $file $fqdn " . localtime() . "\n";

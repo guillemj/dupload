@@ -21,6 +21,7 @@ dupload (2.9.0) UNRELEASED; urgency=medium
     - Replace hard tabs with 4 spaces.
     - Switch a deep conditional into an early return.
     - Remove unused variables.
+    - Fold batch method statistics conditional into subsequent conditional.
 
  -- Guillem Jover <guillem@debian.org>  Sun, 28 May 2017 03:50:00 +0200
 
