@@ -822,7 +822,9 @@ sub announce_if_necessary ($) {
     my ($job) = @_;
     my ($opt_fullname) = " -F '($fullname)'";
     my ($msg);
-    if ($announce{$job} and (! $nomail)) {
+
+    return if not $announce{$job} or $nomail;
+
     if ($config::no_parentheses_to_fullname) {
            $opt_fullname = " -F '$fullname'";
     }
@@ -885,7 +887,6 @@ xxx
         close(L);
     } else {
         p "\n+ log announcement\n";
-    }
     }
 }
 
