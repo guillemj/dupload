@@ -118,7 +118,6 @@ our $opt_configfile;
 our $opt_debug;
 our $opt_force;
 our $opt_help;
-our $opt_host;
 our $opt_keep;
 our $opt_mailonly;
 our $opt_no;
@@ -300,7 +299,6 @@ PACKAGE: foreach my $change (@changes) {
     my ($upstream, $debian) = (split("-", $version, 2));
     my $log = "$job.upload";
 
-    my %md5;
     my (@files, @done, @extra);
     my (%mailto, %fields);
 

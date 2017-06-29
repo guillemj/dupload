@@ -85,6 +85,7 @@ my @policies = qw(
     Variables::ProhibitConditionalDeclarations
     Variables::ProhibitLocalVars
     Variables::ProhibitPerl4PackageNames
+    Variables::ProhibitUnusedVariables
     Variables::ProtectPrivateVars
 );
 
