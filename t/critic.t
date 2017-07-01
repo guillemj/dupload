@@ -48,6 +48,7 @@ my @policies = qw(
     Documentation::RequirePodSections
     InputOutput::ProhibitInteractiveTest
     InputOutput::ProhibitJoinedReadline
+    InputOutput::ProhibitOneArgSelect
     InputOutput::ProhibitReadlineInForLoop
     InputOutput::RequireEncodingWithUTF8Layer
     Miscellanea::ProhibitFormats

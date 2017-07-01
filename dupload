@@ -25,6 +25,7 @@
 use strict;
 use warnings;
 
+use IO::Handle;
 use Cwd;
 use Getopt::Long;
 use File::Basename;
@@ -288,7 +289,7 @@ p("Uploading ($method) to $fqdn:$incoming");
 p("and moving to $fqdn:$queuedir") if $queuedir;
 p("\n");
 
-select((select(STDOUT), $| = 1)[0]);
+*STDOUT->autoflush();
 
 # parse the changes files and update some
 # hashes, indexed by the jobname:
