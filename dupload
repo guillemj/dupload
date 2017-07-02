@@ -359,8 +359,8 @@ PACKAGE: foreach my $change (@changes) {
     my $dir = dirname($change);
     my $cf = basename($change);
     my $job = basename($cf, ".changes");
-    my ($package, $version, $arch) = (split "_", $job, 3);
-    my ($upstream, $debian) = (split "-", $version, 2);
+    my ($package, $version, $arch) = (split /_/, $job, 3);
+    my ($upstream, $debian) = (split /-/, $version, 2);
     my $log = "$job.upload";
 
     my (@files, @done, @extra);
@@ -582,7 +582,7 @@ PACKAGE: foreach my $change (@changes) {
 
         if ($file =~ /\.deb$/) {
             push @all_the_debs, $file;
-            my ($binary_package, $version, $garbage) = split '_', $file;
+            my ($binary_package, $version, $garbage) = split /_/, $file;
 
             $binary_package = basename($binary_package);
             $all_packages{$binary_package} = $version;
@@ -649,8 +649,8 @@ JOB: foreach (keys %files) {
     my $allfiles;
     $copiedfiles = "";
 
-    my ($package, $version, $arch) = (split "_", $job, 3);
-    my ($upstream, $debian) = (split "-", $version, 2);
+    my ($package, $version, $arch) = (split /_/, $job, 3);
+    my ($upstream, $debian) = (split /-/, $version, 2);
 
     $incoming =~ s/_package_/$package/g;
     $incoming =~ s/_version_/$version/g;
@@ -846,7 +846,7 @@ unless ($dry) {
             }
         }
 
-        my ($package, $version, $arch) = (split "_", $_, 3);
+        my ($package, $version, $arch) = (split /_/, $_, 3);
         if ($postupload{'sourcepackage'}) {
             my ($result) = run($postupload{'sourcepackage'},
                                [ basename($package), $version ]);

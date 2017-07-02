@@ -38,6 +38,7 @@ dupload (2.9.0) UNRELEASED; urgency=medium
     - Use three argument open form.
     - Use lexical loop iterators.
     - Rework hook execution to not require an eval.
+    - Do not use stringy split.
 
  -- Guillem Jover <guillem@debian.org>  Sun, 28 May 2017 03:50:00 +0200
 
