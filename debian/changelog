@@ -30,6 +30,7 @@ dupload (2.9.0) UNRELEASED; urgency=medium
     - Declare every global variable on its own my.
     - Improve code comments.
     - Remove unnecessary parenthesis in conditionals.
+    - Switch trivial one-liner conditionals to postfix notation.
 
  -- Guillem Jover <guillem@debian.org>  Sun, 28 May 2017 03:50:00 +0200
 

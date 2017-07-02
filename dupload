@@ -206,9 +206,7 @@ configure($configfile) if defined $configfile;
 
 $dry = defined $opt_no;
 $mailonly = defined $opt_mailonly;
-if ($mailonly) {
-    $dry = 1;
-}
+$dry = 1 if $mailonly;
 $debug = $opt_debug || $debug;
 $keep = $opt_keep || $keep;
 $host = $opt_to || $config::default_host;
@@ -400,9 +398,7 @@ PACKAGE: foreach my $change (@changes) {
 
     # If the dinstall_runs variable is set, we do not want the announcement
     # emails, because dinstall will attend to that.
-    if ($dinstall_runs) {
-        $nomail = 1;
-    }
+    $nomail = 1 if $dinstall_runs;
 
     # Scan the changes file for architecture, distribution code and the files
     # avoid duplicate mail addressees.
@@ -769,9 +765,7 @@ JOB: foreach (keys %files) {
                 unlink $log{$job};
                 fatal("scp $copiedfiles failed\n");
             }
-            if ($needcmd) {
-                system $cmd;
-            }
+            system $cmd if $needcmd;
             fatal("$cmd failed\n") if $?;
         } else {
             p("\n+ scp $options $copiedfiles $login\@$fqdn:$incoming");
@@ -788,9 +782,7 @@ JOB: foreach (keys %files) {
                 unlink $log{$job};
                 fatal("rsync $copiedfiles failed\n");
             }
-            if ($needcmd) {
-                system $cmd;
-            }
+            system $cmd if $needcmd;
             fatal("$cmd failed\n") if $?;
         } else {
             p("\n+ rsync --partial -zave ssh $options -x $copiedfiles $login" . "@" . "$fqdn:$incoming");
@@ -899,9 +891,7 @@ sub announce_if_necessary($)
 
     return if not $announce{$job} or $nomail;
 
-    if ($config::no_parentheses_to_fullname) {
-        $opt_fullname = " -F '$fullname'";
-    }
+    $opt_fullname = " -F '$fullname'" if $config::no_parentheses_to_fullname;
     $fullname =~ s/\'/''/;
     my $sendmail_cmd = "|$sendmail -f $visibleuser" .
                        ($visiblename ? "\@$visiblename" : "") .
