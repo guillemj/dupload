@@ -36,6 +36,7 @@ my @policies = qw(
     ClassHierarchies::ProhibitExplicitISA
     ClassHierarchies::ProhibitOneArgBless
     CodeLayout::ProhibitHardTabs
+    CodeLayout::ProhibitParensWithBuiltins
     CodeLayout::ProhibitQuotedWordLists
     CodeLayout::ProhibitTrailingWhitespace
     CodeLayout::RequireConsistentNewlines

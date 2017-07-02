@@ -35,7 +35,7 @@ use English;
 # more or less configurable constants
 my $version = '2.x';
 my $progname = basename($0);
-my $user = getlogin() || $ENV{LOGNAME} || $ENV{USER};
+my $user = getlogin || $ENV{LOGNAME} || $ENV{USER};
 my $myhost = `hostname --fqdn`;
 chomp $myhost;
 my $cwd = cwd();
@@ -213,20 +213,20 @@ $host or fatal("Need host to upload to.  (See --to option or the default_host co
     if ($passive and ($method ne "ftp")) {
         fatal("Passive mode is only for FTP ($host)");
     }
-    if (defined($nick->{archive})) {
+    if (defined $nick->{archive}) {
         $archive = $nick->{archive};
     } else {
         $archive = 1;
     }
 
     foreach my $category (qw/changes sourcepackage package file deb/) {
-        if (defined($nick->{preupload}{$category})) {
+        if (defined $nick->{preupload}{$category}) {
             $preupload{$category} = $nick->{preupload}{$category};
         } else {
             $preupload{$category} = $config::preupload{$category};
         }
 
-        if (defined($nick->{postupload}{$category})) {
+        if (defined $nick->{postupload}{$category}) {
             $postupload{$category} = $nick->{postupload}{$category};
         } else {
             $postupload{$category} = $config::postupload{$category};
@@ -236,9 +236,9 @@ $host or fatal("Need host to upload to.  (See --to option or the default_host co
     $login = $nick->{login} || $login if $method eq "ftp";
     $login = $nick->{login} || $user if ($method eq "scp" || $method eq "scpb" || $method eq "rsync");
     $visibleuser = $nick->{visibleuser} || $user;
-    chomp($visibleuser);
+    chomp $visibleuser;
     $visiblename = $nick->{visiblename} || '';
-    chomp($visiblename);
+    chomp $visiblename;
     $fullname = $nick->{fullname} || '';
 
     # Do not accept passwords in configuration file,
@@ -263,7 +263,7 @@ foreach (@ARGV) {
     -r $_ or fatal("Can't read $_: $!\n");
     -f _ and do {
         /\.changes$/ or w("no .changes extension: $_\n");
-        unshift(@changes, $_);
+        unshift @changes, $_;
         next;
     };
     -d _ and do {
@@ -273,7 +273,7 @@ foreach (@ARGV) {
     };
 }
 
-@changes or die("No changes file, so nothing to do.\n");
+@changes or die "No changes file, so nothing to do.\n";
 
 # preupload code for changes files
 foreach my $change (@changes) {
@@ -302,8 +302,8 @@ PACKAGE: foreach my $change (@changes) {
     my $dir = dirname($change);
     my $cf = basename($change);
     my $job = basename($cf, ".changes");
-    my ($package, $version, $arch) = (split("_", $job, 3));
-    my ($upstream, $debian) = (split("-", $version, 2));
+    my ($package, $version, $arch) = (split "_", $job, 3);
+    my ($upstream, $debian) = (split "-", $version, 2);
     my $log = "$job.upload";
 
     my (@files, @done, @extra);
@@ -332,7 +332,7 @@ PACKAGE: foreach my $change (@changes) {
     # the files we've already put to the host
     # and the announcements already done
     if (-f $log) {
-        open(L, "<$log") or fatal("Can't read $log: $!\n");
+        open L, "<$log" or fatal("Can't read $log: $!\n");
         while (<L>) {
             chomp;
             if (/^. /) {
@@ -343,7 +343,7 @@ PACKAGE: foreach my $change (@changes) {
             }
             next;
         }
-        close(L);
+        close L;
     }
 
     # if the dinstall_runs variable is set, we don't want the
@@ -355,7 +355,7 @@ PACKAGE: foreach my $change (@changes) {
     # scan the changes file for architecture,
     # distribution code and the files
     # avoid duplicate mail addressees
-    open(C, "<$cf") or fatal("Can't read $cf: $!\n");
+    open C, "<$cf" or fatal("Can't read $cf: $!\n");
     my ($field);
     while (<C>) {
         chomp;
@@ -396,10 +396,10 @@ PACKAGE: foreach my $change (@changes) {
 
         unless ($nomail) {
             p "\n  announce ($cf) to $k";
-            if (grep(/^a .*\s${k}\s/, @done)) {
+            if (grep /^a .*\s${k}\s/, @done) {
                 p " already done";
             } else {
-                $announce{$job} = join(" ", $announce{$job}, $_);
+                $announce{$job} = join " ", $announce{$job}, $_;
                 p " will be sent";
             }
         }
@@ -413,7 +413,7 @@ PACKAGE: foreach my $change (@changes) {
         -r $_ and push @extra, $_;
     }
     if (@extra) {
-        p ", as well as\n  ", join(", ", @extra);
+        p ", as well as\n  ", join ", ", @extra;
         $extra{$job} = [ @extra ];
     }
 
@@ -442,7 +442,7 @@ PACKAGE: foreach my $change (@changes) {
         }
         $checksums{$file}{size} = $size;
     }
-    close(C);
+    close C;
     %checksums && $fields{changes} or p(": not a changes file ]\n"), next PACKAGE;
 
     # test the md5sums
@@ -468,14 +468,14 @@ PACKAGE: foreach my $change (@changes) {
             }
 
             $checksums{$file}{$alg} eq $_ or do {
-                $keep or fatal(uc($alg) . "sum mismatch for $file\n");
-                w(uc($alg) . "sum mismatch for $file, skipping $job\n");
+                $keep or fatal(uc $alg . "sum mismatch for $file\n");
+                w(uc $alg . "sum mismatch for $file, skipping $job\n");
                 push @skipped, $cf;
                 next PACKAGE;
             };
             p ", ${alg}sum ok";
         }
-        if (!$force && @done && grep(/^u \Q${file}\E/, @done)) {
+        if (!$force && @done && grep /^u \Q${file}\E/, @done) {
             p ", already done for $host";
         } else {
             push @files, $file;
@@ -485,7 +485,7 @@ PACKAGE: foreach my $change (@changes) {
 
     # The changes file itself
     p "\n $cf ok";
-    if (!$force && @done && grep(/^u \Q${cf}\E/, @done)) {
+    if (!$force && @done && grep /^u \Q${cf}\E/, @done) {
         p ", already done for $host";
     } else {
         push @files, $cf;
@@ -499,10 +499,10 @@ PACKAGE: foreach my $change (@changes) {
         announce_if_necessary($job);
 
         if (!$dry) {
-            open(L, ">>$log{$job}")
+            open L, ">>$log{$job}"
                 or w("can't open logfile $log{$job}: $!\n");
-            print L "s $changes{$job} $fqdn " . localtime() . "\n";
-            close(L);
+            print L "s $changes{$job} $fqdn " . localtime . "\n";
+            close L;
         } else {
             p "\n+ log successful upload\n";
         }
@@ -523,7 +523,7 @@ PACKAGE: foreach my $change (@changes) {
 
         if ($file =~ /\.deb$/) {
             push @all_the_debs, $file;
-            my ($binary_package, $version, $garbage) = split('_', $file);
+            my ($binary_package, $version, $garbage) = split '_', $file;
 
             $binary_package = basename($binary_package);
             $all_packages{$binary_package} = $version;
@@ -553,7 +553,7 @@ PACKAGE: foreach my $change (@changes) {
 chdir $cwd or fatal("Can't chdir to $cwd: $!\n");
 
 @skipped and w("skipped: @skipped\n");
-%files or (p("Nothing to upload\n"), exit(0));
+%files or (p("Nothing to upload\n"), exit 0);
 
 if ($method eq "ftp") {
     if (!$dry) {
@@ -585,8 +585,8 @@ JOB: foreach (keys %files) {
     my $allfiles;
     $copiedfiles = "";
 
-    my ($package, $version, $arch) = (split("_", $job, 3));
-    my ($upstream, $debian) = (split("-", $version, 2));
+    my ($package, $version, $arch) = (split "_", $job, 3);
+    my ($upstream, $debian) = (split "-", $version, 2);
 
     $incoming =~ s/_package_/$package/g;
     $incoming =~ s/_version_/$version/g;
@@ -609,7 +609,7 @@ JOB: foreach (keys %files) {
         my $t;
 
         p(sprintf "\n $file %0.1f kB", $size / 1024);
-        $t = time();
+        $t = time;
         if ($method eq "ftp") {
             unless ($dry) {
                 unless ($server->put($file, $file)) {
@@ -617,20 +617,20 @@ JOB: foreach (keys %files) {
                     $server->delete($file);
                     fatal("Can't upload $file: $result");
                 }
-                $t = time() - $t;
+                $t = time - $t;
             } else {
                 p "\n+ ftp::put($file)";
                 $t = 1;
             }
         } elsif ($method eq "scp") {
-            $mode = (stat($file))[2];
+            $mode = (stat $file)[2];
             unless ($dry) {
-                system("scp -p -q $options $file $login\@$fqdn:$incoming");
+                system "scp -p -q $options $file $login\@$fqdn:$incoming";
                 fatal("scp $file failed\n") if $?;
-                $t = time() - $t;
+                $t = time - $t;
                 # Small optimization
                 if ($mode != 33188) { # rw-r--r-- aka 0644
-                    system("ssh -x -l $login $fqdn chmod 0644 $incoming/$file");
+                    system "ssh -x -l $login $fqdn chmod 0644 $incoming/$file";
                     fatal("ssh ... chmod 0644 failed\n") if $?;
                 }
             } else {
@@ -642,7 +642,7 @@ JOB: foreach (keys %files) {
             }
         } elsif ($method eq "scpb") {
             $copiedfiles .= "$file ";
-            $mode = (stat($file))[2];
+            $mode = (stat $file)[2];
             # Small optimization
             if ($mode != 33188) { # rw-r--r-- aka 0644
                 $wrong_mode = 1;
@@ -651,7 +651,7 @@ JOB: foreach (keys %files) {
             $batchmode = 1;
         } elsif ($method eq "rsync") {
             $copiedfiles .= "$file ";
-            $mode = (stat($file))[2];
+            $mode = (stat $file)[2];
             # Small optimization
             if ($mode != 33188) { # rw-r--r-- aka 0644
                 $wrong_mode = 1;
@@ -673,7 +673,7 @@ JOB: foreach (keys %files) {
                 }
             } elsif ($method eq "scp") {
                 unless ($dry) {
-                    system("ssh -x -l $login $fqdn \"mv $incoming$file $queuedir$file\"");
+                    system "ssh -x -l $login $fqdn \"mv $incoming$file $queuedir$file\"";
                     fatal("ssh -x -l $login $fqdn: mv failed\n") if $?;
                 } else {
                     p "\n+ ssh -x -l $login $fqdn \"mv $incoming$file $queuedir$file\"";
@@ -688,9 +688,9 @@ JOB: foreach (keys %files) {
             p(sprintf " (${t} s, %.2f kB/s)", $size / 1024 / ($t || 1));
 
             unless ($dry) {
-                open(L, ">>$log{$job}") or w "Can't open $log{$job}: $!\n";
-                print L "u $file $fqdn " . localtime() . "\n";
-                close(L);
+                open L, ">>$log{$job}" or w "Can't open $log{$job}: $!\n";
+                print L "u $file $fqdn " . localtime . "\n";
+                close L;
             } else {
                 p "\n+ log to $log{$job}\n";
             }
@@ -704,7 +704,7 @@ JOB: foreach (keys %files) {
         $cmd .= "chmod 0644 $copiedfiles;";
         $needcmd = 1;
     }
-    if (length($queuedir) > 0) {
+    if (length $queuedir > 0) {
         $cmd .= "mv $copiedfiles $queuedir;";
         $needcmd = 1;
     }
@@ -713,13 +713,13 @@ JOB: foreach (keys %files) {
     if ($method eq "scpb") {
         unless ($dry) {
             p "\n";
-            system("scp $options $copiedfiles $login\@$fqdn:$incoming");
+            system "scp $options $copiedfiles $login\@$fqdn:$incoming";
             if ($?) {
                 unlink $log{$job};
                 fatal("scp $copiedfiles failed\n");
             }
             if ($needcmd) {
-                system($cmd);
+                system $cmd;
             }
             fatal("$cmd failed\n") if $?;
         } else {
@@ -732,13 +732,13 @@ JOB: foreach (keys %files) {
     if ($method eq "rsync") {
         unless ($dry) {
             p "\n";
-            system("rsync --partial -zave ssh $options -x $copiedfiles $login" . "@" . "$fqdn:$incoming");
+            system "rsync --partial -zave ssh $options -x $copiedfiles $login" . "@" . "$fqdn:$incoming";
             if ($?) {
                 unlink $log{$job};
                 fatal("rsync $copiedfiles failed\n");
             }
             if ($needcmd) {
-                system($cmd);
+                system $cmd;
             }
             fatal("$cmd failed\n") if $?;
         } else {
@@ -749,11 +749,11 @@ JOB: foreach (keys %files) {
     }
     if ($batchmode) {
         unless ($dry) {
-            open(L, ">>$log{$job}") or w "Can't open $log{$job}: $!\n";
-            foreach (split(/ /, $allfiles)) {
-                print L "u $_ $fqdn " . localtime() . "\n";
+            open L, ">>$log{$job}" or w "Can't open $log{$job}: $!\n";
+            foreach (split / /, $allfiles) {
+                print L "u $_ $fqdn " . localtime . "\n";
             }
-            close(L);
+            close L;
         } else {
             p "\n+ log to $log{$job}\n";
         }
@@ -762,9 +762,9 @@ JOB: foreach (keys %files) {
 
     announce_if_necessary($job);
     unless ($dry) {
-        open(L, ">>$log{$job}") or w("can't open logfile $log{$job}: $!\n");
-        print L "s $changes{$job} $fqdn " . localtime() . "\n";
-        close(L);
+        open L, ">>$log{$job}" or w("can't open logfile $log{$job}: $!\n");
+        print L "s $changes{$job} $fqdn " . localtime . "\n";
+        close L;
     } else {
         p "\n+ log successful upload\n";
     }
@@ -790,7 +790,7 @@ unless ($dry) {
             }
         }
 
-        my ($package, $version, $arch) = (split("_", $_, 3));
+        my ($package, $version, $arch) = (split "_", $_, 3);
         if ($postupload{'sourcepackage'}) {
             my ($result) = run $postupload{'sourcepackage'},
                                [ basename($package), $version ];
@@ -821,7 +821,7 @@ unless ($dry) {
         }
     }
 
-    foreach my $package (keys(%all_packages)) {
+    foreach my $package (keys %all_packages) {
         if ($postupload{'package'}) {
             my ($result) = run $postupload{'package'},
                                [ $package, $all_packages{$package} ];
@@ -865,10 +865,10 @@ sub announce_if_necessary($)
     p $msg . "\n";
 
     if ((!$dry) or ($mailonly)) {
-        open(M, $sendmail_cmd) or fatal("Can't pipe to $sendmail $!\n");
+        open M, $sendmail_cmd or fatal("Can't pipe to $sendmail $!\n");
     } else {
         p "\n+ announce to $announce{$job} using command ``$sendmail_cmd''\n";
-        open(M, ">&STDOUT");
+        open M, ">&STDOUT";
     }
 
     print M <<xxx;
@@ -888,22 +888,22 @@ Subject: Uploaded $package{$job} $version{$job} ($arch{$job}) to $host
 xxx
     foreach (@{$extra{$job}}) {
         my $line;
-        open(A, "<$_") or w("Can't open extra announce $_: $!\n"), next;
+        open A, "<$_" or w("Can't open extra announce $_: $!\n"), next;
         p " ($_";
         while ($line = <A>) {
             print M $line;
         }
-        close(A);
+        close A;
         p(" ok)");
     }
 
-    open(C, "<$changes{$job}") or fatal("Can't open $changes{$job} $!\n");
+    open C, "<$changes{$job}" or fatal("Can't open $changes{$job} $!\n");
     while (<C>) {
         print M;
     }
-    close(C);
+    close C;
 
-    close(M);
+    close M;
     if ($?) {
         p ", failed";
     } else {
@@ -911,9 +911,9 @@ xxx
     }
 
     if (!$dry) {
-        open(L, ">>$log{$job}") or w("can't open logfile $log{$job}: $!\n");
-        print L "a $changes{$job} $announce{$job} " . localtime() . "\n";
-        close(L);
+        open L, ">>$log{$job}" or w("can't open logfile $log{$job}: $!\n");
+        print L "a $changes{$job} $announce{$job} " . localtime . "\n";
+        close L;
     } else {
         p "\n+ log announcement\n";
     }
@@ -945,7 +945,7 @@ sub ftp_open($$$)
     $server->debug($debug);
 
     $_ = $server->login($user, $pass)
-        or die("Login as $user failed\n");
+        or die "Login as $user failed\n";
     $server->type('I')
         or fatal("Can't set binary type\n");
 }
@@ -1036,8 +1036,7 @@ sub w(@)
 
 sub fatal(@)
 {
-    my ($pack, $file, $line);
-    ($pack, $file, $line) = caller();
+    my ($pack, $file, $line) = caller;
     (my $msg = "$progname fatal error: @_ at $file line $line\n") =~ tr/\0//d;
     die $msg;
 }
@@ -1053,8 +1052,8 @@ sub run($$)
         $args[$i] =~ s#/#\\/#g;
         my ($mycode) = "\$command =~ s/\%" . ($i + 1) . "/$args[$i]/g;";
         # Substitute %1 by the first argument, etc
-        $result = eval($mycode);
-        if (!defined($result)) {
+        $result = eval $mycode;
+        if (!defined $result) {
             fatal("Cannot eval arguments substitution $mycode: $@");
         }
     }

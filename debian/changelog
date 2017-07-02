@@ -24,6 +24,7 @@ dupload (2.9.0) UNRELEASED; urgency=medium
     - Fold batch method statistics conditional into subsequent conditional.
     - Fix indentation and spacing. Split each statement into its own line.
     - Use IO::Handle autoflush instead of single argument select.
+    - Do not use parenthesis with built-ins.
 
  -- Guillem Jover <guillem@debian.org>  Sun, 28 May 2017 03:50:00 +0200
 
