@@ -60,15 +60,15 @@ my $configfile = undef;
 # Target host.
 my $host = undef;
 # Transfer method.
-my $method = "ftp";
+my $method = 'ftp';
 # Default login.
-my $login = "anonymous";
+my $login = 'anonymous';
 # Default password.
 my $passwd = "$user\@$myhost";
 # Extra options for rsync or scp.
-my $options = "";
+my $options = q{};
 
-my $sendmail = "/usr/sbin/sendmail";
+my $sendmail = '/usr/sbin/sendmail';
 
 #
 # Global variables
@@ -161,7 +161,7 @@ $config::no_parentheses_to_fullname = undef;
 $config::postupload = undef;
 $config::preupload = undef;
 
-configure("/etc/dupload.conf", $ENV{HOME} && "$ENV{HOME}/.dupload.conf");
+configure('/etc/dupload.conf', $ENV{HOME} && "$ENV{HOME}/.dupload.conf");
 
 our $opt_Version;
 our $opt_configfile;
@@ -263,7 +263,7 @@ $host or fatal("Need host to upload to.  (See --to option or the default_host co
     $dinstall_runs = $nick->{dinstall_runs};
     $passive = $nick->{passive};
 
-    if ($passive and ($method ne "ftp")) {
+    if ($passive and ($method ne 'ftp')) {
         fatal("Passive mode is only for FTP ($host)");
     }
     if (defined $nick->{archive}) {
@@ -286,8 +286,8 @@ $host or fatal("Need host to upload to.  (See --to option or the default_host co
         }
     }
 
-    $login = $nick->{login} || $login if $method eq "ftp";
-    $login = $nick->{login} || $user if $method eq "scp" or $method eq "scpb" || $method eq "rsync";
+    $login = $nick->{login} || $login if $method eq 'ftp';
+    $login = $nick->{login} || $user if $method eq 'scp' or $method eq 'scpb' || $method eq 'rsync';
     $visibleuser = $nick->{visibleuser} || $user;
     chomp $visibleuser;
     $visiblename = $nick->{visiblename} || '';
@@ -313,7 +313,7 @@ $noarchive = $opt_noarchive || (!$archive);
 #
 
 # Use current dir if no args.
-@ARGV or push @ARGV, ".";
+@ARGV or push @ARGV, '.';
 
 foreach (@ARGV) {
     my @f = undef;
@@ -358,7 +358,7 @@ p("\n");
 PACKAGE: foreach my $change (@changes) {
     my $dir = dirname($change);
     my $cf = basename($change);
-    my $job = basename($cf, ".changes");
+    my $job = basename($cf, '.changes');
     my ($package, $version, $arch) = (split /_/, $job, 3);
     my ($upstream, $debian) = (split /-/, $version, 2);
     my $log = "$job.upload";
@@ -379,7 +379,7 @@ PACKAGE: foreach my $change (@changes) {
                            [ basename($package) . " $version" ]);
         if (!$result) {
             fatal("Pre-upload \'$preupload{'sourcepackage'}\' " .
-                  "failed for " . basename($package) . " $version\n  ");
+                  'failed for ' . basename($package) . " $version\n  ");
         }
     }
 
@@ -433,7 +433,7 @@ PACKAGE: foreach my $change (@changes) {
             /\Wstable/i and $mailto{$mailto}++;
             /\Wunstable/i and $mailto{$mailtx}++;
             /\Wexperimental/i and $mailto{$mailtx}++;
-            /\WUNRELEASED/ and fatal("distribution: UNRELEASED");
+            /\WUNRELEASED/ and fatal('distribution: UNRELEASED');
             $field = undef;
             next;
         };
@@ -456,10 +456,10 @@ PACKAGE: foreach my $change (@changes) {
         unless ($nomail) {
             p("\n  announce ($cf) to $k");
             if (grep { /^a .*\s${k}\s/ } @done) {
-                p(" already done");
+                p(' already done');
             } else {
-                $announce{$job} = join " ", $announce{$job}, $_;
-                p(" will be sent");
+                $announce{$job} = join q{ }, $announce{$job}, $_;
+                p(' will be sent');
             }
         }
     }
@@ -468,11 +468,11 @@ PACKAGE: foreach my $change (@changes) {
     foreach ("${package}",
              "${package}_${upstream}",
              "${package}_${upstream}-${debian}") {
-        $_ .= ".announce";
+        $_ .= '.announce';
         -r $_ and push @extra, $_;
     }
     if (@extra) {
-        p(", as well as\n  ", join ", ", @extra);
+        p(", as well as\n  ", join ', ', @extra);
         $extra{$job} = [ @extra ];
     }
 
@@ -516,7 +516,7 @@ PACKAGE: foreach my $change (@changes) {
             push @skipped, $cf;
             next PACKAGE;
         }
-        p(", size ok");
+        p(', size ok');
 
         foreach my $alg (qw(md5 sha1 sha256)) {
             next unless $checksums{$file}{$alg};
@@ -526,7 +526,7 @@ PACKAGE: foreach my $change (@changes) {
                 $_ = (split)[0];
             } else {
                 print ": $!";
-                $_ = "";
+                $_ = q{};
             }
 
             $checksums{$file}{$alg} eq $_ or do {
@@ -619,7 +619,7 @@ if (not %files) {
     exit 0;
 }
 
-if ($method eq "ftp") {
+if ($method eq 'ftp') {
     if (!$dry) {
         $passwd = getpass() unless defined $passwd;
     } else {
@@ -633,9 +633,9 @@ if ($method eq "ftp") {
         p("+ ftp_open($fqdn, $login, $passwd)\n");
         p("+ ftp::cwd($incoming\n");
     }
-} elsif ($method eq "scp" || $method eq "scpb") {
+} elsif ($method eq 'scp' || $method eq 'scpb') {
     p("Uploading (scp) to $host ($fqdn)\n");
-} elsif ($method eq "rsync") {
+} elsif ($method eq 'rsync') {
     p("Uploading (rsync) to $host ($fqdn)\n");
 } else {
     fatal("Unknown upload method\n");
@@ -647,7 +647,7 @@ JOB: foreach (keys %files) {
     my $mode;
     my $batchmode;
     my $allfiles;
-    $copiedfiles = "";
+    $copiedfiles = qw{};
 
     my ($package, $version, $arch) = (split /_/, $job, 3);
     my ($upstream, $debian) = (split /-/, $version, 2);
@@ -677,7 +677,7 @@ JOB: foreach (keys %files) {
 
         p(sprintf "\n $file %0.1f kB", $size / 1024);
         $t = time;
-        if ($method eq "ftp") {
+        if ($method eq 'ftp') {
             unless ($dry) {
                 unless ($server->put($file, $file)) {
                     $result = $server->message();
@@ -689,7 +689,7 @@ JOB: foreach (keys %files) {
                 p("\n+ ftp::put($file)");
                 $t = 1;
             }
-        } elsif ($method eq "scp") {
+        } elsif ($method eq 'scp') {
             $mode = (stat $file)[2];
             unless ($dry) {
                 system "scp -p -q $options $file $login\@$fqdn:$incoming";
@@ -707,7 +707,7 @@ JOB: foreach (keys %files) {
                 }
                 $t = 1;
             }
-        } elsif ($method eq "scpb") {
+        } elsif ($method eq 'scpb') {
             $copiedfiles .= "$file ";
             $mode = (stat $file)[2];
             # Small optimization.
@@ -716,7 +716,7 @@ JOB: foreach (keys %files) {
             }
             $t = 1;
             $batchmode = 1;
-        } elsif ($method eq "rsync") {
+        } elsif ($method eq 'rsync') {
             $copiedfiles .= "$file ";
             $mode = (stat $file)[2];
             # Small optimization.
@@ -728,8 +728,8 @@ JOB: foreach (keys %files) {
         }
 
         if ($queuedir) {
-            p(", renaming");
-            if ($method eq "ftp") {
+            p(', renaming');
+            if ($method eq 'ftp') {
                 unless ($dry) {
                     if (!$server->rename($file, $queuedir . $file)) {
                         $result = $server->message();
@@ -739,7 +739,7 @@ JOB: foreach (keys %files) {
                 } else {
                     p("\n+ ftp::rename($file, $queuedir$file)");
                 }
-            } elsif ($method eq "scp") {
+            } elsif ($method eq 'scp') {
                 unless ($dry) {
                     system "ssh -x -l $login $fqdn \"mv $incoming$file $queuedir$file\"";
                     fatal("ssh -x -l $login $fqdn: mv failed\n") if $?;
@@ -749,7 +749,7 @@ JOB: foreach (keys %files) {
             }
         }
 
-        p(", ok");
+        p(', ok');
 
         unless ($batchmode) {
             # The batch methods do not produce the $t statistic.
@@ -774,9 +774,9 @@ JOB: foreach (keys %files) {
         $cmd .= "mv $copiedfiles $queuedir;";
         $needcmd = 1;
     }
-    $cmd .= "'";
+    $cmd .= qw{'};
 
-    if ($method eq "scpb") {
+    if ($method eq 'scpb') {
         unless ($dry) {
             p("\n");
             system "scp $options $copiedfiles $login\@$fqdn:$incoming";
@@ -793,7 +793,7 @@ JOB: foreach (keys %files) {
         $allfiles = $copiedfiles;
     }
 
-    if ($method eq "rsync") {
+    if ($method eq 'rsync') {
         unless ($dry) {
             p("\n");
             system "rsync --partial -zave ssh $options -x $copiedfiles $login" . "@" . "$fqdn:$incoming";
@@ -827,7 +827,7 @@ JOB: foreach (keys %files) {
     p(" ]\n");
 }
 
-if ($method eq "ftp") {
+if ($method eq 'ftp') {
     unless ($dry) {
         $server->close();
     } else {
@@ -852,7 +852,7 @@ unless ($dry) {
                                [ basename($package), $version ]);
             if (!$result) {
                 fatal("Post-upload \'$postupload{'sourcepackage'}\' " .
-                      "failed for " . basename($package) . " $version\n  ");
+                      'failed for ' . basename($package) . " $version\n  ");
             }
         }
     }
@@ -907,13 +907,13 @@ sub announce_if_necessary($)
     $opt_fullname = " -F '$fullname'" if $config::no_parentheses_to_fullname;
     $fullname =~ s/\'/''/;
     my $sendmail_cmd = "$sendmail -f $visibleuser" .
-                       ($visiblename ? "\@$visiblename" : "") .
-                       ($fullname ? $opt_fullname : "") .
+                       ($visiblename ? "\@$visiblename" : q{}) .
+                       ($fullname ? $opt_fullname : q{}) .
                        " $announce{$job}";
 
     $msg = "announcing to $announce{$job}";
     if ($cc) {
-        $sendmail_cmd .= " " . $cc;
+        $sendmail_cmd .= q{ } . $cc;
         $msg .= " and $cc";
     }
     p($msg . "\n");
@@ -949,7 +949,7 @@ xxx
             print { $fh_mail } $line;
         }
         close $fh_announce;
-        p(" ok)");
+        p(' ok)');
     }
 
     open my $fh_changes, '<', $changes{$job} or fatal("Can't open $changes{$job} $!\n");
@@ -960,9 +960,9 @@ xxx
 
     close $fh_mail;
     if ($?) {
-        p(", failed");
+        p(', failed');
     } else {
-        p(", ok");
+        p(', ok');
     }
 
     if (!$dry) {
@@ -1044,13 +1044,13 @@ sub configure(@)
 ### password
 sub getpass()
 {
-    system "stty -echo cbreak </dev/tty";
-    $? and fatal("stty");
+    system 'stty -echo cbreak </dev/tty';
+    $? and fatal('stty');
     print "\a${login}\@${fqdn}'s ftp account password: ";
     chomp($_ = <STDIN>);
     print "\n";
-    system "stty echo -cbreak </dev/tty";
-    $? and fatal("stty");
+    system 'stty echo -cbreak </dev/tty';
+    $? and fatal('stty');
     return $_;
 }
 

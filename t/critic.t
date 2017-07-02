@@ -83,6 +83,7 @@ my @policies = qw(
     TestingAndDebugging::RequireUseWarnings
     ValuesAndExpressions::ProhibitCommaSeparatedStatements
     ValuesAndExpressions::ProhibitComplexVersion
+    ValuesAndExpressions::ProhibitInterpolationOfLiterals
     ValuesAndExpressions::ProhibitLongChainsOfMethodCalls
     ValuesAndExpressions::ProhibitMismatchedOperators
     ValuesAndExpressions::ProhibitQuotesAsQuotelikeOperatorDelimiters
