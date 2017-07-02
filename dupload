@@ -396,7 +396,7 @@ PACKAGE: foreach my $change (@changes) {
 
         unless ($nomail) {
             p("\n  announce ($cf) to $k");
-            if (grep /^a .*\s${k}\s/, @done) {
+            if (grep { /^a .*\s${k}\s/ } @done) {
                 p(" already done");
             } else {
                 $announce{$job} = join " ", $announce{$job}, $_;
@@ -475,7 +475,7 @@ PACKAGE: foreach my $change (@changes) {
             };
             p(", ${alg}sum ok");
         }
-        if (!$force && @done && grep /^u \Q${file}\E/, @done) {
+        if (!$force && @done && grep { /^u \Q${file}\E/ } @done) {
             p(", already done for $host");
         } else {
             push @files, $file;
@@ -485,7 +485,7 @@ PACKAGE: foreach my $change (@changes) {
 
     # The changes file itself
     p("\n $cf ok");
-    if (!$force && @done && grep /^u \Q${cf}\E/, @done) {
+    if (!$force && @done && grep { /^u \Q${cf}\E/ } @done) {
         p(", already done for $host");
     } else {
         push @files, $cf;
