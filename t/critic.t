@@ -48,6 +48,7 @@ my @policies = qw(
     ControlStructures::ProhibitUntilBlocks
     Documentation::RequirePackageMatchesPodName
     Documentation::RequirePodSections
+    InputOutput::ProhibitBarewordFileHandles
     InputOutput::ProhibitInteractiveTest
     InputOutput::ProhibitJoinedReadline
     InputOutput::ProhibitOneArgSelect

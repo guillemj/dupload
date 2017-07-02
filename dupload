@@ -388,8 +388,8 @@ PACKAGE: foreach my $change (@changes) {
     # Scan the log file (iff any) for the files we have already put to the
     # host and the announcements already done.
     if (-f $log) {
-        open L, "<$log" or fatal("Can't read $log: $!\n");
-        while (<L>) {
+        open my $fh_log, "<$log" or fatal("Can't read $log: $!\n");
+        while (<$fh_log>) {
             chomp;
             if (/^. /) {
                 if (/^u .*\s(${host}|${fqdn})\s/) {
@@ -405,7 +405,7 @@ PACKAGE: foreach my $change (@changes) {
             }
             next;
         }
-        close L;
+        close $fh_log;
     }
 
     # If the dinstall_runs variable is set, we do not want the announcement
@@ -414,9 +414,9 @@ PACKAGE: foreach my $change (@changes) {
 
     # Scan the changes file for architecture, distribution code and the files
     # avoid duplicate mail addressees.
-    open C, "<$cf" or fatal("Can't read $cf: $!\n");
+    open my $fh_changes, "<$cf" or fatal("Can't read $cf: $!\n");
     my ($field);
-    while (<C>) {
+    while (<$fh_changes>) {
         chomp;
         /^changes:\s*/i and do {
             $fields{changes}++;
@@ -501,7 +501,7 @@ PACKAGE: foreach my $change (@changes) {
         }
         $checksums{$file}{size} = $size;
     }
-    close C;
+    close $fh_changes;
     unless (%checksums && $fields{changes}) {
         p(": not a changes file ]\n");
         next PACKAGE;
@@ -918,46 +918,47 @@ sub announce_if_necessary($)
     }
     p($msg . "\n");
 
+    my $fh_mail;
     if (!$dry or $mailonly) {
-        open M, $sendmail_cmd or fatal("Can't pipe to $sendmail $!\n");
+        open $fh_mail, $sendmail_cmd or fatal("Can't pipe to $sendmail $!\n");
     } else {
         p("\n+ announce to $announce{$job} using command ``$sendmail_cmd''\n");
-        open M, ">&STDOUT";
+        open $fh_mail, ">&STDOUT";
     }
 
-    print M <<xxx;
+    print $fh_mail <<xxx;
 X-dupload: $version
 To: $announce{$job}
 xxx
-    $cc and print M <<xxx;
+    $cc and print $fh_mail <<xxx;
 Cc: $cc
 xxx
-    $noarchive and print M <<xxx;
+    $noarchive and print $fh_mail <<xxx;
 X-No-Archive: yes
 xxx
 
-    print M <<xxx;
+    print $fh_mail <<xxx;
 Subject: Uploaded $package{$job} $version{$job} ($arch{$job}) to $host
 
 xxx
     foreach (@{$extra{$job}}) {
         my $line;
-        open A, "<$_" or w("Can't open extra announce $_: $!\n"), next;
+        open my $fh_announce, "<$_" or w("Can't open extra announce $_: $!\n"), next;
         p " ($_";
-        while ($line = <A>) {
-            print M $line;
+        while ($line = <$fh_announce>) {
+            print { $fh_mail } $line;
         }
-        close A;
+        close $fh_announce;
         p(" ok)");
     }
 
-    open C, "<$changes{$job}" or fatal("Can't open $changes{$job} $!\n");
-    while (<C>) {
-        print M;
+    open my $fh_changes, "<$changes{$job}" or fatal("Can't open $changes{$job} $!\n");
+    while (<$fh_changes>) {
+        print $fh_mail;
     }
-    close C;
+    close $fh_changes;
 
-    close M;
+    close $fh_mail;
     if ($?) {
         p(", failed");
     } else {
