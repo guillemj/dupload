@@ -215,8 +215,14 @@ $nomail = $opt_nomail || 0;
 $quiet = $opt_quiet;
 
 # Only info or version?
-info($opt_to), exit 0 if $opt_print;
-p("$progname version: $version\n"), exit 0 if ($opt_Version or $opt_version);
+if ($opt_print) {
+    info($opt_to);
+    exit 0;
+}
+if ($opt_Version or $opt_version) {
+    p("$progname version: $version\n");
+    exit 0;
+}
 
 if ($opt_help) {
     p(
@@ -386,8 +392,14 @@ PACKAGE: foreach my $change (@changes) {
         while (<L>) {
             chomp;
             if (/^. /) {
-                /^u .*\s(${host}|${fqdn})\s/ and push(@done, $_),  next;
-                /^a / and push(@done, $_), next;
+                if (/^u .*\s(${host}|${fqdn})\s/) {
+                    push @done, $_;
+                    next;
+                }
+                if (/^a /) {
+                    push @done, $_;
+                    next;
+                }
             } else {
                 /\s(${host}|${fqdn})\s/ and push @done, "u $_";
             }
@@ -490,7 +502,10 @@ PACKAGE: foreach my $change (@changes) {
         $checksums{$file}{size} = $size;
     }
     close C;
-    %checksums && $fields{changes} or p(": not a changes file ]\n"), next PACKAGE;
+    unless (%checksums && $fields{changes}) {
+        p(": not a changes file ]\n");
+        next PACKAGE;
+    }
 
     # Test the md5sums.
     foreach my $file (keys %checksums) {
@@ -599,8 +614,13 @@ PACKAGE: foreach my $change (@changes) {
 
 chdir $cwd or fatal("Can't chdir to $cwd: $!\n");
 
-@skipped and w("skipped: @skipped\n");
-%files or (p("Nothing to upload\n"), exit 0);
+if (@skipped) {
+    w("skipped: @skipped\n");
+}
+if (not %files) {
+    p("Nothing to upload\n");
+    exit 0;
+}
 
 if ($method eq "ftp") {
     if (!$dry) {
@@ -645,7 +665,10 @@ JOB: foreach (keys %files) {
     chdir $dir{$job} or fatal("Can't chdir to $dir{$job}: $!\n");
 
     p("[ Uploading job $job");
-    @files or p("\n nothing to do ]"), next;
+    if (@files == 0) {
+        p("\n nothing to do ]");
+        next;
+    }
 
     # For scpb only. A priori, the mode is right for every file.
     my $wrong_mode = 0;
@@ -711,10 +734,11 @@ JOB: foreach (keys %files) {
             p(", renaming");
             if ($method eq "ftp") {
                 unless ($dry) {
-                    $server->rename($file, $queuedir . $file)
-                        or $result = $server->message(),
-                           $server->delete($file),
-                           fatal("Can't rename $file -> $queuedir$file\n");
+                    if (!$server->rename($file, $queuedir . $file)) {
+                        $result = $server->message();
+                        $server->delete($file);
+                        fatal("Can't rename $file -> $queuedir$file\n");
+                    }
                 } else {
                     p("\n+ ftp::rename($file, $queuedir$file)");
                 }
