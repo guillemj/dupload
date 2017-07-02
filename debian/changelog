@@ -28,6 +28,7 @@ dupload (2.9.0) UNRELEASED; urgency=medium
     - Use parenthesis for non-built-in functions.
     - Use block form for grep.
     - Declare every global variable on its own my.
+    - Improve code comments.
 
  -- Guillem Jover <guillem@debian.org>  Sun, 28 May 2017 03:50:00 +0200
 
