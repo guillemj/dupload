@@ -59,30 +59,44 @@ my $options = "";   # extra options for rsync or scp
 my $sendmail = "/usr/sbin/sendmail";
 
 # global Variables
-my (@changes,   # the files we'll have to read from
-    @skipped,   # the packages we skipped
-    @all_the_files,     # ... we installed (for postupload processing)
-    @all_the_debs,      # ... we installed (for postupload processing)
-    %all_packages,      # All Debian binary packages we installed
+my @changes;   # the files we'll have to read from
+my @skipped;   # the packages we skipped
+my @all_the_files;     # ... we installed (for postupload processing)
+my @all_the_debs;      # ... we installed (for postupload processing)
+my %all_packages;      # All Debian binary packages we installed
                         # (for postupload processing)
-    $copiedfiles,
-    $dry,       # if do-nothing
-    $mailonly,
-    $fqdn,      # per host
-    $server,
-    $dinstall_runs,
-    $passive,
-    $nomail, $archive, $noarchive,
-    %preupload, %postupload,
-    $result,
-    $incoming, $queuedir,   # ...
-    $mailto, $mailtx, $cc,  # ...
-    $visiblename, $visibleuser,
-    $fullname,
-    %files, %package, %version, %arch,  # per job
-    %dir, %changes, %log, %announce,    # ...
-    %extra,
-);
+my $copiedfiles;
+my $dry;       # if do-nothing
+my $mailonly;
+
+my $fqdn;      # per host
+my $server;
+my $dinstall_runs;
+my $passive;
+my $nomail;
+my $archive;
+my $noarchive;
+my %preupload;
+my %postupload;
+my $result;
+my $incoming;
+my $queuedir;   # ...
+my $mailto;
+my $mailtx;
+my $cc;  # ...
+my $visiblename;
+my $visibleuser;
+my $fullname;
+
+my %files;  # per job
+my %package;
+my %version;
+my %arch;
+my %dir;
+my %changes;
+my %log;
+my %announce;    # ...
+my %extra;
 
 ### Prototypes
 sub configure(@);   # reads the config file(s)
