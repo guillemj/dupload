@@ -283,7 +283,7 @@ $host or fatal("Need host to upload to.  (See --to option or the default_host co
     }
 
     $login = $nick->{login} || $login if $method eq "ftp";
-    $login = $nick->{login} || $user if ($method eq "scp" || $method eq "scpb" || $method eq "rsync");
+    $login = $nick->{login} || $user if $method eq "scp" or $method eq "scpb" || $method eq "rsync";
     $visibleuser = $nick->{visibleuser} || $user;
     chomp $visibleuser;
     $visiblename = $nick->{visiblename} || '';
@@ -915,7 +915,7 @@ sub announce_if_necessary($)
     }
     p($msg . "\n");
 
-    if ((!$dry) or ($mailonly)) {
+    if (!$dry or $mailonly) {
         open M, $sendmail_cmd or fatal("Can't pipe to $sendmail $!\n");
     } else {
         p("\n+ announce to $announce{$job} using command ``$sendmail_cmd''\n");
@@ -977,7 +977,7 @@ sub ftp_open($$$)
     my ($ftp_port, $retry_call, $attempts) = (21, 1, 1);
     my ($request_passive) = 0;
 
-    if (($user =~ /@/) or ($passive)) {
+    if ($user =~ /@/ or $passive) {
         $request_passive = 1;
         p("+ FTP passive mode selected\n");
     }
@@ -1109,7 +1109,7 @@ sub run($$)
     }
     system "$command";
     $result = $CHILD_ERROR >> 8;
-    return (!$result);
+    return !$result;
 }
 
 # vim:set sts=4 sw=4 et:

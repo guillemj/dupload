@@ -29,6 +29,7 @@ dupload (2.9.0) UNRELEASED; urgency=medium
     - Use block form for grep.
     - Declare every global variable on its own my.
     - Improve code comments.
+    - Remove unnecessary parenthesis in conditionals.
 
  -- Guillem Jover <guillem@debian.org>  Sun, 28 May 2017 03:50:00 +0200
 
