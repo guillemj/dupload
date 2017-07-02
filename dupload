@@ -561,10 +561,7 @@ PACKAGE: foreach my $change (@changes) {
         announce_if_necessary($job);
 
         if (!$dry) {
-            open L, ">>$log{$job}"
-                or w("can't open logfile $log{$job}: $!\n");
-            print L "s $changes{$job} $fqdn " . localtime . "\n";
-            close L;
+            log_job($log{$job}, "s $changes{$job} $fqdn");
         } else {
             p("\n+ log successful upload\n");
         }
@@ -759,9 +756,7 @@ JOB: foreach (keys %files) {
             p(sprintf " (${t} s, %.2f kB/s)", $size / 1024 / ($t || 1));
 
             unless ($dry) {
-                open L, ">>$log{$job}" or w("Can't open $log{$job}: $!\n");
-                print L "u $file $fqdn " . localtime . "\n";
-                close L;
+                log_job($log{$job}, "u $file $fqdn");
             } else {
                 p("\n+ log to $log{$job}\n");
             }
@@ -816,11 +811,7 @@ JOB: foreach (keys %files) {
     }
     if ($batchmode) {
         unless ($dry) {
-            open L, ">>$log{$job}" or w("Can't open $log{$job}: $!\n");
-            foreach (split / /, $allfiles) {
-                print L "u $_ $fqdn " . localtime . "\n";
-            }
-            close L;
+            log_job($log{$job}, map { "u $_ $fqdn" } split / /, $allfiles);
         } else {
             p("\n+ log to $log{$job}\n");
         }
@@ -829,9 +820,7 @@ JOB: foreach (keys %files) {
 
     announce_if_necessary($job);
     unless ($dry) {
-        open L, ">>$log{$job}" or w("can't open logfile $log{$job}: $!\n");
-        print L "s $changes{$job} $fqdn " . localtime . "\n";
-        close L;
+        log_job($log{$job}, "s $changes{$job} $fqdn");
     } else {
         p("\n+ log successful upload\n");
     }
@@ -976,9 +965,7 @@ xxx
     }
 
     if (!$dry) {
-        open L, ">>$log{$job}" or w("can't open logfile $log{$job}: $!\n");
-        print L "a $changes{$job} $announce{$job} " . localtime . "\n";
-        close L;
+        log_job($log{$job}, "a $changes{$job} $announce{$job}");
     } else {
         p("\n+ log announcement\n");
     }
@@ -1096,6 +1083,19 @@ sub w(@)
     }
 }
 
+}
+
+# Log events for a job, by appending the localtime and a new line to each
+# passed line to log.
+sub log_job
+{
+    my ($logfile, @logdata) = @_;
+
+    open my $fh, '>>', $logfile or w("cannot open logfile $logfile: $!\n");
+    foreach my $line (@logdata) {
+        print { $fh } $line . q{ } . localtime . "\n";
+    }
+    close $fh;
 }
 
 sub fatal(@)
