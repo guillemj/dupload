@@ -17,6 +17,7 @@ dupload (2.9.0) UNRELEASED; urgency=medium
     - Declare Getopt::Long option variables.
     - Declare dupload.conf configuration variables.
     - Use strict and warnings in dupload and dupload.conf.
+    - Remove ancient perl version requirement.
 
  -- Guillem Jover <guillem@debian.org>  Sun, 28 May 2017 03:50:00 +0200
 
