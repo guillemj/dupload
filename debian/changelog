@@ -11,11 +11,12 @@ dupload (2.9.0) UNRELEASED; urgency=medium
     do Debian security uploads, and enable all security queues by default.
   * Add support for specifying a filename argument to --configfile, and
     deprecate using it without the argument due to being a security risk.
-  * Do not access the @_ array as @_[0].
-  * Declare Getopt::Long option variables.
-  * Declare dupload.conf configuration variables.
-  * Use strict and warnings in dupload and dupload.conf.
   * Add a basic unit test suite.
+  * Perl code cleanup:
+    - Do not access the @_ array as @_[0].
+    - Declare Getopt::Long option variables.
+    - Declare dupload.conf configuration variables.
+    - Use strict and warnings in dupload and dupload.conf.
 
  -- Guillem Jover <guillem@debian.org>  Sun, 28 May 2017 03:50:00 +0200
 
