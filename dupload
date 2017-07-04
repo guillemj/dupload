@@ -926,18 +926,18 @@ sub announce_if_necessary($)
         open $fh_mail, ">&STDOUT";
     }
 
-    print $fh_mail <<xxx;
+    print { $fh_mail } <<xxx;
 X-dupload: $version
 To: $announce{$job}
 xxx
-    $cc and print $fh_mail <<xxx;
+    $cc and print { $fh_mail } <<xxx;
 Cc: $cc
 xxx
-    $noarchive and print $fh_mail <<xxx;
+    $noarchive and print { $fh_mail } <<xxx;
 X-No-Archive: yes
 xxx
 
-    print $fh_mail <<xxx;
+    print { $fh_mail } <<xxx;
 Subject: Uploaded $package{$job} $version{$job} ($arch{$job}) to $host
 
 xxx
@@ -1069,18 +1069,18 @@ sub p(@)
 {
     return if $quiet;
     $nl = $_[$#_] =~ /\n$/;
-    print STDOUT @_;
+    print { *STDOUT } @_;
 }
 
 sub w(@)
 {
     if ($quiet) {
-        print STDERR "$progname warning: ", @_;
+        print { *STDERR } "$progname warning: ", @_;
     } else {
         $nl = $_[$#_] =~ /\n$/;
         unshift @_, "$progname warning: ";
         unshift @_, "\n" if !$nl;
-        print STDOUT @_;
+        print { *STDOUT } @_;
     }
 }
 

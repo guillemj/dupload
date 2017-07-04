@@ -34,6 +34,7 @@ dupload (2.9.0) UNRELEASED; urgency=medium
     - Switch comma separated statements into prefix conditionals.
     - Refactor job logging into a new log_job() function.
     - Use scalars for filehandles instead of barewords.
+    - Use braced filehandles with print.
 
  -- Guillem Jover <guillem@debian.org>  Sun, 28 May 2017 03:50:00 +0200
 
