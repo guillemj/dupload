@@ -388,7 +388,7 @@ PACKAGE: foreach my $change (@changes) {
     # Scan the log file (iff any) for the files we have already put to the
     # host and the announcements already done.
     if (-f $log) {
-        open my $fh_log, "<$log" or fatal("Can't read $log: $!\n");
+        open my $fh_log, '<', $log or fatal("Can't read $log: $!\n");
         while (<$fh_log>) {
             chomp;
             if (/^. /) {
@@ -414,7 +414,7 @@ PACKAGE: foreach my $change (@changes) {
 
     # Scan the changes file for architecture, distribution code and the files
     # avoid duplicate mail addressees.
-    open my $fh_changes, "<$cf" or fatal("Can't read $cf: $!\n");
+    open my $fh_changes, '<', $cf or fatal("Can't read $cf: $!\n");
     my ($field);
     while (<$fh_changes>) {
         chomp;
@@ -906,7 +906,7 @@ sub announce_if_necessary($)
 
     $opt_fullname = " -F '$fullname'" if $config::no_parentheses_to_fullname;
     $fullname =~ s/\'/''/;
-    my $sendmail_cmd = "|$sendmail -f $visibleuser" .
+    my $sendmail_cmd = "$sendmail -f $visibleuser" .
                        ($visiblename ? "\@$visiblename" : "") .
                        ($fullname ? $opt_fullname : "") .
                        " $announce{$job}";
@@ -920,10 +920,10 @@ sub announce_if_necessary($)
 
     my $fh_mail;
     if (!$dry or $mailonly) {
-        open $fh_mail, $sendmail_cmd or fatal("Can't pipe to $sendmail $!\n");
+        open $fh_mail, '|', $sendmail_cmd or fatal("Can't pipe to $sendmail $!\n");
     } else {
         p("\n+ announce to $announce{$job} using command ``$sendmail_cmd''\n");
-        open $fh_mail, ">&STDOUT";
+        open $fh_mail, '>&', *STDOUT;
     }
 
     print { $fh_mail } <<xxx;
@@ -943,7 +943,7 @@ Subject: Uploaded $package{$job} $version{$job} ($arch{$job}) to $host
 xxx
     foreach (@{$extra{$job}}) {
         my $line;
-        open my $fh_announce, "<$_" or w("Can't open extra announce $_: $!\n"), next;
+        open my $fh_announce, '<', $_ or w("Can't open extra announce $_: $!\n"), next;
         p " ($_";
         while ($line = <$fh_announce>) {
             print { $fh_mail } $line;
@@ -952,7 +952,7 @@ xxx
         p(" ok)");
     }
 
-    open my $fh_changes, "<$changes{$job}" or fatal("Can't open $changes{$job} $!\n");
+    open my $fh_changes, '<', $changes{$job} or fatal("Can't open $changes{$job} $!\n");
     while (<$fh_changes>) {
         print $fh_mail;
     }

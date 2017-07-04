@@ -53,6 +53,7 @@ my @policies = qw(
     InputOutput::ProhibitJoinedReadline
     InputOutput::ProhibitOneArgSelect
     InputOutput::ProhibitReadlineInForLoop
+    InputOutput::ProhibitTwoArgOpen
     InputOutput::RequireBracedFileHandleWithPrint
     InputOutput::RequireEncodingWithUTF8Layer
     Miscellanea::ProhibitFormats
