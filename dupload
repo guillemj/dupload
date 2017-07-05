@@ -1071,7 +1071,7 @@ my $nl;
 sub p(@)
 {
     return if $quiet;
-    $nl = $_[$#_] =~ /\n$/;
+    $nl = $_[-1] =~ /\n$/;
     print { *STDOUT } @_;
 }
 
@@ -1080,7 +1080,7 @@ sub w(@)
     if ($quiet) {
         print { *STDERR } "$progname warning: ", @_;
     } else {
-        $nl = $_[$#_] =~ /\n$/;
+        $nl = $_[-1] =~ /\n$/;
         unshift @_, "$progname warning: ";
         unshift @_, "\n" if !$nl;
         print { *STDOUT } @_;

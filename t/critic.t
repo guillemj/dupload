@@ -110,6 +110,7 @@ my @policies = qw(
     Variables::ProhibitUnusedVariables
     Variables::ProtectPrivateVars
     Variables::RequireLexicalLoopIterators
+    Variables::RequireNegativeIndices
 );
 
 Test::Perl::Critic->import(
