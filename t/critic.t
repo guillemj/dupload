@@ -94,6 +94,7 @@ my @policies = qw(
     Variables::ProhibitPerl4PackageNames
     Variables::ProhibitUnusedVariables
     Variables::ProtectPrivateVars
+    Variables::RequireLexicalLoopIterators
 );
 
 Test::Perl::Critic->import(

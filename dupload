@@ -1111,9 +1111,8 @@ sub run($$)
     my ($command, $args) = @_;
     my (@args) = @{$args};
     my ($result);
-    my ($i);
 
-    foreach $i (0..$#args) {
+    foreach my $i (0..$#args) {
         $args[$i] =~ s#/#\\/#g;
         my ($mycode) = "\$command =~ s/\%" . ($i + 1) . "/$args[$i]/g;";
         # Substitute %1 by the first argument, etc.
