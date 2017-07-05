@@ -100,6 +100,7 @@ my @policies = qw(
     ValuesAndExpressions::ProhibitSpecialLiteralHeredocTerminator
     ValuesAndExpressions::ProhibitVersionStrings
     ValuesAndExpressions::RequireConstantVersion
+    ValuesAndExpressions::RequireUpperCaseHeredocTerminator
     Variables::ProhibitAugmentedAssignmentInDeclaration
     Variables::ProhibitConditionalDeclarations
     Variables::ProhibitLocalVars

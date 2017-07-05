@@ -929,21 +929,21 @@ sub announce_if_necessary($)
         open $fh_mail, '>&', *STDOUT;
     }
 
-    print { $fh_mail } <<xxx;
+    print { $fh_mail } <<MAIL;
 X-dupload: $version
 To: $announce{$job}
-xxx
-    $cc and print { $fh_mail } <<xxx;
+MAIL
+    $cc and print { $fh_mail } <<MAIL;
 Cc: $cc
-xxx
-    $noarchive and print { $fh_mail } <<xxx;
+MAIL
+    $noarchive and print { $fh_mail } <<MAIL;
 X-No-Archive: yes
-xxx
+MAIL
 
-    print { $fh_mail } <<xxx;
+    print { $fh_mail } <<MAIL;
 Subject: Uploaded $package{$job} $version{$job} ($arch{$job}) to $host
 
-xxx
+MAIL
     foreach (@{$extra{$job}}) {
         my $line;
         open my $fh_announce, '<', $_ or w("Can't open extra announce $_: $!\n"), next;
@@ -1012,7 +1012,7 @@ sub info($)
 
     foreach ($host || keys %config::cfg) {
         my $r = $config::cfg{$_};
-        print <<xxx;
+        print <<INFO;
 nick name     : $_
 real name     : $r->{fqdn}
 login         : $r->{login}
@@ -1025,7 +1025,7 @@ passive FTP   : $r->{passive}
 dinstall runs : $r->{dinstall_runs}
 archive mail  : $r->{archive}
 
-xxx
+INFO
     }
 }
 
