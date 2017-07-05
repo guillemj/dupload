@@ -76,6 +76,7 @@ my @policies = qw(
     RegularExpressions::ProhibitComplexRegexes
     RegularExpressions::ProhibitFixedStringMatches
     RegularExpressions::ProhibitSingleCharAlternation
+    RegularExpressions::ProhibitUnusualDelimiters
     RegularExpressions::ProhibitUselessTopic
     RegularExpressions::RequireBracesForMultiline
     RegularExpressions::RequireExtendedFormatting

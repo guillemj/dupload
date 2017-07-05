@@ -46,6 +46,7 @@ dupload (2.9.0) UNRELEASED; urgency=medium
     - Quote HERE-doc terminators.
     - Use glob function instead of the <> operator.
     - Use negative indices instead of $#var.
+    - Use {} instead of # as regex delimiter.
 
  -- Guillem Jover <guillem@debian.org>  Sun, 28 May 2017 03:50:00 +0200
 

@@ -1116,7 +1116,7 @@ sub run($$)
     my ($result);
 
     foreach my $i (1 .. @args) {
-        $args[$i - 1] =~ s#/#\\/#g;
+        $args[$i - 1] =~ s{/}{\\/}g;
 
         # Substitute %1 by the first argument, etc.
         $command =~ s/\%$i/$args[$i - 1]/g;
