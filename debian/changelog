@@ -44,6 +44,7 @@ dupload (2.9.0) UNRELEASED; urgency=medium
     - Do not use undefined $debian when checking announce filenames.
     - Use uppercase names for HERE-doc terminators.
     - Quote HERE-doc terminators.
+    - Use glob function instead of the <> operator.
 
  -- Guillem Jover <guillem@debian.org>  Sun, 28 May 2017 03:50:00 +0200
 

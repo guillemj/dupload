@@ -33,6 +33,7 @@ my @policies = qw(
     BuiltinFunctions::ProhibitVoidMap
     BuiltinFunctions::RequireBlockGrep
     BuiltinFunctions::RequireBlockMap
+    BuiltinFunctions::RequireGlobFunction
     BuiltinFunctions::RequireSimpleSortBlock
     ClassHierarchies::ProhibitAutoloading
     ClassHierarchies::ProhibitExplicitISA

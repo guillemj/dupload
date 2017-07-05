@@ -325,7 +325,7 @@ foreach (@ARGV) {
         next;
     };
     -d _ and do {
-        @f = <$_/*.changes> or w("no changes file in dir $_\n");
+        @f = glob "$_/*.changes" or w("no changes file in dir $_\n");
         unshift @changes, @f;
         next;
     };
