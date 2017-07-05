@@ -286,8 +286,12 @@ $host or fatal("Need host to upload to.  (See --to option or the default_host co
         }
     }
 
-    $login = $nick->{login} || $login if $method eq 'ftp';
-    $login = $nick->{login} || $user if $method eq 'scp' or $method eq 'scpb' || $method eq 'rsync';
+    if ($method eq 'ftp') {
+        $login = $nick->{login} || $login;
+    }
+    if ($method eq 'scp' or $method eq 'scpb' or $method eq 'rsync') {
+        $login = $nick->{login} || $user;
+    }
     $visibleuser = $nick->{visibleuser} || $user;
     chomp $visibleuser;
     $visiblename = $nick->{visiblename} || '';
@@ -922,7 +926,7 @@ sub announce_if_necessary($)
     p($msg . "\n");
 
     my $fh_mail;
-    if (!$dry or $mailonly) {
+    if (not $dry or $mailonly) {
         open $fh_mail, '|', $sendmail_cmd or fatal("Can't pipe to $sendmail $!\n");
     } else {
         p("\n+ announce to $announce{$job} using command ``$sendmail_cmd''\n");
