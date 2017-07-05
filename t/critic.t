@@ -23,6 +23,7 @@ test_needs_author();
 test_needs_module('Test::Perl::Critic');
 
 my @policies = qw(
+    BuiltinFunctions::ProhibitBooleanGrep
     BuiltinFunctions::ProhibitLvalueSubstr
     BuiltinFunctions::ProhibitReverseSortBlock
     BuiltinFunctions::ProhibitSleepViaSelect
