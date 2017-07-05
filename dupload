@@ -1112,14 +1112,11 @@ sub run($$)
     my (@args) = @{$args};
     my ($result);
 
-    foreach my $i (0..$#args) {
-        $args[$i] =~ s#/#\\/#g;
-        my ($mycode) = "\$command =~ s/\%" . ($i + 1) . "/$args[$i]/g;";
+    foreach my $i (1 .. @args) {
+        $args[$i - 1] =~ s#/#\\/#g;
+
         # Substitute %1 by the first argument, etc.
-        $result = eval $mycode;
-        if (!defined $result) {
-            fatal("Cannot eval arguments substitution $mycode: $@");
-        }
+        $command =~ s/\%$i/$args[$i - 1]/g;
     }
     system "$command";
     $result = $CHILD_ERROR >> 8;
