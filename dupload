@@ -465,9 +465,12 @@ PACKAGE: foreach my $change (@changes) {
     }
 
     # Search for extra announcement files.
-    foreach ("${package}",
-             "${package}_${upstream}",
-             "${package}_${upstream}-${debian}") {
+    my @announce_names = (
+        "${package}",
+        "${package}_${upstream}",
+        defined $debian ? "${package}_${upstream}-${debian}" : (),
+    );
+    foreach (@announce_names) {
         $_ .= '.announce';
         -r $_ and push @extra, $_;
     }

@@ -41,6 +41,7 @@ dupload (2.9.0) UNRELEASED; urgency=medium
     - Do not use stringy split.
     - Do not interpolate literal strings.
     - Do not use undefined $queuedir variable.
+    - Do not use undefined $debian when checking announce filenames.
 
  -- Guillem Jover <guillem@debian.org>  Sun, 28 May 2017 03:50:00 +0200
 
