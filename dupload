@@ -703,13 +703,13 @@ JOB: foreach (keys %files) {
                 fatal("scp $file failed\n") if $?;
                 $t = time - $t;
                 # Small optimization.
-                if ($mode != 33188) { # rw-r--r-- aka 0644
+                if ($mode != 0100644) {
                     system "ssh -x -l $login $fqdn chmod 0644 $incoming/$file";
                     fatal("ssh ... chmod 0644 failed\n") if $?;
                 }
             } else {
                 p("\n+ scp -p -q $options $file $login\@$fqdn:$incoming");
-                if ($mode != 33188) { # rw-r--r-- aka 0644
+                if ($mode != 0100644) {
                     p("\n+ ssh -x -l $login $fqdn chmod 0644 $incoming/$file");
                 }
                 $t = 1;
@@ -718,7 +718,7 @@ JOB: foreach (keys %files) {
             $copiedfiles .= "$file ";
             $mode = (stat $file)[2];
             # Small optimization.
-            if ($mode != 33188) { # rw-r--r-- aka 0644
+            if ($mode != 0100644) {
                 $wrong_mode = 1;
             }
             $t = 1;
@@ -727,7 +727,7 @@ JOB: foreach (keys %files) {
             $copiedfiles .= "$file ";
             $mode = (stat $file)[2];
             # Small optimization.
-            if ($mode != 33188) { # rw-r--r-- aka 0644
+            if ($mode != 0100644) {
                 $wrong_mode = 1;
             }
             $t = 1;
