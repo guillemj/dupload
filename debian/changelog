@@ -40,6 +40,7 @@ dupload (2.9.0) UNRELEASED; urgency=medium
     - Rework hook execution to not require an eval.
     - Do not use stringy split.
     - Do not interpolate literal strings.
+    - Do not use undefined $queuedir variable.
 
  -- Guillem Jover <guillem@debian.org>  Sun, 28 May 2017 03:50:00 +0200
 

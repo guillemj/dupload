@@ -770,7 +770,7 @@ JOB: foreach (keys %files) {
         $cmd .= "chmod 0644 $copiedfiles;";
         $needcmd = 1;
     }
-    if (length $queuedir > 0) {
+    if (defined $queuedir and length $queuedir > 0) {
         $cmd .= "mv $copiedfiles $queuedir;";
         $needcmd = 1;
     }
