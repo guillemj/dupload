@@ -71,6 +71,7 @@ my @policies = qw(
     Modules::RequireBarewordIncludes
     Modules::RequireEndWithOne
     Modules::RequireExplicitPackage
+    Modules::RequireNoMatchVarsWithUseEnglish
     Objects::ProhibitIndirectSyntax
     References::ProhibitDoubleSigils
     RegularExpressions::ProhibitCaptureWithoutTest

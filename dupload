@@ -31,7 +31,6 @@ use Cwd;
 use Getopt::Long;
 use File::Basename;
 use Net::FTP;
-use English;
 
 #
 # More or less configurable constants.
@@ -1123,7 +1122,7 @@ sub run($$)
         $command =~ s/\%$i/$args[$i - 1]/g;
     }
     system "$command";
-    $result = $CHILD_ERROR >> 8;
+    $result = $? >> 8;
     return !$result;
 }
 
