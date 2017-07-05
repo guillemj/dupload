@@ -47,6 +47,7 @@ my @policies = qw(
     ControlStructures::ProhibitMutatingListFunctions
     ControlStructures::ProhibitNegativeExpressionsInUnlessAndUntilConditions
     ControlStructures::ProhibitUntilBlocks
+    ControlStructures::ProhibitYadaOperator
     Documentation::RequirePackageMatchesPodName
     Documentation::RequirePodSections
     InputOutput::ProhibitBarewordFileHandles
@@ -61,16 +62,24 @@ my @policies = qw(
     Miscellanea::ProhibitTies
     Miscellanea::ProhibitUnrestrictedNoCritic
     Miscellanea::ProhibitUselessNoCritic
+    Modules::ProhibitAutomaticExportation
     Modules::ProhibitConditionalUseStatements
     Modules::ProhibitEvilModules
+    Modules::ProhibitMultiplePackages
     Modules::RequireBarewordIncludes
     Modules::RequireEndWithOne
     Modules::RequireExplicitPackage
     Objects::ProhibitIndirectSyntax
+    References::ProhibitDoubleSigils
+    RegularExpressions::ProhibitCaptureWithoutTest
+    RegularExpressions::ProhibitComplexRegexes
+    RegularExpressions::ProhibitFixedStringMatches
     RegularExpressions::ProhibitSingleCharAlternation
     RegularExpressions::ProhibitUselessTopic
     RegularExpressions::RequireBracesForMultiline
     RegularExpressions::RequireExtendedFormatting
+    Subroutines::ProhibitAmpersandSigils
+    Subroutines::ProhibitBuiltinHomonyms
     Subroutines::ProhibitExplicitReturnUndef
     Subroutines::ProhibitNestedSubs
     Subroutines::ProhibitReturnSort
@@ -78,6 +87,7 @@ my @policies = qw(
     Subroutines::ProtectPrivateSubs
     TestingAndDebugging::ProhibitNoStrict
     TestingAndDebugging::ProhibitNoWarnings
+    TestingAndDebugging::ProhibitProlongedStrictureOverride
     TestingAndDebugging::RequireTestLabels
     TestingAndDebugging::RequireUseStrict
     TestingAndDebugging::RequireUseWarnings
