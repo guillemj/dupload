@@ -146,7 +146,7 @@ GetOptions qw(
 
 # Handle deprecated configfile option.
 $configfile = $opt_configfile // $configfile;
-if (length $configfile == 0) {
+if (defined $configfile and length $configfile == 0) {
     w("--configfile without a filename is a security risk and is deprecated\n");
     $configfile = './dupload.conf';
 }
