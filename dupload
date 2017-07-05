@@ -929,18 +929,18 @@ sub announce_if_necessary($)
         open $fh_mail, '>&', *STDOUT;
     }
 
-    print { $fh_mail } <<MAIL;
+    print { $fh_mail } <<"MAIL";
 X-dupload: $version
 To: $announce{$job}
 MAIL
-    $cc and print { $fh_mail } <<MAIL;
+    $cc and print { $fh_mail } <<"MAIL";
 Cc: $cc
 MAIL
-    $noarchive and print { $fh_mail } <<MAIL;
+    $noarchive and print { $fh_mail } <<'MAIL';
 X-No-Archive: yes
 MAIL
 
-    print { $fh_mail } <<MAIL;
+    print { $fh_mail } <<"MAIL";
 Subject: Uploaded $package{$job} $version{$job} ($arch{$job}) to $host
 
 MAIL
@@ -1012,7 +1012,7 @@ sub info($)
 
     foreach ($host || keys %config::cfg) {
         my $r = $config::cfg{$_};
-        print <<INFO;
+        print <<"INFO";
 nick name     : $_
 real name     : $r->{fqdn}
 login         : $r->{login}
