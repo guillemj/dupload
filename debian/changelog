@@ -62,6 +62,7 @@ dupload (2.9.0) UNRELEASED; urgency=medium
     - Avoid explicit usage of the topic variable.
     - Simplify and cleanup fatal error reporting.
     - Use non-capturing groups in regexes.
+    - Refactor pre and post upload hooks into two new functions.
 
  -- Guillem Jover <guillem@debian.org>  Sun, 28 May 2017 03:50:00 +0200
 

@@ -346,12 +346,7 @@ foreach my $pathname (@ARGV) {
 
 # Preupload code for changes files.
 foreach my $change (@changes) {
-    if ($preupload{'changes'}) {
-        my ($result) = run($preupload{'changes'}, [ $change ]);
-        if (!$result) {
-            fatal("Pre-upload \'$preupload{'changes'}\' failed for $change\n  ");
-        }
-    }
+    preupload_hook('changes', [ $change ]);
 }
 
 p("Uploading ($method) to $fqdn:$incoming");
@@ -385,14 +380,7 @@ PACKAGE: foreach my $change (@changes) {
     $version{$job} = $version;
 
     # Preupload code for source package.
-    if ($preupload{'sourcepackage'}) {
-        my ($result) = run($preupload{'sourcepackage'},
-                           [ basename($package) . " $version" ]);
-        if (!$result) {
-            fatal("Pre-upload \'$preupload{'sourcepackage'}\' " .
-                  'failed for ' . basename($package) . " $version\n  ");
-        }
-    }
+    preupload_hook('sourcepackage', [ basename($package) . " $version" ]);
 
     p("[ job $job from $cf");
 
@@ -592,13 +580,7 @@ PACKAGE: foreach my $change (@changes) {
     foreach my $file (@files) {
         push @all_the_files, $file;
 
-        if ($preupload{'file'}) {
-            my ($result) = run($preupload{'file'}, [ $file ]);
-            if (!$result) {
-                fatal("Pre-upload \'$preupload{'file'}\' " .
-                      "failed for $file\n  ");
-            }
-        }
+        preupload_hook('file', [ $file ]);
 
         if ($file =~ /\.deb$/) {
             push @all_the_debs, $file;
@@ -607,22 +589,8 @@ PACKAGE: foreach my $change (@changes) {
             $binary_package = basename($binary_package);
             $all_packages{$binary_package} = $version;
 
-            if ($preupload{'package'}) {
-                my ($result) = run($preupload{'package'},
-                                   [ $binary_package, $version ]);
-                if (!$result) {
-                    fatal("Pre-upload \'$preupload{'package'}\' " .
-                          "failed for $binary_package $version\n  ");
-                }
-            }
-
-            if ($preupload{'deb'}) {
-                my ($result) = run($preupload{'deb'}, [ $file ]);
-                if (!$result) {
-                    fatal("Pre-upload \'$preupload{'deb'}\' " .
-                          "failed for $file\n  ");
-                }
-            }
+            preupload_hook('package', [ $binary_package, $version ]);
+            preupload_hook('deb', [ $file ]);
         }
     }
 } continue {
@@ -856,54 +824,22 @@ if ($method eq 'ftp') {
 # Postupload code for changes files.
 unless ($dry) {
     foreach my $change (@changes) {
-        if ($postupload{'changes'}) {
-            my ($result) = run($postupload{'changes'}, [ $change ]);
-            if (!$result) {
-                fatal("Post-upload \'$postupload{'changes'}\' " .
-                      "failed for $change\n  ");
-            }
-        }
+        postupload_hook('changes', [ $change ]);
 
         my ($package, $version, $arch) = (split /_/, $change, 3);
-        if ($postupload{'sourcepackage'}) {
-            my ($result) = run($postupload{'sourcepackage'},
-                               [ basename($package), $version ]);
-            if (!$result) {
-                fatal("Post-upload \'$postupload{'sourcepackage'}\' " .
-                      'failed for ' . basename($package) . " $version\n  ");
-            }
-        }
+        postupload_hook('sourcepackage', [ basename($package), $version ]);
     }
 
     foreach my $file (@all_the_files) {
-        if ($postupload{'file'}) {
-            my ($result) = run($postupload{'file'}, [ $file ]);
-            if (!$result) {
-                fatal("Post-upload \'$postupload{'file'}\' " .
-                      "failed for $file\n  ");
-            }
-        }
+        postupload_hook('file', [ $file ]);
     }
 
     foreach my $file (@all_the_debs) {
-        if ($postupload{'deb'}) {
-            my ($result) = run($postupload{'deb'}, [ $file ]);
-            if (!$result) {
-                fatal("Post-upload \'$postupload{'deb'}\' " .
-                      "failed for $file\n  ");
-            }
-        }
+        postupload_hook('deb', [ $file ]);
     }
 
     foreach my $package (keys %all_packages) {
-        if ($postupload{'package'}) {
-            my ($result) = run($postupload{'package'},
-                               [ $package, $all_packages{$package} ]);
-            if (!$result) {
-                fatal("Post-upload \'$postupload{'package'}\' " .
-                      "failed for $package $all_packages{$package}\n  ");
-            }
-        }
+        postupload_hook('package', [ $package, $all_packages{$package} ]);
     }
 }
 
@@ -1151,6 +1087,28 @@ sub run($$)
     system "$command";
     $result = $? >> 8;
     return !$result;
+}
+
+sub preupload_hook
+{
+    my ($name, $args) = @_;
+
+    return unless $preupload{$name};
+
+    if (not run($preupload{$name}, $args)) {
+        fatal("Pre-upload \'$preupload{$name}\' failed for @{$args}\n  ");
+    }
+}
+
+sub postupload_hook
+{
+    my ($name, $args) = @_;
+
+    return unless $postupload{$name};
+
+    if (not run($postupload{$name}, $args)) {
+        fatal("Post-upload \'$postupload{$name}\' failed for @{$args}\n  ");
+    }
 }
 
 # vim:set sts=4 sw=4 et:
