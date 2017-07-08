@@ -12,6 +12,7 @@ dupload (2.9.0) UNRELEASED; urgency=medium
   * Add support for specifying a filename argument to --configfile, and
     deprecate using it without the argument due to being a security risk.
   * Add a basic unit test suite.
+  * Fix fatal error for pre-upload package hook to include the actual hook.
   * Perl code cleanup:
     - Do not access the @_ array as @_[0].
     - Declare Getopt::Long option variables.

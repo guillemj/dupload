@@ -598,7 +598,7 @@ PACKAGE: foreach my $change (@changes) {
                 my ($result) = run($preupload{'package'},
                                    [ $binary_package, $version ]);
                 if (!$result) {
-                    fatal("Pre-upload \'$preupload{'dpackage'}\' " .
+                    fatal("Pre-upload \'$preupload{'package'}\' " .
                           "failed for $binary_package $version\n  ");
                 }
             }
