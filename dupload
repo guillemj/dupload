@@ -853,7 +853,7 @@ unless ($dry) {
             }
         }
 
-        my ($package, $version, $arch) = (split /_/, $_, 3);
+        my ($package, $version, $arch) = (split /_/, $change, 3);
         if ($postupload{'sourcepackage'}) {
             my ($result) = run($postupload{'sourcepackage'},
                                [ basename($package), $version ]);
