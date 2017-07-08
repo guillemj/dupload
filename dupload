@@ -1121,6 +1121,7 @@ sub log_job
     my $fh;
     if (not open $fh, '>>', $logfile) {
         w("cannot open logfile $logfile: $!\n");
+        return;
     }
     foreach my $line (@logdata) {
         print { $fh } $line . q{ } . localtime . "\n";
