@@ -319,21 +319,23 @@ $noarchive = $opt_noarchive || (!$archive);
 # Use current dir if no args.
 @ARGV or push @ARGV, '.';
 
-foreach (@ARGV) {
-    if (! -r $_) {
-        fatal("Cannot read $_: $!\n");
+foreach my $pathname (@ARGV) {
+    stat $pathname;
+
+    if (! -r _) {
+        fatal("Cannot read $pathname: $!\n");
     }
     if (-f _) {
-        if (! /\.changes$/) {
-            w("no .changes extension: $_\n");
+        if ($pathname !~ /\.changes$/) {
+            w("no .changes extension: $pathname\n");
         }
-        unshift @changes, $_;
+        unshift @changes, $pathname;
         next;
     }
     if (-d _) {
-        my @f = glob "$_/*.changes";
+        my @f = glob "$pathname/*.changes";
         if (@f == 0) {
-            w("no changes file in dir $_\n");
+            w("no changes file in dir $pathname\n");
         }
         unshift @changes, @f;
         next;
@@ -398,15 +400,15 @@ PACKAGE: foreach my $change (@changes) {
     # host and the announcements already done.
     if (-f $log) {
         open my $fh_log, '<', $log or fatal("Can't read $log: $!\n");
-        while (<$fh_log>) {
+        while (my $entry = <$fh_log>) {
             chomp;
 
-            if (/^u .*\s(${host}|${fqdn})\s/) {
-                push @done, $_;
-            } elsif (/^a /) {
-                push @done, $_;
-            } elsif (/\s(${host}|${fqdn})\s/) {
-                push @done, "u $_";
+            if ($entry =~ /^u .*\s(${host}|${fqdn})\s/) {
+                push @done, $entry;
+            } elsif ($entry =~ /^a /) {
+                push @done, $entry;
+            } elsif ($entry =~ /\s(${host}|${fqdn})\s/) {
+                push @done, "u $entry";
             }
             next;
         }
@@ -434,18 +436,18 @@ PACKAGE: foreach my $change (@changes) {
             next;
         }
         if (/^distribution:\s+/i) {
-            $_ = " $'";
+            my $dist = " $'";
 
-            if (/\Wstable/i) {
+            if ($dist =~ /\Wstable/i) {
                 $mailto{$mailto}++;
             }
-            if (/\Wunstable/i) {
+            if ($dist =~ /\Wunstable/i) {
                 $mailto{$mailtx}++;
             }
-            if (/\Wexperimental/i) {
+            if ($dist =~ /\Wexperimental/i) {
                 $mailto{$mailtx}++;
             }
-            if (/\WUNRELEASED/) {
+            if ($dist =~ /\WUNRELEASED/) {
                 fatal('distribution: UNRELEASED');
             }
             $field = undef;
@@ -464,15 +466,13 @@ PACKAGE: foreach my $change (@changes) {
             $field = undef;
         }
     }
-    foreach (keys %mailto) {
-        my $k = $_;
-
+    foreach my $k (keys %mailto) {
         unless ($nomail) {
             p("\n  announce ($cf) to $k");
             if (any { /^a .*\s${k}\s/ } @done) {
                 p(' already done');
             } else {
-                $announce{$job} = join q{ }, $announce{$job}, $_;
+                $announce{$job} = join q{ }, $announce{$job}, $k;
                 p(' will be sent');
             }
         }
@@ -484,10 +484,10 @@ PACKAGE: foreach my $change (@changes) {
         "${package}_${upstream}",
         defined $debian ? "${package}_${upstream}-${debian}" : (),
     );
-    foreach (@announce_names) {
-        $_ .= '.announce';
-        if (-r $_) {
-            push @extra, $_;
+    foreach my $announce_filename (@announce_names) {
+        $announce_filename .= '.announce';
+        if (-r $announce_filename) {
+            push @extra, $announce_filename;
         }
     }
     if (@extra) {
@@ -540,12 +540,13 @@ PACKAGE: foreach my $change (@changes) {
         foreach my $alg (qw(md5 sha1 sha256)) {
             next unless $checksums{$file}{$alg};
 
+            my $checksum;
             if (-r $file) {
-                $_ = `${alg}sum $file`;
-                $_ = (split)[0];
+                my $output = `${alg}sum $file`;
+                $checksum = (split q{ }, $output)[0];
             } else {
                 print ": $!";
-                $_ = q{};
+                $checksum = q{};
             }
 
             if ($checksums{$file}{$alg} ne $checksum) {
@@ -660,8 +661,7 @@ if ($method eq 'ftp') {
     fatal("Unknown upload method\n");
 }
 
-JOB: foreach (keys %files) {
-    my $job = $_;
+JOB: foreach my $job (keys %files) {
     my @files = @{$files{$job}};
     my $mode;
     my $batchmode;
@@ -689,9 +689,8 @@ JOB: foreach (keys %files) {
     # For scpb only. A priori, the mode is right for every file.
     my $wrong_mode = 0;
 
-    foreach (@files) {
-        my $file = $_;
-        my $size = -s;
+    foreach my $file (@files) {
+        my $size = -s $file;
         my $t;
 
         p(sprintf "\n $file %0.1f kB", $size / 1024);
@@ -960,15 +959,15 @@ MAIL
 Subject: Uploaded $package{$job} $version{$job} ($arch{$job}) to $host
 
 MAIL
-    foreach (@{$extra{$job}}) {
+    foreach my $announce (@{$extra{$job}}) {
         my $line;
 
         my $fh_announce;
-        if (not open $fh_announce, '<', $_) {
-            w("Cannot open extra announce $_: $!\n");
+        if (not open $fh_announce, '<', $announce) {
+            w("Cannot open extra announce $announce: $!\n");
             next;
         }
-        p " ($_";
+        p " ($announce";
         while ($line = <$fh_announce>) {
             print { $fh_mail } $line;
         }
@@ -1020,7 +1019,7 @@ sub ftp_open($$$)
     }
     $server->debug($debug);
 
-    $_ = $server->login($user, $pass)
+    $server->login($user, $pass)
         or die "Login as $user failed\n";
     $server->type('I')
         or fatal("Can't set binary type\n");
@@ -1031,10 +1030,10 @@ sub info($)
 {
     my ($host) = @_;
 
-    foreach ($host || keys %config::cfg) {
-        my $r = $config::cfg{$_};
+    foreach my $nick ($host || keys %config::cfg) {
+        my $r = $config::cfg{$nick};
         print <<"INFO";
-nick name     : $_
+nick name     : $nick
 real name     : $r->{fqdn}
 login         : $r->{login}
 incoming      : $r->{incoming}
@@ -1056,11 +1055,13 @@ sub configure(@)
     my @conffiles = @_;
 
     my @read = ();
-    foreach (@conffiles) {
-        -r or next;
-        -s or next;
-        do $_ or fatal("$@\n");
-        push @read, $_;
+    foreach my $file (@conffiles) {
+        stat $file;
+
+        -r _ or next;
+        -s _ or next;
+        do $file or fatal("$@\n");
+        push @read, $file;
     }
     @read or fatal("No configuration files\n");
 }
@@ -1071,11 +1072,12 @@ sub getpass()
     system 'stty -echo cbreak </dev/tty';
     $? and fatal('stty');
     print "\a${login}\@${fqdn}'s ftp account password: ";
-    chomp($_ = <STDIN>);
+    my $pass = <STDIN>;
+    chomp $pass;
     print "\n";
     system 'stty echo -cbreak </dev/tty';
     $? and fatal('stty');
-    return $_;
+    return $pass;
 }
 
 ###

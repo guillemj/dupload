@@ -30,6 +30,7 @@ my @policies = qw(
     BuiltinFunctions::ProhibitStringySplit
     BuiltinFunctions::ProhibitUniversalCan
     BuiltinFunctions::ProhibitUniversalIsa
+    BuiltinFunctions::ProhibitUselessTopic
     BuiltinFunctions::ProhibitVoidGrep
     BuiltinFunctions::ProhibitVoidMap
     BuiltinFunctions::RequireBlockGrep
