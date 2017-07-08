@@ -321,16 +321,16 @@ $noarchive = $opt_noarchive || (!$archive);
 
 foreach (@ARGV) {
     -r $_ or fatal("Can't read $_: $!\n");
-    -f _ and do {
+    if (-f _) {
         /\.changes$/ or w("no .changes extension: $_\n");
         unshift @changes, $_;
         next;
-    };
-    -d _ and do {
+    }
+    if (-d _) {
         my @f = glob "$_/*.changes" or w("no changes file in dir $_\n");
         unshift @changes, @f;
         next;
-    };
+    }
 }
 
 @changes or die "No changes file, so nothing to do.\n";
@@ -420,17 +420,17 @@ PACKAGE: foreach my $change (@changes) {
     my ($field);
     while (<$fh_changes>) {
         chomp;
-        /^changes:\s*/i and do {
+        if (/^changes:\s*/i) {
             $fields{changes}++;
             $field = undef;
             next;
-        };
-        /^architecture:\s+/i and do {
+        }
+        if (/^architecture:\s+/i) {
             chomp($arch{$job} = "$'");
             $field = undef;
             next;
-        };
-        /^distribution:\s+/i and do {
+        }
+        if (/^distribution:\s+/i) {
             $_ = " $'";
             /\Wstable/i and $mailto{$mailto}++;
             /\Wunstable/i and $mailto{$mailtx}++;
@@ -438,19 +438,19 @@ PACKAGE: foreach my $change (@changes) {
             /\WUNRELEASED/ and fatal('distribution: UNRELEASED');
             $field = undef;
             next;
-        };
-        /^(files|checksums-(?:sha1|sha256)):\s*$/i and do {
+        }
+        if (/^(files|checksums-(?:sha1|sha256)):\s*$/i) {
             $field = lc $1;
             push @{$fields{$field}}, $' if $';
             next;
-        };
-        /^\s+/ and $field and do {
+        }
+        if (/^\s+/ and $field) {
             push @{$fields{$field}}, $' if $';
             next;
         };
-        /^[\w.-]+:/ and do {
+        if (/^[\w.-]+:/) {
             $field = undef;
-        };
+        }
     }
     foreach (keys %mailto) {
         my $k = $_;
@@ -534,12 +534,12 @@ PACKAGE: foreach my $change (@changes) {
                 $_ = q{};
             }
 
-            $checksums{$file}{$alg} eq $_ or do {
+            if ($checksums{$file}{$alg} ne $checksum) {
                 $keep or fatal(uc $alg . "sum mismatch for $file\n");
                 w(uc $alg . "sum mismatch for $file, skipping $job\n");
                 push @skipped, $cf;
                 next PACKAGE;
-            };
+            }
             p(", ${alg}sum ok");
         }
         if (!$force && @done && any { /^u \Q${file}\E/ } @done) {
