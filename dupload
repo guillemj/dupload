@@ -958,7 +958,12 @@ Subject: Uploaded $package{$job} $version{$job} ($arch{$job}) to $host
 MAIL
     foreach (@{$extra{$job}}) {
         my $line;
-        open my $fh_announce, '<', $_ or w("Can't open extra announce $_: $!\n"), next;
+
+        my $fh_announce;
+        if (not open $fh_announce, '<', $_) {
+            w("Cannot open extra announce $_: $!\n");
+            next;
+        }
         p " ($_";
         while ($line = <$fh_announce>) {
             print { $fh_mail } $line;
