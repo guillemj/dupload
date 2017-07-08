@@ -56,6 +56,7 @@ dupload (2.9.0) UNRELEASED; urgency=medium
     - Use octals instead of decimal values for file modes.
     - Move declaration of @f to its initialization.
     - Do not use «and do» or «or do» constructs.
+    - Do not use «and» or «or» for non-control-flow actions.
 
  -- Guillem Jover <guillem@debian.org>  Sun, 28 May 2017 03:50:00 +0200
 
