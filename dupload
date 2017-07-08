@@ -320,7 +320,9 @@ $noarchive = $opt_noarchive || (!$archive);
 @ARGV or push @ARGV, '.';
 
 foreach (@ARGV) {
-    -r $_ or fatal("Can't read $_: $!\n");
+    if (! -r $_) {
+        fatal("Cannot read $_: $!\n");
+    }
     if (-f _) {
         if (! /\.changes$/) {
             w("no .changes extension: $_\n");
@@ -443,7 +445,9 @@ PACKAGE: foreach my $change (@changes) {
             if (/\Wexperimental/i) {
                 $mailto{$mailtx}++;
             }
-            /\WUNRELEASED/ and fatal('distribution: UNRELEASED');
+            if (/\WUNRELEASED/) {
+                fatal('distribution: UNRELEASED');
+            }
             $field = undef;
             next;
         }
