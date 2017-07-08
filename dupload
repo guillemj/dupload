@@ -320,8 +320,6 @@ $noarchive = $opt_noarchive || (!$archive);
 @ARGV or push @ARGV, '.';
 
 foreach (@ARGV) {
-    my @f = undef;
-
     -r $_ or fatal("Can't read $_: $!\n");
     -f _ and do {
         /\.changes$/ or w("no .changes extension: $_\n");
@@ -329,7 +327,7 @@ foreach (@ARGV) {
         next;
     };
     -d _ and do {
-        @f = glob "$_/*.changes" or w("no changes file in dir $_\n");
+        my @f = glob "$_/*.changes" or w("no changes file in dir $_\n");
         unshift @changes, @f;
         next;
     };
