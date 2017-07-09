@@ -785,16 +785,19 @@ JOB: foreach my $job (keys %files) {
 
     # And now the batch mode uploads.
     my $needcmd = 0;
-    my $cmd = "ssh -x -l $login $fqdn 'cd $incoming;";
-    if ($wrong_mode) {
-        $cmd .= "chmod 0644 $copiedfiles;";
-        $needcmd = 1;
+    my $cmd;
+    if ($batchmode) {
+        $cmd = "ssh -x -l $login $fqdn 'cd $incoming;";
+        if ($wrong_mode) {
+            $cmd .= "chmod 0644 $copiedfiles;";
+            $needcmd = 1;
+        }
+        if (defined $queuedir and length $queuedir > 0) {
+            $cmd .= "mv $copiedfiles $queuedir;";
+            $needcmd = 1;
+        }
+        $cmd .= qw{'};
     }
-    if (defined $queuedir and length $queuedir > 0) {
-        $cmd .= "mv $copiedfiles $queuedir;";
-        $needcmd = 1;
-    }
-    $cmd .= qw{'};
 
     if ($method eq 'scpb') {
         unless ($dry) {
