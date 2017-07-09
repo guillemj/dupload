@@ -1098,6 +1098,7 @@ sub fatal(@)
 {
     my ($pack, $file, $line) = caller;
 
+    print { *STDERR } "\n";
     die "$progname: error: @_ at $file line $line\n";
 }
 
