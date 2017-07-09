@@ -86,7 +86,7 @@ For logins other than E<quot>anonymousE<quot>, you are asked for
 the password.  For security reasons there is no way to supply it via
 the commandline or the environment.
 
-=head2 FTP / scp / rsync
+=head2 FTP / scp / rsync / copy
 
 The default transfer method is FTP.  Alternative methods are scp/SSH
 and rsync/SSH.  For scp and rsync, the default login is taken
@@ -96,6 +96,9 @@ The scp/SSH method only works properly if no password is required
 (see B<ssh>(1)).
 When you use scp, it is recommended to set the "method" keyword to
 "scpb", which will transfer all files in a batch.
+
+The copy method works by simply copying the files to another directory
+in the local filesystem.
 
 If you are using an upload queue, use FTP because it is fast.
 If you are using an authenticated host, B<always> use scp or rsync

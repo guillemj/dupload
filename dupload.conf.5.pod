@@ -41,11 +41,14 @@ option of B<dupload>), for the following items:
 
 The fully qualified domain name (FQDN) of the nickname.
 
+For the E<quot>copyE<quot> method, this option is ignored and the local
+FQDN will be used intead.
+
 =item B<method> [optional]
 
 The transfer method. The available methods are: E<quot>ftpE<quot>
-(which is the default), E<quot>scpE<quot>, E<quot>scpbE<quot> and
-E<quot>rsyncE<quot> (over SSH).
+(which is the default), E<quot>scpE<quot>, E<quot>scpbE<quot>,
+E<quot>rsyncE<quot> (over SSH) and E<quot>copyE<quot> (local filesystem).
 
 If you are using an upload queue, use FTP because it is fast.
 If you are using an authenticated host, B<always> use scp or rsync

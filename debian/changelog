@@ -16,6 +16,7 @@ dupload (2.9.0) UNRELEASED; urgency=medium
   * Use $changes instead of $_ for the sourcepackage postupload hook, so that
     we compute the hook arguments properly.
   * Do not try to operate on the job log filehandle if we cannot open it.
+  * Add new "copy" upload method. Closes: #259981
   * Perl code cleanup:
     - Do not access the @_ array as @_[0].
     - Declare Getopt::Long option variables.

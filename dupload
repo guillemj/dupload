@@ -30,6 +30,7 @@ use List::Util qw(any);
 use Cwd;
 use Getopt::Long;
 use File::Basename;
+use File::Copy;
 use Net::FTP;
 
 #
@@ -254,7 +255,8 @@ $host or fatal("Need host to upload to.  (See --to option or the default_host co
     my $nick = $config::cfg{$host};
     $method = $nick->{method} || $method;
     $options = $nick->{options} || $options;
-    $fqdn = $nick->{fqdn} or fatal("Nothing known about host $host\n");
+    $fqdn = $nick->{fqdn};
+    $fqdn = $myhost if $method eq 'copy';
     $incoming = $nick->{incoming} or fatal("No Incoming dir\n");
     $queuedir = $nick->{queuedir};
     $mailto = $nick->{mailto};
@@ -265,6 +267,9 @@ $host or fatal("Need host to upload to.  (See --to option or the default_host co
 
     if ($passive and ($method ne 'ftp')) {
         fatal("Passive mode is only for FTP ($host)");
+    }
+    if (not $fqdn) {
+        fatal("Nothing known about host $host\n");
     }
     if (defined $nick->{archive}) {
         $archive = $nick->{archive};
@@ -625,6 +630,8 @@ if ($method eq 'ftp') {
     p("Uploading (scp) to $host ($fqdn)\n");
 } elsif ($method eq 'rsync') {
     p("Uploading (rsync) to $host ($fqdn)\n");
+} elsif ($method eq 'copy') {
+    p("Uploading (copy) to $host ($fqdn)\n");
 } else {
     fatal("Unknown upload method\n");
 }
@@ -711,6 +718,25 @@ JOB: foreach my $job (keys %files) {
             }
             $t = 1;
             $batchmode = 1;
+        } elsif ($method eq 'copy') {
+            $mode = (stat $file)[2];
+
+            unless ($dry) {
+                copy($file, $incoming)
+                    or fatal("Cannot copy $file to $incoming: $!\n");
+                $t = time - $t;
+                # Small optimization.
+                if ($mode != 0100644) {
+                    chmod 0644, "$incoming/$file"
+                        or fatal("Cannot chmod 0644 $incoming/$file: $!\n");
+                }
+            } else {
+                p("\n+ copy $file $incoming");
+                if ($mode != 0100644) {
+                    p("\n+ chmod 0644 $incoming/$file");
+                }
+                $t = 1;
+            }
         }
 
         if ($queuedir) {
@@ -731,6 +757,13 @@ JOB: foreach my $job (keys %files) {
                     fatal("ssh -x -l $login $fqdn: mv failed\n") if $?;
                 } else {
                     p("\n+ ssh -x -l $login $fqdn \"mv $incoming$file $queuedir$file\"");
+                }
+            } elsif ($method eq 'copy') {
+                unless ($dry) {
+                    move("$incoming/$file", "$queuedir/$file")
+                        or fatal("Cannot move $file from $incoming to $queuedir: $!\n");
+                } else {
+                    p("\n+ move $incoming/$file $queuedir/$file");
                 }
             }
         }
