@@ -11,8 +11,8 @@ program-extensions = .pl .t
 lib_sections = NAME | DESCRIPTION | CHANGES
 script_sections = NAME | SYNOPSIS | DESCRIPTION
 
-#[RegularExpressions::ProhibitUnusualDelimiters]
-#allow_all_brackets = 1
+[RegularExpressions::ProhibitUnusualDelimiters]
+allow_all_brackets = 1
 
 [RegularExpressions::RequireBracesForMultiline]
 allow_all_brackets = 1
