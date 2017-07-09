@@ -743,20 +743,20 @@ JOB: foreach my $job (keys %files) {
             p(', renaming');
             if ($method eq 'ftp') {
                 unless ($dry) {
-                    if (!$server->rename($file, $queuedir . $file)) {
+                    if (!$server->rename($file, "$queuedir/$file")) {
                         $result = $server->message();
                         $server->delete($file);
-                        fatal("Cannot rename $file -> $queuedir$file\n");
+                        fatal("Cannot rename $file -> $queuedir/$file\n");
                     }
                 } else {
-                    p("\n+ ftp::rename($file, $queuedir$file)");
+                    p("\n+ ftp::rename($file, $queuedir/$file)");
                 }
             } elsif ($method eq 'scp') {
                 unless ($dry) {
-                    system "ssh -x -l $login $fqdn \"mv $incoming$file $queuedir$file\"";
+                    system "ssh -x -l $login $fqdn \"mv $incoming/$file $queuedir/$file\"";
                     fatal("ssh -x -l $login $fqdn: mv failed\n") if $?;
                 } else {
-                    p("\n+ ssh -x -l $login $fqdn \"mv $incoming$file $queuedir$file\"");
+                    p("\n+ ssh -x -l $login $fqdn \"mv $incoming/$file $queuedir/$file\"");
                 }
             } elsif ($method eq 'copy') {
                 unless ($dry) {

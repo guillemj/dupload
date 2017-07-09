@@ -17,6 +17,8 @@ dupload (2.9.0) UNRELEASED; urgency=medium
     we compute the hook arguments properly.
   * Do not try to operate on the job log filehandle if we cannot open it.
   * Add new "copy" upload method. Closes: #259981
+  * Do not expect incoming nor queuedir options to end in a slash. This was
+    affecting the ftp and scp methods.
   * Perl code cleanup:
     - Do not access the @_ array as @_[0].
     - Declare Getopt::Long option variables.
