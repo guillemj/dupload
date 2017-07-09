@@ -877,7 +877,7 @@ sub announce_if_necessary($)
         open $fh_mail, '|', $sendmail_cmd or fatal("Can't pipe to $sendmail $!\n");
     } else {
         p("\n+ announce to $announce{$job} using command ``$sendmail_cmd''\n");
-        open $fh_mail, '>&', *STDOUT;
+        open $fh_mail, '>&', *STDOUT or fatal("Cannot redirect to stdout\n");
     }
 
     print { $fh_mail } <<"MAIL";
