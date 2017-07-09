@@ -54,7 +54,7 @@ my $quiet = 0;
 
 # Specifies an alternative configuration file to read.
 # For backwards compatibility, an empty string means to load ./dupload.conf,
-# which is a security risk that we'll warn about as deprecated.
+# which is a security risk that we will warn about as deprecated.
 my $configfile = undef;
 
 # Target host.
@@ -143,13 +143,13 @@ sub announce_if_necessary($);
 sub run($$);
 
 # Some tests on constants.
-$user or fatal("Who am I? (can't get user identity)\n");
-$myhost or fatal("Who am I? (can't get hostname)\n");
-$cwd or fatal("Where am I? (can't get current directory)\n");
+$user or fatal("Who am I? (cannot get user identity)\n");
+$myhost or fatal("Who am I? (cannot get hostname)\n");
+$cwd or fatal("Where am I? (cannot get current directory)\n");
 
 unless (-x $sendmail) {
     $nomail = 1;
-    w("mail options disabled, can't run `$sendmail': $!\n");
+    w("mail options disabled, cannot run `$sendmail': $!\n");
 }
 
 #
@@ -372,7 +372,7 @@ PACKAGE: foreach my $change (@changes) {
     my (@files, @done, @extra);
     my (%mailto, %fields);
 
-    chdir $dir or fatal("Can't chdir to $dir: $!\n");
+    chdir $dir or fatal("Cannot chdir to $dir: $!\n");
 
     $dir{$job} = $dir;
     $changes{$job} = $cf;
@@ -387,7 +387,7 @@ PACKAGE: foreach my $change (@changes) {
     # Scan the log file (iff any) for the files we have already put to the
     # host and the announcements already done.
     if (-f $log) {
-        open my $fh_log, '<', $log or fatal("Can't read $log: $!\n");
+        open my $fh_log, '<', $log or fatal("Cannot read $log: $!\n");
         while (my $entry = <$fh_log>) {
             chomp;
 
@@ -409,7 +409,7 @@ PACKAGE: foreach my $change (@changes) {
 
     # Scan the changes file for architecture, distribution code and the files
     # avoid duplicate mail addressees.
-    open my $fh_changes, '<', $cf or fatal("Can't read $cf: $!\n");
+    open my $fh_changes, '<', $cf or fatal("Cannot read $cf: $!\n");
     my ($field);
     while (<$fh_changes>) {
         chomp;
@@ -594,10 +594,10 @@ PACKAGE: foreach my $change (@changes) {
         }
     }
 } continue {
-    chdir $cwd or fatal("Can't chdir back to $cwd\n");
+    chdir $cwd or fatal("Cannot chdir back to $cwd\n");
 }
 
-chdir $cwd or fatal("Can't chdir to $cwd: $!\n");
+chdir $cwd or fatal("Cannot chdir to $cwd: $!\n");
 
 if (@skipped) {
     w("skipped: @skipped\n");
@@ -645,8 +645,8 @@ JOB: foreach my $job (keys %files) {
     $incoming =~ s/_upstream_/$upstream/g;
     $incoming =~ s/_debian_/$debian/g;
 
-    chdir $cwd or fatal("Can't chdir to $cwd: $!\n");
-    chdir $dir{$job} or fatal("Can't chdir to $dir{$job}: $!\n");
+    chdir $cwd or fatal("Cannot chdir to $cwd: $!\n");
+    chdir $dir{$job} or fatal("Cannot chdir to $dir{$job}: $!\n");
 
     p("[ Uploading job $job");
     if (@files == 0) {
@@ -668,7 +668,7 @@ JOB: foreach my $job (keys %files) {
                 unless ($server->put($file, $file)) {
                     $result = $server->message();
                     $server->delete($file);
-                    fatal("Can't upload $file: $result");
+                    fatal("Cannot upload $file: $result");
                 }
                 $t = time - $t;
             } else {
@@ -720,7 +720,7 @@ JOB: foreach my $job (keys %files) {
                     if (!$server->rename($file, $queuedir . $file)) {
                         $result = $server->message();
                         $server->delete($file);
-                        fatal("Can't rename $file -> $queuedir$file\n");
+                        fatal("Cannot rename $file -> $queuedir$file\n");
                     }
                 } else {
                     p("\n+ ftp::rename($file, $queuedir$file)");
@@ -874,7 +874,7 @@ sub announce_if_necessary($)
 
     my $fh_mail;
     if (not $dry or $mailonly) {
-        open $fh_mail, '|', $sendmail_cmd or fatal("Can't pipe to $sendmail $!\n");
+        open $fh_mail, '|', $sendmail_cmd or fatal("Cannot pipe to $sendmail $!\n");
     } else {
         p("\n+ announce to $announce{$job} using command ``$sendmail_cmd''\n");
         open $fh_mail, '>&', *STDOUT or fatal("Cannot redirect to stdout\n");
@@ -911,7 +911,7 @@ MAIL
         p(' ok)');
     }
 
-    open my $fh_changes, '<', $changes{$job} or fatal("Can't open $changes{$job} $!\n");
+    open my $fh_changes, '<', $changes{$job} or fatal("Cannot open $changes{$job} $!\n");
     while (<$fh_changes>) {
         print $fh_mail;
     }
@@ -958,7 +958,7 @@ sub ftp_open($$$)
     $server->login($user, $pass)
         or fatal("Login as $user failed\n");
     $server->type('I')
-        or fatal("Can't set binary type\n");
+        or fatal("Cannot set binary type\n");
 }
 
 # Display known host information.

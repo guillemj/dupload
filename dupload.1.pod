@@ -33,7 +33,7 @@ B<dupload> checks each non-option argument to find readable files or
 directories. It parses the files as F<.changes> files, or tries to find
 such files in the given directories.
 
-B<dupload> will warn if the name of the file doesn't end with
+B<dupload> will warn if the name of the file does not end with
 E<quot>.changesE<quot>. Further processing is done changing into the
 directories of the changes files.
 
@@ -82,8 +82,8 @@ login name and your hostname, which is common for anonymous FTP logins.
 For anonymous logins only, you can provide the "password" in
 the configuration file.
 
-For logins other than E<quot>anonymousE<quot>, you're asked for
-the password.  For security reasons there's no way to supply it via
+For logins other than E<quot>anonymousE<quot>, you are asked for
+the password.  For security reasons there is no way to supply it via
 the commandline or the environment.
 
 =head2 FTP / scp / rsync
@@ -97,7 +97,7 @@ The scp/SSH method only works properly if no password is required
 When you use scp, it is recommended to set the "method" keyword to
 "scpb", which will transfer all files in a batch.
 
-If you are using an upload queue, use FTP because it's fast.
+If you are using an upload queue, use FTP because it is fast.
 If you are using an authenticated host, B<always> use scp or rsync
 via SSH, because FTP transmits the password in clear text.
 
@@ -115,7 +115,7 @@ Upload regardless of the transfers logged as already completed.
 
 =item B<-k>, B<--keep>
 
-Keep going, skipping packages whose checksums don't match.
+Keep going, skipping packages whose checksums does not match.
 
 =item B<-c>, B<--configfile> [I<filename>]
 
@@ -200,7 +200,7 @@ mails instead.
 
 =head1 BUGS
 
-B<dupload> is tested on B<Debian> systems only. It shouldn't require too
+B<dupload> is tested on B<Debian> systems only. It should not require too
 much effort to make it run under others systems, though.
 
 =head1 SEE ALSO

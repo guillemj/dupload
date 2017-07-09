@@ -22,7 +22,7 @@ dupload.conf - configuration file for dupload
 
 =head1 DESCRIPTION
 
-The configuration file is rather straight forward Perl code as it's
+The configuration file is rather straight forward Perl code as it is
 included by the B<dupload> script via C<do $config>.  I<The config file
 is read as Perl code!>
 
@@ -47,19 +47,19 @@ The transfer method. The available methods are: E<quot>ftpE<quot>
 (which is the default), E<quot>scpE<quot>, E<quot>scpbE<quot> and
 E<quot>rsyncE<quot> (over SSH).
 
-If you are using an upload queue, use FTP because it's fast.
+If you are using an upload queue, use FTP because it is fast.
 If you are using an authenticated host, B<always> use scp or rsync
 via SSH, because FTP transmits the password in clear text.
 
 For B<scp> and B<rsync> to work properly, you have to setup the remote
 and local host to establish a ssh/slogin connection using F<.shosts/.rhosts>
-or the files in F<~/.ssh/>. If you don't want or can't do that,
+or the files in F<~/.ssh/>. If you do not want or cannot do that,
 you may find the B<scpb> more convenient since it uploads in batch,
 reducing the number of password prompts.
 
 The only major caveat of the rsync and scpb options is that the files are
 processed in a batch mode, i.e. not separately, so in case of an error
-B<dupload> won't be able to detect which part of the transfer failed, and
+B<dupload> will not be able to detect which part of the transfer failed, and
 just delete the B<.upload> file completely.
 
 =item B<login> [optional]
@@ -121,7 +121,7 @@ scp or rsync calls done.
 =item B<dinstall_runs> [optional]
 
 Tells B<dupload> that the remote host runs dinstall (or equivalent)
-so that B<dupload> won't send a duplicate announcement mail.
+so that B<dupload> will not send a duplicate announcement mail.
 The default is 0 (false), set it to 1 to enable it.
 
 =item B<archive> [optional]

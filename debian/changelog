@@ -65,6 +65,7 @@ dupload (2.9.0) UNRELEASED; urgency=medium
     - Refactor pre and post upload hooks into two new functions.
     - Check open return value for redirection of announcement to stdout.
     - Use fatal() instead of die.
+    - Do not use contracted forms in output messages nor documentation.
 
  -- Guillem Jover <guillem@debian.org>  Sun, 28 May 2017 03:50:00 +0200
 
