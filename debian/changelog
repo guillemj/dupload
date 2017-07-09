@@ -21,6 +21,7 @@ dupload (2.9.0) UNRELEASED; urgency=medium
     affecting the ftp and scp methods.
   * Always print a newline before printing a fatal error to make sure we do
     not start on a partially written line.
+  * Insert a colon after the program name in errors and warnings.
   * Perl code cleanup:
     - Do not access the @_ array as @_[0].
     - Declare Getopt::Long option variables.
