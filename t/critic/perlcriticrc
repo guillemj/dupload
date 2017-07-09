@@ -85,9 +85,6 @@ allow_if_string_contains_single_quote = 1
 # Needed.
 [-Subroutines::ProhibitSubroutinePrototypes]
 
-# Adding these seems like more noise.
-[-Subroutines::RequireFinalReturn]
-
 # Readers need to know perl, English module is worse.
 [-Variables::ProhibitPunctuationVars]
 

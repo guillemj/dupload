@@ -966,6 +966,8 @@ MAIL
     } else {
         p("\n+ log announcement\n");
     }
+
+    return;
 }
 
 # Open the FTP connection.
@@ -996,6 +998,8 @@ sub ftp_open($$$)
         or fatal("Login as $user failed\n");
     $server->type('I')
         or fatal("Cannot set binary type\n");
+
+    return;
 }
 
 # Display known host information.
@@ -1020,6 +1024,8 @@ archive mail  : $r->{archive}
 
 INFO
     }
+
+    return;
 }
 
 # Read the dupload configuration files.
@@ -1037,6 +1043,8 @@ sub configure(@)
         push @read, $file;
     }
     @read or fatal("No configuration files\n");
+
+    return;
 }
 
 # Prompt for the FTP password.
@@ -1063,6 +1071,7 @@ sub p(@)
     return if $quiet;
     $nl = $_[-1] =~ /\n$/;
     print { *STDOUT } @_;
+    return;
 }
 
 # Warn to STDOUT if !$quiet, or to STDERR if $quiet.
@@ -1076,6 +1085,7 @@ sub w(@)
         unshift @_, "\n" if !$nl;
         print { *STDOUT } @_;
     }
+    return;
 }
 
 }
@@ -1095,6 +1105,8 @@ sub log_job
         print { $fh } $line . q{ } . localtime . "\n";
     }
     close $fh;
+
+    return;
 }
 
 # Emit a fatal error and die.
@@ -1132,6 +1144,8 @@ sub preupload_hook
     if (not run($preupload{$name}, $args)) {
         fatal("Pre-upload \'$preupload{$name}\' failed for @{$args}\n  ");
     }
+
+    return;
 }
 
 sub postupload_hook
@@ -1143,6 +1157,8 @@ sub postupload_hook
     if (not run($postupload{$name}, $args)) {
         fatal("Post-upload \'$postupload{$name}\' failed for @{$args}\n  ");
     }
+
+    return;
 }
 
 # vim:set sts=4 sw=4 et:

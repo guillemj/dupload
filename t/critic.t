@@ -94,6 +94,7 @@ my @policies = qw(
     Subroutines::ProhibitReturnSort
     Subroutines::ProhibitUnusedPrivateSubroutines
     Subroutines::ProtectPrivateSubs
+    Subroutines::RequireFinalReturn
     TestingAndDebugging::ProhibitNoStrict
     TestingAndDebugging::ProhibitNoWarnings
     TestingAndDebugging::ProhibitProlongedStrictureOverride

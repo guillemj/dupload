@@ -70,6 +70,8 @@ sub test_needs_author
     if (not $ENV{AUTHOR_TESTING}) {
         plan skip_all => 'developer test';
     }
+
+    return;
 }
 
 sub test_needs_module
@@ -89,7 +91,9 @@ sub test_needs_module
         1;
     } or do {
         plan skip_all => "requires module $module $version";
-    }
+    };
+
+    return;
 }
 
 sub test_needs_command
@@ -99,6 +103,8 @@ sub test_needs_command
     if (not can_run($command)) {
         plan skip_all => "requires command $command";
     }
+
+    return;
 }
 
 1;

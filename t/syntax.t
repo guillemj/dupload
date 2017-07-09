@@ -41,6 +41,8 @@ sub syntax_ok {
     if (not $ok) {
         diag($eval);
     }
+
+    return;
 }
 
 for my $file (@files) {
