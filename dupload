@@ -1131,8 +1131,8 @@ sub log_job
 sub fatal(@)
 {
     my ($pack, $file, $line) = caller;
-    (my $msg = "$progname fatal error: @_ at $file line $line\n") =~ tr/\0//d;
-    die $msg;
+
+    die "$progname: error: @_ at $file line $line\n";
 }
 
 sub run($$)

@@ -59,6 +59,7 @@ dupload (2.9.0) UNRELEASED; urgency=medium
     - Do not use «and» or «or» for non-control-flow actions.
     - Unify fatal error handling with other surrounding flow control logic.
     - Avoid explicit usage of the topic variable.
+    - Simplify and cleanup fatal error reporting.
 
  -- Guillem Jover <guillem@debian.org>  Sun, 28 May 2017 03:50:00 +0200
 
