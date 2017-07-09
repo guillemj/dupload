@@ -389,7 +389,7 @@ PACKAGE: foreach my $change (@changes) {
     if (-f $log) {
         open my $fh_log, '<', $log or fatal("Cannot read $log: $!\n");
         while (my $entry = <$fh_log>) {
-            chomp;
+            chomp $entry;
 
             if ($entry =~ /^u .*\s(?:${host}|${fqdn})\s/) {
                 push @done, $entry;
