@@ -1,6 +1,7 @@
 # Makefile for dupload
 # Copyright © 1996 Heiko Schlittermann
 # Copyright © 2002 Josip Rodin
+# Copyright © 2017 Guillem Jover <guillem@debian.org>
 
 version = $(shell dpkg-parsechangelog -SVersion)
 reltime = $(shell dpkg-parsechangelog -STimestamp)
