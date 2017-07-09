@@ -403,11 +403,11 @@ PACKAGE: foreach my $change (@changes) {
         while (my $entry = <$fh_log>) {
             chomp;
 
-            if ($entry =~ /^u .*\s(${host}|${fqdn})\s/) {
+            if ($entry =~ /^u .*\s(?:${host}|${fqdn})\s/) {
                 push @done, $entry;
             } elsif ($entry =~ /^a /) {
                 push @done, $entry;
-            } elsif ($entry =~ /\s(${host}|${fqdn})\s/) {
+            } elsif ($entry =~ /\s(?:${host}|${fqdn})\s/) {
                 push @done, "u $entry";
             }
             next;
