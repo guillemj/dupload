@@ -55,6 +55,7 @@ my @policies = qw(
     ControlStructures::ProhibitYadaOperator
     Documentation::RequirePackageMatchesPodName
     Documentation::RequirePodSections
+    ErrorHandling::RequireCarping
     ErrorHandling::RequireCheckingReturnValueOfEval
     InputOutput::ProhibitBarewordFileHandles
     InputOutput::ProhibitInteractiveTest
@@ -76,6 +77,7 @@ my @policies = qw(
     Modules::RequireEndWithOne
     Modules::RequireExplicitPackage
     Modules::RequireNoMatchVarsWithUseEnglish
+    NamingConventions::ProhibitAmbiguousNames
     Objects::ProhibitIndirectSyntax
     References::ProhibitDoubleSigils
     RegularExpressions::ProhibitCaptureWithoutTest
@@ -90,6 +92,7 @@ my @policies = qw(
     Subroutines::ProhibitAmpersandSigils
     Subroutines::ProhibitBuiltinHomonyms
     Subroutines::ProhibitExplicitReturnUndef
+    Subroutines::ProhibitManyArgs
     Subroutines::ProhibitNestedSubs
     Subroutines::ProhibitReturnSort
     Subroutines::ProhibitUnusedPrivateSubroutines
