@@ -849,7 +849,7 @@ exit 0;
 
 ### SUBS
 
-###
+# Prepare and possibly send the mail announcement.
 sub announce_if_necessary($)
 {
     my ($job) = @_;
@@ -931,7 +931,7 @@ MAIL
     }
 }
 
-### Open the connection.
+# Open the FTP connection.
 sub ftp_open($$$)
 {
     my ($remote, $user, $pass) = @_;
@@ -961,7 +961,7 @@ sub ftp_open($$$)
         or fatal("Can't set binary type\n");
 }
 
-### Display what we know ...
+# Display known host information.
 sub info($)
 {
     my ($host) = @_;
@@ -985,7 +985,7 @@ INFO
     }
 }
 
-### Read the configuration
+# Read the dupload configuration files.
 sub configure(@)
 {
     my @conffiles = @_;
@@ -1002,7 +1002,7 @@ sub configure(@)
     @read or fatal("No configuration files\n");
 }
 
-### password
+# Prompt for the FTP password.
 sub getpass()
 {
     system 'stty -echo cbreak </dev/tty';
@@ -1016,17 +1016,11 @@ sub getpass()
     return $pass;
 }
 
-###
-# output
-# p() prints to STDOUT if !$quiet
-# w()          ....             ,
-#     but to STDERR if $quiet
-# fatal() dies
-
 {
 
 my $nl;
 
+# Print to STDOUT if !$quiet.
 sub p(@)
 {
     return if $quiet;
@@ -1034,6 +1028,7 @@ sub p(@)
     print { *STDOUT } @_;
 }
 
+# Warn to STDOUT if !$quiet, or to STDERR if $quiet.
 sub w(@)
 {
     if ($quiet) {
@@ -1065,6 +1060,7 @@ sub log_job
     close $fh;
 }
 
+# Emit a fatal error and die.
 sub fatal(@)
 {
     my ($pack, $file, $line) = caller;
