@@ -342,7 +342,7 @@ foreach my $pathname (@ARGV) {
     }
 }
 
-@changes or die "No changes file, so nothing to do.\n";
+@changes or fatal("No changes file, so nothing to do.\n");
 
 # Preupload code for changes files.
 foreach my $change (@changes) {
@@ -956,7 +956,7 @@ sub ftp_open($$$)
     $server->debug($debug);
 
     $server->login($user, $pass)
-        or die "Login as $user failed\n";
+        or fatal("Login as $user failed\n");
     $server->type('I')
         or fatal("Can't set binary type\n");
 }
