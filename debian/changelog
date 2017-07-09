@@ -69,6 +69,7 @@ dupload (2.9.0) UNRELEASED; urgency=medium
     - Check open return value for redirection of announcement to stdout.
     - Use fatal() instead of die.
     - Do not use contracted forms in output messages nor documentation.
+    - Chain method conditionals into if/elsif blocks.
 
  -- Guillem Jover <guillem@debian.org>  Sun, 28 May 2017 03:50:00 +0200
 

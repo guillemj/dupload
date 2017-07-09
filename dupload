@@ -670,6 +670,7 @@ JOB: foreach my $job (keys %files) {
 
         p(sprintf "\n $file %0.1f kB", $size / 1024);
         $t = time;
+
         if ($method eq 'ftp') {
             unless ($dry) {
                 unless ($server->put($file, $file)) {
@@ -810,9 +811,7 @@ JOB: foreach my $job (keys %files) {
             p( "\n+ $cmd");
         }
         $allfiles = $copiedfiles;
-    }
-
-    if ($method eq 'rsync') {
+    } elsif ($method eq 'rsync') {
         unless ($dry) {
             p("\n");
             system "rsync --partial -zave ssh $options -x $copiedfiles $login" . "@" . "$fqdn:$incoming";
@@ -828,6 +827,7 @@ JOB: foreach my $job (keys %files) {
         }
         $allfiles = $copiedfiles;
     }
+
     if ($batchmode) {
         unless ($dry) {
             log_job($log{$job}, map { "u $_ $fqdn" } split / /, $allfiles);
