@@ -21,7 +21,7 @@ use Test::Dupload qw(:needs);
 
 test_needs_module('Test::Strict');
 
-eval '$Test::Strict::TEST_WARNINGS = 1';
+$Test::Strict::TEST_WARNINGS = 1;
 
 my @files = Test::Dupload::all_perl_files();
 
@@ -30,4 +30,9 @@ plan tests => scalar @files * 2;
 for my $file (@files) {
     strict_ok($file);
     warnings_ok($file);
+}
+
+END {
+    # Quiesce perl's "used only once" warning.
+    $Test::Strict::TEST_WARNINGS = 0;
 }

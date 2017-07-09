@@ -53,6 +53,7 @@ my @policies = qw(
     ControlStructures::ProhibitYadaOperator
     Documentation::RequirePackageMatchesPodName
     Documentation::RequirePodSections
+    ErrorHandling::RequireCheckingReturnValueOfEval
     InputOutput::ProhibitBarewordFileHandles
     InputOutput::ProhibitInteractiveTest
     InputOutput::ProhibitJoinedReadline
@@ -107,6 +108,7 @@ my @policies = qw(
     ValuesAndExpressions::ProhibitSpecialLiteralHeredocTerminator
     ValuesAndExpressions::ProhibitVersionStrings
     ValuesAndExpressions::RequireConstantVersion
+    ValuesAndExpressions::RequireInterpolationOfMetachars
     ValuesAndExpressions::RequireQuotedHeredocTerminator
     ValuesAndExpressions::RequireUpperCaseHeredocTerminator
     Variables::ProhibitAugmentedAssignmentInDeclaration
