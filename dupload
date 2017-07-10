@@ -93,7 +93,7 @@ my $mailonly;
 
 # Variables per host.
 my $fqdn;
-my $server;
+my $ftp;
 my $dinstall_runs;
 my $passive;
 my $nomail;
@@ -622,7 +622,7 @@ if ($method eq 'ftp') {
     p("Uploading (ftp) to $host ($fqdn)\n");
     if (!$dry) {
         ftp_open($fqdn, $login, $passwd);
-        $server->cwd($incoming);
+        $ftp->cwd($incoming);
     } else {
         p("+ ftp_open($fqdn, $login, $passwd)\n");
         p("+ ftp::cwd($incoming\n");
@@ -674,9 +674,9 @@ JOB: foreach my $job (keys %files) {
 
         if ($method eq 'ftp') {
             unless ($dry) {
-                unless ($server->put($file, $file)) {
-                    $result = $server->message();
-                    $server->delete($file);
+                unless ($ftp->put($file, $file)) {
+                    $result = $ftp->message();
+                    $ftp->delete($file);
                     fatal("Cannot upload $file: $result");
                 }
                 $t = time - $t;
@@ -745,9 +745,9 @@ JOB: foreach my $job (keys %files) {
             p(', renaming');
             if ($method eq 'ftp') {
                 unless ($dry) {
-                    if (!$server->rename($file, "$queuedir/$file")) {
-                        $result = $server->message();
-                        $server->delete($file);
+                    if (!$ftp->rename($file, "$queuedir/$file")) {
+                        $result = $ftp->message();
+                        $ftp->delete($file);
                         fatal("Cannot rename $file -> $queuedir/$file\n");
                     }
                 } else {
@@ -852,7 +852,7 @@ JOB: foreach my $job (keys %files) {
 
 if ($method eq 'ftp') {
     unless ($dry) {
-        $server->close();
+        $ftp->close();
     } else {
         p("\n+ ftp::close\n");
     }
@@ -985,18 +985,18 @@ sub ftp_open($$$)
     # It may seems complicated, but it is to be sure that the environment
     # variable FTP_PASSIVE works (which needs no Passive argument).
     if ($request_passive) {
-        $server = Net::FTP->new("$fqdn", Passive => $request_passive);
+        $ftp = Net::FTP->new("$fqdn", Passive => $request_passive);
     } else {
-        $server = Net::FTP->new("$fqdn");
+        $ftp = Net::FTP->new("$fqdn");
     }
-    if (!$server) {
+    if (!$ftp) {
         fatal($@);
     }
-    $server->debug($debug);
+    $ftp->debug($debug);
 
-    $server->login($user, $pass)
+    $ftp->login($user, $pass)
         or fatal("Login as $user failed\n");
-    $server->type('I')
+    $ftp->type('I')
         or fatal("Cannot set binary type\n");
 
     return;
