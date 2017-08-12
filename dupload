@@ -132,7 +132,7 @@ sub configure(@);
 sub ftp_open($$$);
 # Print the available info (for a given host).
 sub info($);
-# Nail out.
+# Bail out.
 sub fatal(@);
 # Read a password.
 sub getpass();
