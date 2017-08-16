@@ -23,6 +23,8 @@ dupload (2.9.0) UNRELEASED; urgency=medium
     not start on a partially written line.
   * Insert a colon after the program name in errors and warnings.
   * Only set the batch mode command variables when in that mode.
+  * Add Ubuntu host to dupload.conf.
+    Thanks to Oliver Grawert (ogra) <hostmaster@grawert.net>.
   * Perl code cleanup:
     - Do not access the @_ array as @_[0].
     - Declare Getopt::Long option variables.
