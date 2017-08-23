@@ -1,4 +1,4 @@
-dupload (2.9.0) UNRELEASED; urgency=medium
+dupload (2.9.0) unstable; urgency=medium
 
   * Update the TODO list.
   * Add Vcs-Browser and Vcs-Git fields to debian/control.
@@ -79,7 +79,7 @@ dupload (2.9.0) UNRELEASED; urgency=medium
     - Chain method conditionals into if/elsif blocks.
     - Rename $server variable to $ftp.
 
- -- Guillem Jover <guillem@debian.org>  Sun, 28 May 2017 03:50:00 +0200
+ -- Guillem Jover <guillem@debian.org>  Wed, 23 Aug 2017 19:21:33 +0200
 
 dupload (2.8.3) unstable; urgency=medium
 
