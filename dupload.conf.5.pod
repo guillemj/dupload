@@ -43,7 +43,7 @@ option of B<dupload>), for the following items:
 The fully qualified domain name (FQDN) of the nickname.
 
 For the E<quot>copyE<quot> method, this option is ignored and the local
-FQDN will be used intead.
+FQDN will be used instead.
 
 =item B<method> [optional]
 
