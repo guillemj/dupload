@@ -35,7 +35,7 @@ directories. It parses the files as F<.changes> files, or tries to find
 such files in the given directories.
 
 B<dupload> will warn if the name of the file does not end with
-E<quot>.changesE<quot>. Further processing is done changing into the
+F<.changes>. Further processing is done changing into the
 directories of the changes files.
 
 B<dupload> tests the available checksums and size for each file listed in the F<.changes> file,
@@ -61,12 +61,12 @@ B<foobar>, has upstream version 3.14, and Debian revision 2:
 =item *
 
 If you only want the announcement to be made with only ONE upload,
-you name it foobar_3.14-2.announce.
+you name it I<foobar_3.14-2.announce>.
 
 =item *
 
 If you want it to be made with every upload of a particular upstream
-version, name it foobar_3.14.announce.
+version, name it I<foobar_3.14.announce>.
 
 =item *
 
@@ -78,32 +78,32 @@ foobar.announce.
 =head2 Login and password
 
 If no login (username) is defined in the configuration file,
-E<quot>anonymousE<quot> is used.  The password is derived from your
+B<anonymous> is used.  The password is derived from your
 login name and your hostname, which is common for anonymous FTP logins.
 For anonymous logins only, you can provide the "password" in
 the configuration file.
 
-For logins other than E<quot>anonymousE<quot>, you are asked for
+For logins other than B<anonymous>, you are asked for
 the password.  For security reasons there is no way to supply it via
 the commandline or the environment.
 
-=head2 FTP / scp / rsync / copy
+=head2 ftp / scp / rsync / copy
 
-The default transfer method is FTP.  Alternative methods are scp/SSH
-and rsync/SSH.  For scp and rsync, the default login is taken
+The default transfer method is B<ftp>.  Alternative methods are B<scp>/SSH
+and B<rsync>/SSH.  For B<scp> and B<rsync>, the default login is taken
 from your local user name.
 
-The scp/SSH method only works properly if no password is required
+The B<scp>/SSH method only works properly if no password is required
 (see B<ssh>(1)).
-When you use scp, it is recommended to set the "method" keyword to
-"scpb", which will transfer all files in a batch.
+When you use B<scp>, it is recommended to set the "method" keyword to
+B<scpb>, which will transfer all files in a batch.
 
-The copy method works by simply copying the files to another directory
+The B<copy> method works by simply copying the files to another directory
 in the local filesystem.
 
-If you are using an upload queue, use FTP because it is fast.
-If you are using an authenticated host, B<always> use scp or rsync
-via SSH, because FTP transmits the password in clear text.
+If you are using an upload queue, use B<ftp> because it is fast.
+If you are using an authenticated host, B<always> use B<scp> or B<rsync>
+via SSH, because B<ftp> transmits the password in clear text.
 
 =head1 OPTIONS
 
@@ -139,7 +139,7 @@ what we would do.
 
 Suppress announcement for this run. You can send it later by just
 calling dupload again w/o this option. Note that this option is by
-default implied for all hosts with the "dinstall_runs" option set to 1.
+default implied for all hosts with the B<dinstall_runs> option set to 1.
 
 =item B<--mailonly>
 
@@ -148,8 +148,8 @@ unconditionally.
 
 =item B<--noarchive>
 
-Adds a "X-No-Archive: yes" header so that the announcement will not be
-archived. You can use the per-host "archive" option in the configuration
+Adds a B<X-No-Archive: yes> header so that the announcement will not be
+archived. You can use the per-host B<archive> option in the configuration
 file.
 
 =item B<-p>, B<--print>
@@ -165,7 +165,7 @@ Be quiet, i.e., suppress normal output.
 =item B<-t>, B<--to> I<nickname>
 
 Upload to I<nickname>'d host.  I<nickname> is the key for doing lookups
-in the config file. You can use the "default_host" configuration option
+in the config file. You can use the B<default_host> configuration option
 to specify a host without B<--to>.
 
 =item B<--help>

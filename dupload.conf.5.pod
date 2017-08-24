@@ -42,18 +42,18 @@ option of B<dupload>), for the following items:
 
 The fully qualified domain name (FQDN) of the nickname.
 
-For the E<quot>copyE<quot> method, this option is ignored and the local
+For the B<copy> method, this option is ignored and the local
 FQDN will be used instead.
 
 =item B<method> [optional]
 
-The transfer method. The available methods are: E<quot>ftpE<quot>
-(which is the default), E<quot>scpE<quot>, E<quot>scpbE<quot>,
-E<quot>rsyncE<quot> (over SSH) and E<quot>copyE<quot> (local filesystem).
+The transfer method. The available methods are: B<ftp>
+(which is the default), B<scp>, B<scpb>, B<rsync> (over SSH) and
+B<copy> (local filesystem).
 
-If you are using an upload queue, use FTP because it is fast.
-If you are using an authenticated host, B<always> use scp or rsync
-via SSH, because FTP transmits the password in clear text.
+If you are using an upload queue, use B<ftp> because it is fast.
+If you are using an authenticated host, B<always> use B<scp> or B<rsync>
+via SSH, because B<ftp> transmits the password in clear text.
 
 For B<scp> and B<rsync> to work properly, you have to setup the remote
 and local host to establish a ssh/slogin connection using F<.shosts/.rhosts>
@@ -61,7 +61,7 @@ or the files in F<~/.ssh/>. If you do not want or cannot do that,
 you may find the B<scpb> more convenient since it uploads in batch,
 reducing the number of password prompts.
 
-The only major caveat of the rsync and scpb options is that the files are
+The only major caveat of the B<rsync> and B<scpb> options is that the files are
 processed in a batch mode, i.e. not separately, so in case of an error
 B<dupload> will not be able to detect which part of the transfer failed, and
 just delete the B<.upload> file completely.
@@ -69,7 +69,7 @@ just delete the B<.upload> file completely.
 =item B<login> [optional]
 
 The account name used to log into the FTP server. The default is
-E<quot>anonymousE<quot>, should work with firewall logins too.
+B<anonymous>, should work with firewall logins too.
 
 =item B<incoming> [required]
 
@@ -114,13 +114,13 @@ your local MTA likes.
 
 =item B<passive> [optional]
 
-Set the passive mode for FTP transfers. Since B<dupload> uses Net::FTP,
-you can also use the environment variable FTP_PASSIVE.
+Set the passive mode for FTP transfers. Since B<dupload> uses L<Net::FTP>,
+you can also use the environment variable B<FTP_PASSIVE>.
 
 =item B<options> [optional]
 
 String that will be added verbatim to the command line of any
-scp or rsync calls done.
+B<scp> or B<rsync> calls done.
 
 =item B<dinstall_runs> [optional]
 
@@ -130,7 +130,7 @@ The default is 0 (false), set it to 1 to enable it.
 
 =item B<archive> [optional]
 
-If set to 0 (false), adds a "X-No-Archive: yes" header in the announcement.
+If set to 0 (false), adds a B<X-No-Archive: yes> header in the announcement.
 The default is 1 (true).
 
 =back
@@ -162,24 +162,24 @@ always run (even in dry mode) and stop B<dupload> if they fail
 (failure being mesured by the hook's exit status). Post-uploads
 are only run when you are not in dry mode and only if the uploading succeeded.
 
-Both sorts of hooks are run for a given category: changes, sourcepackage,
-package, file or deb.
+Both sorts of hooks are run for a given category: B<changes>, B<sourcepackage>,
+B<package>, B<file> or B<deb>.
 
 =over 4
 
 =item changes
 
-This hook is run once per "changes" file (given as an argument to B<dupload>)
+This hook is run once per F<changes> file (given as an argument to B<dupload>)
 with the filename as its parameter.
 
 =item sourcepackage
 
-This hook is run once per "changes" file
+This hook is run once per F<changes> file
 with the source package name and its version as its two parameters.
 
 =item package
 
-This hook is run once per binary package (a "deb" file) with
+This hook is run once per binary package (a F<deb> file) with
 the package name and its version as its two parameters.
 
 =item file
@@ -188,7 +188,7 @@ This hook is run once per uploaded file, with the file name as its parameter.
 
 =item deb
 
-This hook is run once per binary package (a "deb" file) with
+This hook is run once per binary package (a F<deb> file) with
 the filename as its parameter.
 
 =back
@@ -199,7 +199,7 @@ Hooks are defined in two Perl hashes, C<%preupload> and C<%postupload>, each ind
 by category. In addition to the global hashes, each host entry has two fields
 with the same names, for the host-specific hooks.
 
-The shell command will be substituted first: %1 will be replace by the first
+The shell command will be substituted first: C<%1> will be replace by the first
 argument, etc.
 
 =head2 Per-host or global hooks
@@ -236,7 +236,7 @@ The latest entries override the former.
 
 =head1 ENVIRONMENT
 
-Those of Net::FTP for the FTP method:
+Those of L<Net::FTP> for the FTP method:
 
  FTP_FIREWALL
  FTP_PASSIVE
