@@ -432,13 +432,13 @@ PACKAGE: foreach my $change (@changes) {
         if (/^distribution:\s+/i) {
             my $dist = " $'";
 
-            if ($dist =~ /\Wstable/i) {
+            if ($mailto and $dist =~ /\Wstable/i) {
                 $mailto{$mailto}++;
             }
-            if ($dist =~ /\Wunstable/i) {
+            if ($mailtx and $dist =~ /\Wunstable/i) {
                 $mailto{$mailtx}++;
             }
-            if ($dist =~ /\Wexperimental/i) {
+            if ($mailtx and $dist =~ /\Wexperimental/i) {
                 $mailto{$mailtx}++;
             }
             if ($dist =~ /\WUNRELEASED/) {
