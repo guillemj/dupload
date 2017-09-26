@@ -5,7 +5,7 @@
 
 version = $(shell dpkg-parsechangelog -SVersion)
 reltime = $(shell dpkg-parsechangelog -STimestamp)
-mandate = $(shell TZ=UTC LC_ALL=C date '+%F' --date="@$(reltime)")
+mandate = $(shell TZ=UTC0 LC_ALL=C date '+%F' --date="@$(reltime)")
 
 MAN1 = dupload.1
 MAN5 = dupload.conf.5
