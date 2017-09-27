@@ -3,6 +3,7 @@ dupload (2.9.1) UNRELEASED; urgency=medium
   * Fix perl warning on upload queues without a mailto or mailtx attribute.
   * Fix markup in man pages.
   * Use UTC0 when setting TZ for the man date.
+  * Use balanced '' instead of `' in output messages.
   * Perl code cleanup:
     - Use qx() instead of ``.
 

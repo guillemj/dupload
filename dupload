@@ -151,7 +151,7 @@ $cwd or fatal("Where am I? (cannot get current directory)\n");
 
 unless (-x $sendmail) {
     $nomail = 1;
-    w("mail options disabled, cannot run `$sendmail': $!\n");
+    w("mail options disabled, cannot run '$sendmail': $!\n");
 }
 
 #
@@ -913,7 +913,7 @@ sub announce_if_necessary($)
     if (not $dry or $mailonly) {
         open $fh_mail, '|', $sendmail_cmd or fatal("Cannot pipe to $sendmail $!\n");
     } else {
-        p("\n+ announce to $announce{$job} using command ``$sendmail_cmd''\n");
+        p("\n+ announce to $announce{$job} using command '$sendmail_cmd'\n");
         open $fh_mail, '>&', *STDOUT or fatal("Cannot redirect to stdout\n");
     }
 
