@@ -41,7 +41,7 @@ use Net::FTP;
 my $version = '2.x';
 my $progname = basename($0);
 my $user = getlogin || $ENV{LOGNAME} || $ENV{USER};
-my $myhost = `hostname --fqdn`;
+my $myhost = qx(hostname --fqdn);
 chomp $myhost;
 my $cwd = cwd();
 
@@ -536,7 +536,7 @@ PACKAGE: foreach my $change (@changes) {
 
             my $checksum;
             if (-r $file) {
-                my $output = `${alg}sum $file`;
+                my $output = qx(${alg}sum $file);
                 $checksum = (split q{ }, $output)[0];
             } else {
                 print ": $!";
