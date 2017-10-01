@@ -6,6 +6,9 @@ dupload (2.9.1) UNRELEASED; urgency=medium
   * Use balanced '' instead of `' in output messages.
   * Perl code cleanup:
     - Use qx() instead of ``.
+  * Improve file mode handling:
+    - Switch rsync method to use -L and -t instead of -a.
+    Proposed by Ansgar Burchardt <ansgar@debian.org>.
 
  -- Guillem Jover <guillem@debian.org>  Thu, 24 Aug 2017 20:45:05 +0200
 

@@ -818,7 +818,7 @@ JOB: foreach my $job (keys %files) {
     } elsif ($method eq 'rsync') {
         unless ($dry) {
             p("\n");
-            system "rsync --partial -zave ssh $options -x $copiedfiles $login" . "@" . "$fqdn:$incoming";
+            system "rsync --partial -Ltzve ssh $options -x $copiedfiles $login" . "@" . "$fqdn:$incoming";
             if ($?) {
                 unlink $log{$job};
                 fatal("rsync $copiedfiles failed\n");
@@ -826,7 +826,7 @@ JOB: foreach my $job (keys %files) {
             system $cmd if $needcmd;
             fatal("$cmd failed\n") if $?;
         } else {
-            p("\n+ rsync --partial -zave ssh $options -x $copiedfiles $login" . "@" . "$fqdn:$incoming");
+            p("\n+ rsync --partial -Ltzve ssh $options -x $copiedfiles $login" . "@" . "$fqdn:$incoming");
             p("\n+ $cmd");
         }
         $allfiles = $copiedfiles;
