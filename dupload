@@ -110,6 +110,8 @@ my $cc;
 my $visiblename;
 my $visibleuser;
 my $fullname;
+my $dochmode;
+my $filemode;
 
 # Variables per job.
 my %files;
@@ -265,6 +267,8 @@ $host or fatal("Need host to upload to.  (See --to option or the default_host co
     $cc = $nick->{cc};
     $dinstall_runs = $nick->{dinstall_runs};
     $passive = $nick->{passive};
+    $dochmode = !exists $nick->{filemode} && defined $nick->{filemode};
+    $filemode = ($nick->{filemode} // 0644) & 07777;
 
     if ($passive and ($method ne 'ftp')) {
         fatal("Passive mode is only for FTP ($host)");
@@ -691,14 +695,14 @@ JOB: foreach my $job (keys %files) {
                 fatal("scp $file failed\n") if $?;
                 $t = time - $t;
                 # Small optimization.
-                if ($mode != 0644) {
-                    system "ssh -x -l $login $fqdn chmod 0644 $incoming/$file";
-                    fatal("ssh ... chmod 0644 failed\n") if $?;
+                if ($dochmode && $mode != $filemode) {
+                    system "ssh -x -l $login $fqdn chmod $filemode $incoming/$file";
+                    fatal("ssh ... chmod $filemode failed\n") if $?;
                 }
             } else {
                 p("\n+ scp -p -q $options $file $login\@$fqdn:$incoming");
-                if ($mode != 0644) {
-                    p("\n+ ssh -x -l $login $fqdn chmod 0644 $incoming/$file");
+                if ($dochmode && $mode != $filemode) {
+                    p("\n+ ssh -x -l $login $fqdn chmod $filemode $incoming/$file");
                 }
                 $t = 1;
             }
@@ -706,7 +710,7 @@ JOB: foreach my $job (keys %files) {
             $copiedfiles .= "$file ";
             $mode = (stat $file)[2] & 07777;
             # Small optimization.
-            if ($mode != 0644) {
+            if ($dochmode && $mode != $filemode) {
                 $wrong_mode = 1;
             }
             $t = 1;
@@ -715,7 +719,7 @@ JOB: foreach my $job (keys %files) {
             $copiedfiles .= "$file ";
             $mode = (stat $file)[2] & 07777;
             # Small optimization.
-            if ($mode != 0644) {
+            if ($dochmode && $mode != $filemode) {
                 $wrong_mode = 1;
             }
             $t = 1;
@@ -728,14 +732,14 @@ JOB: foreach my $job (keys %files) {
                     or fatal("Cannot copy $file to $incoming: $!\n");
                 $t = time - $t;
                 # Small optimization.
-                if ($mode != 0644) {
-                    chmod 0644, "$incoming/$file"
-                        or fatal("Cannot chmod 0644 $incoming/$file: $!\n");
+                if ($dochmode && $mode != $filemode) {
+                    chmod $filemode, "$incoming/$file"
+                        or fatal("Cannot chmod $filemode $incoming/$file: $!\n");
                 }
             } else {
                 p("\n+ copy $file $incoming");
-                if ($mode != 0644) {
-                    p("\n+ chmod 0644 $incoming/$file");
+                if ($dochmode && $mode != $filemode) {
+                    p("\n+ chmod $filemode $incoming/$file");
                 }
                 $t = 1;
             }
@@ -790,7 +794,7 @@ JOB: foreach my $job (keys %files) {
     if ($batchmode) {
         $cmd = "ssh -x -l $login $fqdn 'cd $incoming;";
         if ($wrong_mode) {
-            $cmd .= "chmod 0644 $copiedfiles;";
+            $cmd .= "chmod $filemode $copiedfiles;";
             $needcmd = 1;
         }
         if (defined $queuedir and length $queuedir > 0) {

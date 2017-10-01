@@ -71,6 +71,11 @@ just delete the B<.upload> file completely.
 The account name used to log into the FTP server. The default is
 B<anonymous>, should work with firewall logins too.
 
+=item B<filemode> [optional]
+
+The destination files mode, in octal. If the value is B<undef>, the mode
+will not be modified. The default is B<0644>.
+
 =item B<incoming> [required]
 
 Incoming directory, the directory we try to upload to.
