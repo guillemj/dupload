@@ -434,19 +434,19 @@ PACKAGE: foreach my $change (@changes) {
             next;
         }
         if (/^distribution:\s+/i) {
-            my $dist = " $'";
-
-            if ($mailto and $dist =~ /\Wstable/i) {
-                $mailto{$mailto}++;
-            }
-            if ($mailtx and $dist =~ /\Wunstable/i) {
-                $mailto{$mailtx}++;
-            }
-            if ($mailtx and $dist =~ /\Wexperimental/i) {
-                $mailto{$mailtx}++;
-            }
-            if ($dist =~ /\WUNRELEASED/) {
-                fatal('distribution: UNRELEASED');
+            foreach my $dist (split ' ', $') {
+                if ($mailto and $dist =~ m/^stable/) {
+                    $mailto{$mailto}++;
+                }
+                if ($mailtx and $dist =~ m/^unstable/) {
+                    $mailto{$mailtx}++;
+                }
+                if ($mailtx and $dist =~ m/^experimental/) {
+                    $mailto{$mailtx}++;
+                }
+                if ($dist =~ m/^UNRELEASED/) {
+                    fatal('distribution: UNRELEASED');
+                }
             }
             $field = undef;
             next;
