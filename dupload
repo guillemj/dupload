@@ -792,6 +792,8 @@ JOB: foreach my $job (keys %files) {
     my $subcmd;
 
     if ($method eq 'scpb') {
+        $subcmd .= "chmod $filemode $copiedfiles;" if $wrong_mode;
+
         unless ($dry) {
             p("\n");
             system "scp $options $copiedfiles $login\@$fqdn:$incoming";
@@ -804,23 +806,23 @@ JOB: foreach my $job (keys %files) {
         }
         $allfiles = $copiedfiles;
     } elsif ($method eq 'rsync') {
+        my $rsync_opts = $options;
+        $rsync_opts .= " --chmod=F$filemode" if $wrong_mode;
+
         unless ($dry) {
             p("\n");
-            system "rsync --partial -Ltzve ssh $options -x $copiedfiles $login" . "@" . "$fqdn:$incoming";
+            system "rsync --partial -Ltzve ssh $rsync_opts -x $copiedfiles $login" . "@" . "$fqdn:$incoming";
             if ($?) {
                 unlink $log{$job};
                 fatal("rsync $copiedfiles failed\n");
             }
         } else {
-            p("\n+ rsync --partial -Ltzve ssh $options -x $copiedfiles $login" . "@" . "$fqdn:$incoming");
+            p("\n+ rsync --partial -Ltzve ssh $rsync_opts -x $copiedfiles $login" . "@" . "$fqdn:$incoming");
         }
         $allfiles = $copiedfiles;
     }
 
     if ($batchmode) {
-        if ($wrong_mode) {
-            $subcmd .= "chmod $filemode $copiedfiles;";
-        }
         if (defined $queuedir and length $queuedir > 0) {
             $subcmd .= "mv $copiedfiles $queuedir;";
         }

@@ -11,6 +11,7 @@ dupload (2.9.1) UNRELEASED; urgency=medium
   * Improve file mode handling:
     - Switch rsync method to use -L and -t instead of -a.
     - Add a new host filemode option to configure the destination files mode.
+    - Use --chmod=F<mode> for rsync method instead of using a chmod command.
     Proposed by Ansgar Burchardt <ansgar@debian.org>.
 
  -- Guillem Jover <guillem@debian.org>  Thu, 24 Aug 2017 20:45:05 +0200
