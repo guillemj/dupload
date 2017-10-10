@@ -685,56 +685,56 @@ JOB: foreach my $job (keys %files) {
                 $t = 1;
             }
         } elsif ($method eq 'scp') {
-            $mode = (stat $file)[2];
+            $mode = (stat $file)[2] & 07777;
             unless ($dry) {
                 system "scp -p -q $options $file $login\@$fqdn:$incoming";
                 fatal("scp $file failed\n") if $?;
                 $t = time - $t;
                 # Small optimization.
-                if ($mode != 0100644) {
+                if ($mode != 0644) {
                     system "ssh -x -l $login $fqdn chmod 0644 $incoming/$file";
                     fatal("ssh ... chmod 0644 failed\n") if $?;
                 }
             } else {
                 p("\n+ scp -p -q $options $file $login\@$fqdn:$incoming");
-                if ($mode != 0100644) {
+                if ($mode != 0644) {
                     p("\n+ ssh -x -l $login $fqdn chmod 0644 $incoming/$file");
                 }
                 $t = 1;
             }
         } elsif ($method eq 'scpb') {
             $copiedfiles .= "$file ";
-            $mode = (stat $file)[2];
+            $mode = (stat $file)[2] & 07777;
             # Small optimization.
-            if ($mode != 0100644) {
+            if ($mode != 0644) {
                 $wrong_mode = 1;
             }
             $t = 1;
             $batchmode = 1;
         } elsif ($method eq 'rsync') {
             $copiedfiles .= "$file ";
-            $mode = (stat $file)[2];
+            $mode = (stat $file)[2] & 07777;
             # Small optimization.
-            if ($mode != 0100644) {
+            if ($mode != 0644) {
                 $wrong_mode = 1;
             }
             $t = 1;
             $batchmode = 1;
         } elsif ($method eq 'copy') {
-            $mode = (stat $file)[2];
+            $mode = (stat $file)[2] & 07777;
 
             unless ($dry) {
                 copy($file, $incoming)
                     or fatal("Cannot copy $file to $incoming: $!\n");
                 $t = time - $t;
                 # Small optimization.
-                if ($mode != 0100644) {
+                if ($mode != 0644) {
                     chmod 0644, "$incoming/$file"
                         or fatal("Cannot chmod 0644 $incoming/$file: $!\n");
                 }
             } else {
                 p("\n+ copy $file $incoming");
-                if ($mode != 0100644) {
+                if ($mode != 0644) {
                     p("\n+ chmod 0644 $incoming/$file");
                 }
                 $t = 1;
