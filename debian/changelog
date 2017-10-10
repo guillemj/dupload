@@ -7,6 +7,7 @@ dupload (2.9.1) UNRELEASED; urgency=medium
   * Perl code cleanup:
     - Use qx() instead of ``.
     - Mask non file-mode bits when comparing the stat value.
+    - Move batch mode post command setup after batch mode transfer.
   * Improve file mode handling:
     - Switch rsync method to use -L and -t instead of -a.
     - Add a new host filemode option to configure the destination files mode.

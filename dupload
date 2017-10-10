@@ -789,20 +789,7 @@ JOB: foreach my $job (keys %files) {
     }
 
     # And now the batch mode uploads.
-    my $needcmd = 0;
-    my $cmd;
-    if ($batchmode) {
-        $cmd = "ssh -x -l $login $fqdn 'cd $incoming;";
-        if ($wrong_mode) {
-            $cmd .= "chmod $filemode $copiedfiles;";
-            $needcmd = 1;
-        }
-        if (defined $queuedir and length $queuedir > 0) {
-            $cmd .= "mv $copiedfiles $queuedir;";
-            $needcmd = 1;
-        }
-        $cmd .= qw{'};
-    }
+    my $subcmd;
 
     if ($method eq 'scpb') {
         unless ($dry) {
@@ -812,11 +799,8 @@ JOB: foreach my $job (keys %files) {
                 unlink $log{$job};
                 fatal("scp $copiedfiles failed\n");
             }
-            system $cmd if $needcmd;
-            fatal("$cmd failed\n") if $?;
         } else {
             p("\n+ scp $options $copiedfiles $login\@$fqdn:$incoming");
-            p( "\n+ $cmd");
         }
         $allfiles = $copiedfiles;
     } elsif ($method eq 'rsync') {
@@ -827,16 +811,30 @@ JOB: foreach my $job (keys %files) {
                 unlink $log{$job};
                 fatal("rsync $copiedfiles failed\n");
             }
-            system $cmd if $needcmd;
-            fatal("$cmd failed\n") if $?;
         } else {
             p("\n+ rsync --partial -Ltzve ssh $options -x $copiedfiles $login" . "@" . "$fqdn:$incoming");
-            p("\n+ $cmd");
         }
         $allfiles = $copiedfiles;
     }
 
     if ($batchmode) {
+        if ($wrong_mode) {
+            $subcmd .= "chmod $filemode $copiedfiles;";
+        }
+        if (defined $queuedir and length $queuedir > 0) {
+            $subcmd .= "mv $copiedfiles $queuedir;";
+        }
+        if (defined $subcmd) {
+            my $cmd = "ssh -x -l $login $fqdn 'cd $incoming;$subcmd'";
+
+            unless ($dry) {
+                system $cmd;
+                fatal("$cmd failed\n") if $?;
+            } else {
+                p("\n+ $cmd");
+            }
+        }
+
         unless ($dry) {
             log_job($log{$job}, map { "u $_ $fqdn" } split / /, $allfiles);
         } else {
