@@ -15,6 +15,7 @@ dupload (2.9.1) UNRELEASED; urgency=medium
     - Do not change the file mode for Debian security uploads.
     Proposed by Ansgar Burchardt <ansgar@debian.org>. Closes: #876900
   * Update fqdn and incoming in Debian security upload queue configuration.
+  * Add new Debian security-unembargoed ssh queue.
 
  -- Guillem Jover <guillem@debian.org>  Thu, 24 Aug 2017 20:45:05 +0200
 
