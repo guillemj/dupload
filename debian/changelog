@@ -1,3 +1,9 @@
+dupload (2.9.2) UNRELEASED; urgency=medium
+
+  * Set Rules-Requires-Root field to no.
+
+ -- Guillem Jover <guillem@debian.org>  Tue, 31 Oct 2017 02:29:59 +0100
+
 dupload (2.9.1) unstable; urgency=medium
 
   * Fix perl warning on upload queues without a mailto or mailtx attribute.
