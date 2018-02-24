@@ -1,6 +1,8 @@
 dupload (2.9.2) UNRELEASED; urgency=medium
 
   * Set Rules-Requires-Root field to no.
+  * Update mentors.debian.net incoming path in dupload.conf. Closes: #891269
+    Thanks to Mattia Rizzolo <mattia@debian.org>.
 
  -- Guillem Jover <guillem@debian.org>  Tue, 31 Oct 2017 02:29:59 +0100
 
