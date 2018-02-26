@@ -1006,6 +1006,15 @@ sub ftp_open($$$)
     return;
 }
 
+sub info_field
+{
+    my ($field, $value) = @_;
+
+    printf "%-14s: %s\n", $field, $value // '';
+
+    return;
+}
+
 # Display known host information.
 sub info($)
 {
@@ -1013,20 +1022,19 @@ sub info($)
 
     foreach my $nick ($host || keys %config::cfg) {
         my $r = $config::cfg{$nick};
-        print <<"INFO";
-nick name     : $nick
-real name     : $r->{fqdn}
-login         : $r->{login}
-incoming      : $r->{incoming}
-queuedir      : $r->{queuedir}
-mail to       : $r->{mailto}
-mail to x     : $r->{mailtx}
-cc            : $r->{cc}
-passive FTP   : $r->{passive}
-dinstall runs : $r->{dinstall_runs}
-archive mail  : $r->{archive}
 
-INFO
+        info_field("nick name", $nick);
+        info_field("real name", $r->{fqdn});
+        info_field("login", $r->{login});
+        info_field("incoming", $r->{incoming});
+        info_field("queuedir", $r->{queuedir});
+        info_field("mail to", $r->{mailto});
+        info_field("mail to x", $r->{mailtx});
+        info_field("cc", $r->{cc});
+        info_field("passive FTP", $r->{passive});
+        info_field("dinstall runs", $r->{dinstall_runs});
+        info_field("archive mail", $r->{archive});
+        print "\n";
     }
 
     return;
