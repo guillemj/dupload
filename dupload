@@ -6,7 +6,7 @@
 # Copyright © 1999 Stephane Bortzmeyer
 # Copyright © 1999, 2002, 2003 Josip Rodin <joy-packages@debian.org>
 # Copyright © 2005, 2006, 2008, 2011 Frank Lichtenheld <djpig@debian.org>
-# Copyright © 2017 Guillem Jover <guillem@debian.org>
+# Copyright © 2017, 2018 Guillem Jover <guillem@debian.org>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -147,9 +147,9 @@ sub announce_if_necessary($);
 sub run($$);
 
 # Some tests on constants.
-$user or fatal("Who am I? (cannot get user identity)\n");
-$myhost or fatal("Who am I? (cannot get hostname)\n");
-$cwd or fatal("Where am I? (cannot get current directory)\n");
+$user or fatal('Who am I? (cannot get user identity)');
+$myhost or fatal('Who am I? (cannot get hostname)');
+$cwd or fatal('Where am I? (cannot get current directory)');
 
 unless (-x $sendmail) {
     $nomail = 1;
@@ -198,7 +198,7 @@ GetOptions qw(
     to=s
     version
     Version
-) or fatal("Bad Options\n");
+) or fatal('Bad options');
 
 # Handle deprecated configfile option.
 $configfile = $opt_configfile // $configfile;
@@ -252,7 +252,7 @@ if ($opt_help) {
 
 # Get the configuration for that host global, job independent information.
 
-$host or fatal("Need host to upload to.  (See --to option or the default_host configuration variable)\n");
+$host or fatal('Need host to upload to. (See --to option or the default_host configuration variable)');
 
 {
     my $nick = $config::cfg{$host};
@@ -260,7 +260,7 @@ $host or fatal("Need host to upload to.  (See --to option or the default_host co
     $options = $nick->{options} || $options;
     $fqdn = $nick->{fqdn};
     $fqdn = $myhost if $method eq 'copy';
-    $incoming = $nick->{incoming} or fatal("No Incoming dir\n");
+    $incoming = $nick->{incoming} or fatal('No incoming directory');
     $queuedir = $nick->{queuedir};
     $mailto = $nick->{mailto};
     $mailtx = $nick->{mailtx} || $mailto;
@@ -274,7 +274,7 @@ $host or fatal("Need host to upload to.  (See --to option or the default_host co
         fatal("Passive mode is only for FTP ($host)");
     }
     if (not $fqdn) {
-        fatal("Nothing known about host $host\n");
+        fatal("Nothing known about host $host");
     }
     if (defined $nick->{archive}) {
         $archive = $nick->{archive};
@@ -333,7 +333,7 @@ foreach my $pathname (@ARGV) {
     stat $pathname;
 
     if (! -r _) {
-        fatal("Cannot read $pathname: $!\n");
+        fatal("Cannot read $pathname: $!");
     }
     if (-f _) {
         if ($pathname !~ /\.changes$/) {
@@ -352,7 +352,7 @@ foreach my $pathname (@ARGV) {
     }
 }
 
-@changes or fatal("No changes file, so nothing to do.\n");
+@changes or fatal('No changes file, so nothing to do');
 
 # Preupload code for changes files.
 foreach my $change (@changes) {
@@ -382,7 +382,7 @@ PACKAGE: foreach my $change (@changes) {
     my (@files, @done, @extra);
     my (%mailto, %fields);
 
-    chdir $dir or fatal("Cannot chdir to $dir: $!\n");
+    chdir $dir or fatal("Cannot change directory to $dir: $!");
 
     $dir{$job} = $dir;
     $changes{$job} = $cf;
@@ -397,7 +397,7 @@ PACKAGE: foreach my $change (@changes) {
     # Scan the log file (iff any) for the files we have already put to the
     # host and the announcements already done.
     if (-f $log) {
-        open my $fh_log, '<', $log or fatal("Cannot read $log: $!\n");
+        open my $fh_log, '<', $log or fatal("Cannot open $log: $!");
         while (my $entry = <$fh_log>) {
             chomp $entry;
 
@@ -419,7 +419,7 @@ PACKAGE: foreach my $change (@changes) {
 
     # Scan the changes file for architecture, distribution code and the files
     # avoid duplicate mail addressees.
-    open my $fh_changes, '<', $cf or fatal("Cannot read $cf: $!\n");
+    open my $fh_changes, '<', $cf or fatal("Cannot open $cf: $!");
     my ($field);
     while (<$fh_changes>) {
         chomp;
@@ -502,7 +502,7 @@ PACKAGE: foreach my $change (@changes) {
             $checksums{$file}{$alg} = $chksum;
             if (exists $checksums{$file}{size}
                 and $checksums{$file}{size} != $size) {
-                fatal("differing sizes for file $file: $size != $checksums{$file}{size}");
+                fatal("Size mismatch for file $file in digest $alg: $size != $checksums{$file}{size}");
             }
             $checksums{$file}{size} = $size;
         }
@@ -514,7 +514,7 @@ PACKAGE: foreach my $change (@changes) {
         $checksums{$file}{md5} = $chksum;
         if (exists $checksums{$file}{size}
             and $checksums{$file}{size} != $size) {
-            fatal("differing sizes for file $file: $size != $checksums{$file}{size}");
+            fatal("Size mismatch for file $file in digest md5: $size != $checksums{$file}{size}");
         }
         $checksums{$file}{size} = $size;
     }
@@ -526,9 +526,11 @@ PACKAGE: foreach my $change (@changes) {
 
     # Test the md5sums.
     foreach my $file (keys %checksums) {
+        my $size = -s $file;
+
         p("\n $file");
-        if ($checksums{$file}{size} != -s $file) {
-            $keep or fatal("Size mismatch for $file\n");
+        if ($checksums{$file}{size} != $size) {
+            $keep or fatal("Size mismatch for $file on disk: $size != $checksums{$file}{size}");
             w("Size mismatch for $file, skipping $job\n");
             push @skipped, $cf;
             next PACKAGE;
@@ -548,7 +550,7 @@ PACKAGE: foreach my $change (@changes) {
             }
 
             if ($checksums{$file}{$alg} ne $checksum) {
-                $keep or fatal(uc $alg . "sum mismatch for $file\n");
+                $keep or fatal(uc $alg . "sum mismatch for $file");
                 w(uc $alg . "sum mismatch for $file, skipping $job\n");
                 push @skipped, $cf;
                 next PACKAGE;
@@ -604,10 +606,10 @@ PACKAGE: foreach my $change (@changes) {
         }
     }
 } continue {
-    chdir $cwd or fatal("Cannot chdir back to $cwd\n");
+    chdir $cwd or fatal("Cannot change directory back to $cwd");
 }
 
-chdir $cwd or fatal("Cannot chdir to $cwd: $!\n");
+chdir $cwd or fatal("Cannot change directory to $cwd: $!");
 
 if (@skipped) {
     w("skipped: @skipped\n");
@@ -638,7 +640,7 @@ if ($method eq 'ftp') {
 } elsif ($method eq 'copy') {
     p("Uploading (copy) to $host ($fqdn)\n");
 } else {
-    fatal("Unknown upload method\n");
+    fatal("Unknown upload method ($method)");
 }
 
 JOB: foreach my $job (keys %files) {
@@ -657,8 +659,8 @@ JOB: foreach my $job (keys %files) {
     $incoming =~ s/_upstream_/$upstream/g;
     $incoming =~ s/_debian_/$debian/g;
 
-    chdir $cwd or fatal("Cannot chdir to $cwd: $!\n");
-    chdir $dir{$job} or fatal("Cannot chdir to $dir{$job}: $!\n");
+    chdir $cwd or fatal("Cannot change directory to $cwd: $!");
+    chdir $dir{$job} or fatal("Cannot change directory to $dir{$job}: $!");
 
     p("[ Uploading job $job");
     if (@files == 0) {
@@ -692,12 +694,12 @@ JOB: foreach my $job (keys %files) {
             $mode = (stat $file)[2] & 07777;
             unless ($dry) {
                 system "scp -p -q $options $file $login\@$fqdn:$incoming";
-                fatal("scp $file failed\n") if $?;
+                fatal("scp $file failed") if $?;
                 $t = time - $t;
                 # Small optimization.
                 if ($dochmode && $mode != $filemode) {
                     system "ssh -x -l $login $fqdn chmod $filemode $incoming/$file";
-                    fatal("ssh ... chmod $filemode failed\n") if $?;
+                    fatal("ssh ... chmod $filemode failed") if $?;
                 }
             } else {
                 p("\n+ scp -p -q $options $file $login\@$fqdn:$incoming");
@@ -729,12 +731,12 @@ JOB: foreach my $job (keys %files) {
 
             unless ($dry) {
                 copy($file, $incoming)
-                    or fatal("Cannot copy $file to $incoming: $!\n");
+                    or fatal("Cannot copy $file to $incoming: $!");
                 $t = time - $t;
                 # Small optimization.
                 if ($dochmode && $mode != $filemode) {
                     chmod $filemode, "$incoming/$file"
-                        or fatal("Cannot chmod $filemode $incoming/$file: $!\n");
+                        or fatal("Cannot change mode $filemode for $incoming/$file: $!");
                 }
             } else {
                 p("\n+ copy $file $incoming");
@@ -752,7 +754,7 @@ JOB: foreach my $job (keys %files) {
                     if (!$ftp->rename($file, "$queuedir/$file")) {
                         $result = $ftp->message();
                         $ftp->delete($file);
-                        fatal("Cannot rename $file -> $queuedir/$file\n");
+                        fatal("Cannot rename $file -> $queuedir/$file");
                     }
                 } else {
                     p("\n+ ftp::rename($file, $queuedir/$file)");
@@ -760,14 +762,14 @@ JOB: foreach my $job (keys %files) {
             } elsif ($method eq 'scp') {
                 unless ($dry) {
                     system "ssh -x -l $login $fqdn \"mv $incoming/$file $queuedir/$file\"";
-                    fatal("ssh -x -l $login $fqdn: mv failed\n") if $?;
+                    fatal("ssh -x -l $login $fqdn: mv failed") if $?;
                 } else {
                     p("\n+ ssh -x -l $login $fqdn \"mv $incoming/$file $queuedir/$file\"");
                 }
             } elsif ($method eq 'copy') {
                 unless ($dry) {
                     move("$incoming/$file", "$queuedir/$file")
-                        or fatal("Cannot move $file from $incoming to $queuedir: $!\n");
+                        or fatal("Cannot move $file from $incoming to $queuedir: $!");
                 } else {
                     p("\n+ move $incoming/$file $queuedir/$file");
                 }
@@ -799,7 +801,7 @@ JOB: foreach my $job (keys %files) {
             system "scp $options $copiedfiles $login\@$fqdn:$incoming";
             if ($?) {
                 unlink $log{$job};
-                fatal("scp $copiedfiles failed\n");
+                fatal("scp $copiedfiles failed");
             }
         } else {
             p("\n+ scp $options $copiedfiles $login\@$fqdn:$incoming");
@@ -814,7 +816,7 @@ JOB: foreach my $job (keys %files) {
             system "rsync --partial -Ltzve ssh $rsync_opts -x $copiedfiles $login" . "@" . "$fqdn:$incoming";
             if ($?) {
                 unlink $log{$job};
-                fatal("rsync $copiedfiles failed\n");
+                fatal("rsync $copiedfiles failed");
             }
         } else {
             p("\n+ rsync --partial -Ltzve ssh $rsync_opts -x $copiedfiles $login" . "@" . "$fqdn:$incoming");
@@ -831,7 +833,7 @@ JOB: foreach my $job (keys %files) {
 
             unless ($dry) {
                 system $cmd;
-                fatal("$cmd failed\n") if $?;
+                fatal("$cmd failed") if $?;
             } else {
                 p("\n+ $cmd");
             }
@@ -915,10 +917,10 @@ sub announce_if_necessary($)
 
     my $fh_mail;
     if (not $dry or $mailonly) {
-        open $fh_mail, '|', $sendmail_cmd or fatal("Cannot pipe to $sendmail $!\n");
+        open $fh_mail, '|', $sendmail_cmd or fatal("Cannot pipe to $sendmail $!");
     } else {
         p("\n+ announce to $announce{$job} using command '$sendmail_cmd'\n");
-        open $fh_mail, '>&', *STDOUT or fatal("Cannot redirect to stdout\n");
+        open $fh_mail, '>&', *STDOUT or fatal('Cannot redirect to stdout');
     }
 
     print { $fh_mail } <<"MAIL";
@@ -952,7 +954,7 @@ MAIL
         p(' ok)');
     }
 
-    open my $fh_changes, '<', $changes{$job} or fatal("Cannot open $changes{$job} $!\n");
+    open my $fh_changes, '<', $changes{$job} or fatal("Cannot open $changes{$job} $!");
     while (<$fh_changes>) {
         print $fh_mail;
     }
@@ -999,9 +1001,9 @@ sub ftp_open($$$)
     $ftp->debug($debug);
 
     $ftp->login($user, $pass)
-        or fatal("Login as $user failed\n");
+        or fatal("Login as $user failed");
     $ftp->type('I')
-        or fatal("Cannot set binary type\n");
+        or fatal('Cannot set binary type');
 
     return;
 }
@@ -1023,17 +1025,17 @@ sub info($)
     foreach my $nick ($host || keys %config::cfg) {
         my $r = $config::cfg{$nick};
 
-        info_field("nick name", $nick);
-        info_field("real name", $r->{fqdn});
-        info_field("login", $r->{login});
-        info_field("incoming", $r->{incoming});
-        info_field("queuedir", $r->{queuedir});
-        info_field("mail to", $r->{mailto});
-        info_field("mail to x", $r->{mailtx});
-        info_field("cc", $r->{cc});
-        info_field("passive FTP", $r->{passive});
-        info_field("dinstall runs", $r->{dinstall_runs});
-        info_field("archive mail", $r->{archive});
+        info_field('nick name', $nick);
+        info_field('real name', $r->{fqdn});
+        info_field('login', $r->{login});
+        info_field('incoming', $r->{incoming});
+        info_field('queuedir', $r->{queuedir});
+        info_field('mail to', $r->{mailto});
+        info_field('mail to x', $r->{mailtx});
+        info_field('cc', $r->{cc});
+        info_field('passive FTP', $r->{passive});
+        info_field('dinstall runs', $r->{dinstall_runs});
+        info_field('archive mail', $r->{archive});
         print "\n";
     }
 
@@ -1051,10 +1053,10 @@ sub configure(@)
 
         -r _ or next;
         -s _ or next;
-        do $file or fatal("$@\n");
+        do $file or fatal("$@");
         push @read, $file;
     }
-    @read or fatal("No configuration files\n");
+    @read or fatal('No configuration files');
 
     return;
 }
@@ -1124,10 +1126,8 @@ sub log_job
 # Emit a fatal error and die.
 sub fatal(@)
 {
-    my ($pack, $file, $line) = caller;
-
     print { *STDERR } "\n";
-    die "$progname: error: @_ at $file line $line\n";
+    die "$progname: error: @_\n";
 }
 
 sub run($$)
@@ -1154,7 +1154,7 @@ sub preupload_hook
     return unless $preupload{$name};
 
     if (not run($preupload{$name}, $args)) {
-        fatal("Pre-upload \'$preupload{$name}\' failed for @{$args}\n  ");
+        fatal("Pre-upload \'$preupload{$name}\' failed for @{$args}");
     }
 
     return;
@@ -1167,7 +1167,7 @@ sub postupload_hook
     return unless $postupload{$name};
 
     if (not run($postupload{$name}, $args)) {
-        fatal("Post-upload \'$postupload{$name}\' failed for @{$args}\n  ");
+        fatal("Post-upload \'$postupload{$name}\' failed for @{$args}");
     }
 
     return;
