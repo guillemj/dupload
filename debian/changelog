@@ -10,6 +10,7 @@ dupload (2.9.2) UNRELEASED; urgency=medium
     - Rewrite error strings to make them easier to understand.
   * Namespace debhelper files with package name.
   * Update Vcs URLs to point to the new hosting site.
+  * Bump Standard-Version to 4.1.5 (no changed needed).
 
  -- Guillem Jover <guillem@debian.org>  Tue, 31 Oct 2017 02:29:59 +0100
 
