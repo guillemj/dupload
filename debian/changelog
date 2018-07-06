@@ -1,4 +1,4 @@
-dupload (2.9.2) UNRELEASED; urgency=medium
+dupload (2.9.2) unstable; urgency=medium
 
   * Set Rules-Requires-Root field to no.
   * Update mentors.debian.net incoming path in dupload.conf. Closes: #891269
@@ -13,7 +13,7 @@ dupload (2.9.2) UNRELEASED; urgency=medium
   * Bump Standard-Version to 4.1.5 (no changed needed).
   * Add default-mta as the first alternative to mail-transport-agent.
 
- -- Guillem Jover <guillem@debian.org>  Tue, 31 Oct 2017 02:29:59 +0100
+ -- Guillem Jover <guillem@debian.org>  Fri, 06 Jul 2018 12:08:34 +0200
 
 dupload (2.9.1) unstable; urgency=medium
 
