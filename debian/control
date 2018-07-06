@@ -22,8 +22,8 @@ Depends:
 Recommends:
  openssh-client | ssh,
 Suggests:
+ default-mta | mail-transport-agent,
  lintian,
- mail-transport-agent,
 Description: Debian package upload tool
  dupload will automagically upload Debian packages to a remote host with
  a Debian upload queue. The default host is configurable, along with the
