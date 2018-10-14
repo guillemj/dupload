@@ -1,6 +1,6 @@
 dupload (2.9.3) UNRELEASED; urgency=medium
 
-  *
+  * Remove trailing spaces from changelog file.
 
  -- Guillem Jover <guillem@debian.org>  Sun, 14 Oct 2018 12:52:36 +0200
 
@@ -398,7 +398,7 @@ dupload (2.4.2) frozen unstable; urgency=low
     Closes: #63809, #64003, #92418, #78829
   * Small documentation bug about ssh. Closes: #63660
   * Build dependencies. Closes: #70279
-	
+
  -- Stephane Bortzmeyer <bortzmeyer@debian.org>  Tue, 10 Apr 2001 20:47:05 +0200
 
 dupload (2.4.1) frozen unstable; urgency=low
@@ -429,7 +429,7 @@ dupload (2.4) unstable; urgency=low
     Closes #43722.
   * The fact that the "scpb" method is the recommened one is now clear
     in dupload(1). Closes #42342.
-	
+
  -- Stephane Bortzmeyer <bortzmeyer@debian.org>  Mon, 30 Aug 1999 12:46:56 +0200
 
 dupload (2.3) unstable; urgency=low
