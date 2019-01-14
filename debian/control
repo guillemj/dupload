@@ -8,7 +8,7 @@ Vcs-Git: https://git.dpkg.org/git/dpkg/dupload.git
 Standards-Version: 4.1.5
 Rules-Requires-Root: no
 Build-Depends:
- debhelper (>= 10),
+ debhelper (>= 11),
  bash-completion,
 Build-Depends-Indep:
  perl,

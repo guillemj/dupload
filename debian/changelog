@@ -1,6 +1,7 @@
 dupload (2.9.3) UNRELEASED; urgency=medium
 
   * Remove trailing spaces from changelog file.
+  * Switch to debhelper compatibility level 11.
 
  -- Guillem Jover <guillem@debian.org>  Sun, 14 Oct 2018 12:52:36 +0200
 
