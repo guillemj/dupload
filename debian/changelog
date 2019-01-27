@@ -4,6 +4,8 @@ dupload (2.9.3) UNRELEASED; urgency=medium
   * Switch to debhelper compatibility level 11.
   * Bump Standards-Version to 4.3.0 (no changes needed).
   * Fix typos.
+  * Add configuration stanza for Debian Ports archive.
+    Prompted by Manuel A. Fernandez Montecelo <mafm@debian.org>.
 
  -- Guillem Jover <guillem@debian.org>  Sun, 14 Oct 2018 12:52:36 +0200
 
