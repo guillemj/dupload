@@ -11,7 +11,6 @@ dupload TODO
 * Refactor uploader methods into Perl modules.
 
 * Add new uploader methods:
-  - local upload support, so that we can do easy automated testing.
   - FTP via HTTP proxy.
   - HTTP, HTTPS.
   - SFTP.
@@ -29,10 +28,6 @@ dupload TODO
 
 * Add archive attribute information so that additional checks or features
   can be enabled on those.
-
-* Add a hook that requests confirmation for the Debian security hosts, so
-  that these can be uncommented by default, and the hook removed or overridden
-  in a local config, instead of needing to copy&paste the entire entries.
 
 * Think about switching from a perl "config" to a proper declarative config
   format.
