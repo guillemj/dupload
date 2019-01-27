@@ -164,7 +164,7 @@ You have two sort of hooks: pre-upload and post-upload. Both are simple
 shell commands (executed by C<sh -c> so you can use any shell tricks).
 Pre-uploads are
 always run (even in dry mode) and stop B<dupload> if they fail
-(failure being mesured by the hook's exit status). Post-uploads
+(failure being measured by the hook's exit status). Post-uploads
 are only run when you are not in dry mode and only if the uploading succeeded.
 
 Both sorts of hooks are run for a given category: B<changes>, B<sourcepackage>,
@@ -215,7 +215,7 @@ Host specific hooks override the global ones for each category.
 =head2 Examples
 
 This one runs B<lintian> before uploading. It is global and guarantee
-that you will always upload lintian-free packages (thanks to B<lintian>
+that you will always upload lintian-clean packages (thanks to B<lintian>
 return status).
 
      $preupload{'deb'} = 'lintian -v -i %1';

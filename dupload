@@ -237,9 +237,9 @@ if ($opt_help) {
 "  -f, --force              Upload even if a previous upload is present.\n" .
 "  -k, --keep               Keep going, ignore packages with wrong checksums\n" .
 "      --no                 Dry run.\n" .
-"      --nomail             Suppress mail announcment for this run.\n" .
-"      --mailonly           Dry run, except that mail announcment is sent.\n" .
-"      --noarchive          Mark the mail announcment to not be archived.\n" .
+"      --nomail             Suppress mail announcement for this run.\n" .
+"      --mailonly           Dry run, except that mail announcement is sent.\n" .
+"      --noarchive          Mark the mail announcement to not be archived.\n" .
 "  -p, --print              Print the configuration file.\n" .
 "  -c, --configfile         Read dupload.conf from the current directory.\n" .
 "  -q, --quiet              Enable quiet mode.\n" .

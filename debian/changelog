@@ -3,6 +3,7 @@ dupload (2.9.3) UNRELEASED; urgency=medium
   * Remove trailing spaces from changelog file.
   * Switch to debhelper compatibility level 11.
   * Bump Standards-Version to 4.3.0 (no changes needed).
+  * Fix typos.
 
  -- Guillem Jover <guillem@debian.org>  Sun, 14 Oct 2018 12:52:36 +0200
 
@@ -158,7 +159,7 @@ dupload (2.8.1) unstable; urgency=medium
 
 dupload (2.8.0) unstable; urgency=medium
 
-  * Take over maintainersip as part of the Dpkg Developers umbrella,
+  * Take over maintainership as part of the Dpkg Developers umbrella,
     with the agreement of previous maintainer, Josip Rodin.
   * Bump Standards-Version to 3.9.8.
   * Switch debian/copyright to machine-readable format.
@@ -178,7 +179,7 @@ dupload (2.8.0) unstable; urgency=medium
   * Improve man page metadata.
   * Simplify Version field fetching with new dpkg-parsechangelog -S option.
   * Reflow and improve package description.
-  * Remove stray "d" inbetween changelog entries.
+  * Remove stray "d" in-between changelog entries.
   * Update and unify copyright and license information.
     - Remove AUTHOR sections from man pages.
     - Expand license text in file headers.
@@ -429,7 +430,7 @@ dupload (2.4) unstable; urgency=low
     Hooks are now seriously tested. Closes: #43644
   * $dinstall_runs is now set for every host which transfers to master.
     Closes #43722.
-  * The fact that the "scpb" method is the recommened one is now clear
+  * The fact that the "scpb" method is the recommended one is now clear
     in dupload(1). Closes #42342.
 
  -- Stephane Bortzmeyer <bortzmeyer@debian.org>  Mon, 30 Aug 1999 12:46:56 +0200
@@ -449,7 +450,7 @@ dupload (2.2) unstable; urgency=low
     be cancelled if they fail) and after successful uploading.
     See dupload.conf(5). Closes #34883 and, I hope, almost all the future
     wishlists "Can you add such and such in dupload" :-)
-  * Small improvment to the automatic changelog detection code. Closes
+  * Small improvement to the automatic changelog detection code. Closes
     #39072
   * Several cleanings of the source code and dependencies, thanks to
     Julian Gilbey <J.D.Gilbey@qmw.ac.uk>
@@ -467,7 +468,7 @@ dupload (2.1) unstable; urgency=low
     Patch by Julian Gilbey <J.D.Gilbey@qmw.ac.uk>. Closes #34209
   * New global configuration variable default_host. --to is no longer
     mandatory. Closes #34208 and probably #31684 by a side-effect.
-  * New option --mailonly for unconditionnal announcements. Closes
+  * New option --mailonly for unconditional announcements. Closes
     #31616
   * Allows a new global configuration variable to suppress
     parentheses around full names. Closes #16685

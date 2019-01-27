@@ -143,12 +143,12 @@ default implied for all hosts with the B<dinstall_runs> option set to 1.
 
 =item B<--mailonly>
 
-Acts as if B<--no> has been specified and but sends the announcements,
+Acts as if B<--no> has been specified, but sends the announcements,
 unconditionally.
 
 =item B<--noarchive>
 
-Adds a B<X-No-Archive: yes> header so that the announcement will not be
+Adds an B<X-No-Archive: yes> header so that the announcement will not be
 archived. You can use the per-host B<archive> option in the configuration
 file.
 
