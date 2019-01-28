@@ -985,7 +985,6 @@ MAIL
 sub ftp_open($$$)
 {
     my ($remote, $user, $pass) = @_;
-    my ($ftp_port, $retry_call, $attempts) = (21, 1, 1);
     my ($request_passive) = 0;
 
     if ($user =~ /@/ or $passive) {
