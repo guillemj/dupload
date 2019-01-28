@@ -995,9 +995,9 @@ sub ftp_open($$$)
     # It may seems complicated, but it is to be sure that the environment
     # variable FTP_PASSIVE works (which needs no Passive argument).
     if ($request_passive) {
-        $ftp = Net::FTP->new("$fqdn", Passive => $request_passive);
+        $ftp = Net::FTP->new($remote, Passive => $request_passive);
     } else {
-        $ftp = Net::FTP->new("$fqdn");
+        $ftp = Net::FTP->new($remote);
     }
     if (!$ftp) {
         fatal($@);
