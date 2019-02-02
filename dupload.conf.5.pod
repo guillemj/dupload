@@ -68,8 +68,11 @@ just delete the B<.upload> file completely.
 
 =item B<login> [optional]
 
-The account name used to log into the FTP server. The default is
-B<anonymous>, should work with firewall logins too.
+The account name used to log into the remote host.
+For B<ftp> the default is B<anonymous>, which should work with firewall
+logins too.
+For B<scp>, B<scpb> and B<rsync> the default is delegated to SSH and its
+own configuration.
 
 =item B<password> [optional]
 

@@ -18,6 +18,12 @@ dupload (2.9.3) UNRELEASED; urgency=medium
     that is Debian or Ubuntu.
   * Clarify that the "Login and password" man page subsection is FTP-specific.
   * Document the anonymous FTP password host option.
+  * Only set the ssh login name if specified in the dupload config. We should
+    delegate the username to either the ssh host configuration or the dupload
+    configuration. Trying to use the current system login name, or one of
+    LOGNAME or USER confuses and annoys users, and makes them have to
+    duplicate the information which is already kept in the ssh config.
+    Closes: #63130, #100460, #504175
   * Perl code cleanup:
     - Remove unused variables in ftp_open().
     - Use ftp_open() function argument instead of global variable.

@@ -90,8 +90,9 @@ the commandline or the environment.
 =head2 ftp / scp / rsync / copy
 
 The default transfer method is B<ftp>.  Alternative methods are B<scp>/SSH
-and B<rsync>/SSH.  For B<scp> and B<rsync>, the default login is taken
-from your local user name.
+and B<rsync>/SSH.
+For B<scp> and B<rsync>, the default login is delegated to SSH and its own
+configuration.
 
 The B<scp>/SSH method only works properly if no password is required
 (see B<ssh>(1)).
