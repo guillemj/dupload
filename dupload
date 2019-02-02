@@ -632,7 +632,7 @@ if ($method eq 'ftp') {
     }
     p("Uploading (ftp) to $host ($fqdn)\n");
     if (!$dry) {
-        ftp_open($fqdn, $login, $passwd);
+        $ftp = ftp_open($fqdn, $login, $passwd);
         $ftp->cwd($incoming);
     } else {
         p("+ ftp_open($fqdn, $login, $passwd)\n");
@@ -992,6 +992,7 @@ sub ftp_open($$$)
         p("+ FTP passive mode selected\n");
     }
 
+    my $ftp;
     # It may seems complicated, but it is to be sure that the environment
     # variable FTP_PASSIVE works (which needs no Passive argument).
     if ($request_passive) {
@@ -1009,7 +1010,7 @@ sub ftp_open($$$)
     $ftp->type('I')
         or fatal('Cannot set binary type');
 
-    return;
+    return $ftp;
 }
 
 sub info_field
