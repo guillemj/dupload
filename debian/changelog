@@ -14,6 +14,8 @@ dupload (2.9.3) UNRELEASED; urgency=medium
   * Add distblacklist and distwhitelist checks for security and backports
     uploads. Closes: #647130
   * Remove done items from the TODO list.
+  * Automatically select the default host based on the current vendor, when
+    that is Debian or Ubuntu.
   * Perl code cleanup:
     - Remove unused variables in ftp_open().
     - Use ftp_open() function argument instead of global variable.

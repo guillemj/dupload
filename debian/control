@@ -19,6 +19,7 @@ Multi-Arch: foreign
 Depends:
  ${misc:Depends},
  ${perl:Depends},
+ libdpkg-perl,
 Recommends:
  openssh-client | ssh,
 Suggests:

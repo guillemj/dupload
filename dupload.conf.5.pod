@@ -156,7 +156,9 @@ The configuration files also contain the following global variables:
 
 =item B<default_host> [optional]
 
-The default host to upload to. The default value of this variable is unset.
+The default host to upload to. The default value of this variable is set
+depending on the current vendor, but if there is no configuration for that
+vendor it will be left unset.
 
 =item B<no_parentheses_to_fullname> [optional]
 
