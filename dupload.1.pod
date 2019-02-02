@@ -161,7 +161,7 @@ displayed.
 
 =item B<-q>, B<--quiet>
 
-Be quiet, i.e., suppress normal output.
+Be quiet, i.e., suppress normal output and progress bars.
 
 =item B<-t>, B<--to> I<nickname>
 

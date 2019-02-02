@@ -75,6 +75,7 @@ my $sendmail = '/usr/sbin/sendmail';
 # Method specific variables.
 my $ssh_target;
 my $ssh_login = q{};
+my $scp_options = q{};
 
 #
 # Global variables
@@ -320,6 +321,7 @@ $host or fatal('Need host to upload to. (See --to option or the default_host con
         $ssh_target = "$login\@" if defined $login;
         $ssh_target .= "$fqdn:$incoming";
         $ssh_login = "-l $login" if defined $login;
+        $scp_options = ' -q' if $quiet;
     }
     $visibleuser = $nick->{visibleuser} || $user;
     chomp $visibleuser;
@@ -706,7 +708,7 @@ JOB: foreach my $job (keys %files) {
         } elsif ($method eq 'scp') {
             $mode = (stat $file)[2] & 07777;
             unless ($dry) {
-                system "scp -p -q $options $file $ssh_target";
+                system "scp -p $scp_options $options $file $ssh_target";
                 fatal("scp $file failed") if $?;
                 $t = time - $t;
                 # Small optimization.
@@ -715,7 +717,7 @@ JOB: foreach my $job (keys %files) {
                     fatal("ssh ... chmod $filemode failed") if $?;
                 }
             } else {
-                p("\n+ scp -p -q $options $file $ssh_target");
+                p("\n+ scp -p $scp_options $options $file $ssh_target");
                 if ($dochmode && $mode != $filemode) {
                     p("\n+ ssh -x $ssh_login $fqdn chmod $filemode $incoming/$file");
                 }
@@ -811,28 +813,29 @@ JOB: foreach my $job (keys %files) {
 
         unless ($dry) {
             p("\n");
-            system "scp $options $copiedfiles $ssh_target";
+            system "scp $scp_options $options $copiedfiles $ssh_target";
             if ($?) {
                 unlink $log{$job};
                 fatal("scp $copiedfiles failed");
             }
         } else {
-            p("\n+ scp $options $copiedfiles $ssh_target");
+            p("\n+ scp $scp_options $options $copiedfiles $ssh_target");
         }
         $allfiles = $copiedfiles;
     } elsif ($method eq 'rsync') {
         my $rsync_opts = $options;
+        $rsync_opts .= ' -v' if not $quiet;
         $rsync_opts .= " --chmod=F$filemode" if $wrong_mode;
 
         unless ($dry) {
             p("\n");
-            system "rsync --partial -Ltzve ssh $rsync_opts -x $copiedfiles $ssh_target";
+            system "rsync --partial -Ltze ssh $rsync_opts -x $copiedfiles $ssh_target";
             if ($?) {
                 unlink $log{$job};
                 fatal("rsync $copiedfiles failed");
             }
         } else {
-            p("\n+ rsync --partial -Ltzve ssh $rsync_opts -x $copiedfiles $ssh_target");
+            p("\n+ rsync --partial -Ltze ssh $rsync_opts -x $copiedfiles $ssh_target");
         }
         $allfiles = $copiedfiles;
     }

@@ -24,6 +24,11 @@ dupload (2.9.3) UNRELEASED; urgency=medium
     LOGNAME or USER confuses and annoys users, and makes them have to
     duplicate the information which is already kept in the ssh config.
     Closes: #63130, #100460, #504175
+  * Fix quiet mode to be consistent across upload methods. Pass -q to scp
+    only when quiet is enabled, which changes the default behavior for the
+    «scp» method that was always passing -q, and for the «scpb» method that
+    was never passing it. For the «rsync» method we now pass -v only when
+    quiet is not set. Closes: #61324
   * Perl code cleanup:
     - Remove unused variables in ftp_open().
     - Use ftp_open() function argument instead of global variable.
