@@ -75,7 +75,7 @@ foobar.announce.
 
 =back
 
-=head2 Login and password
+=head2 FTP login and password
 
 If no login (username) is defined in the configuration file,
 B<anonymous> is used.  The password is derived from your
