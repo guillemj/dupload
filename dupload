@@ -1038,7 +1038,7 @@ sub info($)
 {
     my ($host) = @_;
 
-    foreach my $nick ($host || keys %config::cfg) {
+    foreach my $nick ($host || sort keys %config::cfg) {
         my $r = $config::cfg{$nick};
 
         info_field('nick name', $nick);

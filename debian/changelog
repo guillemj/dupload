@@ -29,6 +29,7 @@ dupload (2.9.3) UNRELEASED; urgency=medium
     «scp» method that was always passing -q, and for the «scpb» method that
     was never passing it. For the «rsync» method we now pass -v only when
     quiet is not set. Closes: #61324
+  * Output the database entries with --print in a deterministic order.
   * Perl code cleanup:
     - Remove unused variables in ftp_open().
     - Use ftp_open() function argument instead of global variable.
