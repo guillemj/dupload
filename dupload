@@ -302,6 +302,14 @@ $host or fatal('Need host to upload to. (See --to option or the default_host con
 
     if ($method eq 'ftp') {
         $login = $nick->{login} || $login;
+
+        # Do not accept passwords in configuration file, except for anonymous
+        # logins.
+        if ($login =~ /^anonymous|ftp$/) {
+            $passwd = $nick->{password} if $nick->{password};
+        } else {
+            undef $passwd;
+        }
     }
     if ($method eq 'scp' or $method eq 'scpb' or $method eq 'rsync') {
         $login = $nick->{login} || $user;
@@ -311,13 +319,6 @@ $host or fatal('Need host to upload to. (See --to option or the default_host con
     $visiblename = $nick->{visiblename} || '';
     chomp $visiblename;
     $fullname = $nick->{fullname} || '';
-
-    # Do not accept passwords in configuration file, except for anonymous
-    # logins.
-    undef $passwd unless $login =~ /^anonymous|ftp$/;
-    if ($nick->{password} && ($login =~ /^anonymous|ftp$/)) {
-        $passwd = $nick->{password};
-    }
 }
 
 # Command-line options have precedence over configuration files:

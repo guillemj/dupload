@@ -22,6 +22,7 @@ dupload (2.9.3) UNRELEASED; urgency=medium
     - Remove unused variables in ftp_open().
     - Use ftp_open() function argument instead of global variable.
     - Make $ftp a local variable in ftp_open().
+    - Only handle the password setting in FTP-method specific code path.
 
  -- Guillem Jover <guillem@debian.org>  Sun, 14 Oct 2018 12:52:36 +0200
 
