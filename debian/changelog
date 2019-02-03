@@ -1,4 +1,4 @@
-dupload (2.9.3) UNRELEASED; urgency=medium
+dupload (2.9.3) unstable; urgency=medium
 
   * Remove trailing spaces from changelog file.
   * Switch to debhelper compatibility level 11.
@@ -37,7 +37,7 @@ dupload (2.9.3) UNRELEASED; urgency=medium
     - Make $ftp a local variable in ftp_open().
     - Only handle the password setting in FTP-method specific code path.
 
- -- Guillem Jover <guillem@debian.org>  Sun, 14 Oct 2018 12:52:36 +0200
+ -- Guillem Jover <guillem@debian.org>  Sun, 03 Feb 2019 01:01:59 +0100
 
 dupload (2.9.2) unstable; urgency=medium
 
