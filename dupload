@@ -248,7 +248,7 @@ if ($opt_help) {
 "      --mailonly           Dry run, except that mail announcement is sent.\n" .
 "      --noarchive          Mark the mail announcement to not be archived.\n" .
 "  -p, --print              Print the configuration file.\n" .
-"  -c, --configfile         Read dupload.conf from the current directory.\n" .
+"  -c, --configfile <file>  Use <file> as the configuration file.\n" .
 "  -q, --quiet              Enable quiet mode.\n" .
 "  -d, --debug [<level>]    Enable debug output from the FTP module.\n" .
 "      --help               Print this help message.\n" .
