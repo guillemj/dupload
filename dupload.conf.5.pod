@@ -71,6 +71,10 @@ just delete the B<.upload> file completely.
 The account name used to log into the FTP server. The default is
 B<anonymous>, should work with firewall logins too.
 
+=item B<password> [optional]
+
+The FTP password for anonymous logins.
+
 =item B<filemode> [optional]
 
 The destination files mode, in octal. If the value is B<undef>, the mode
