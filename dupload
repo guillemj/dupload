@@ -374,7 +374,7 @@ foreach my $change (@changes) {
 }
 
 p("Uploading ($method) to $fqdn:$incoming");
-p("and moving to $fqdn:$queuedir") if $queuedir;
+p("\nand moving to $fqdn:$queuedir") if $queuedir;
 p("\n");
 
 *STDOUT->autoflush();
