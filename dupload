@@ -649,7 +649,7 @@ if ($method eq 'ftp') {
         p("+ ftp::cwd($incoming\n");
     }
 } elsif ($method eq 'scp' || $method eq 'scpb') {
-    p("Uploading (scp) to $host ($fqdn)\n");
+    p("Uploading ($method) to $host ($fqdn)\n");
 } elsif ($method eq 'rsync') {
     p("Uploading (rsync) to $host ($fqdn)\n");
 } elsif ($method eq 'copy') {
