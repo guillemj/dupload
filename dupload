@@ -621,7 +621,7 @@ PACKAGE: foreach my $change (@changes) {
         }
     }
 } continue {
-    chdir $cwd or fatal("Cannot change directory back to $cwd");
+    chdir $cwd or fatal("Cannot change directory back to $cwd: $!");
 }
 
 chdir $cwd or fatal("Cannot change directory to $cwd: $!");
@@ -674,7 +674,6 @@ JOB: foreach my $job (keys %files) {
     $incoming =~ s/_upstream_/$upstream/g;
     $incoming =~ s/_debian_/$debian/g;
 
-    chdir $cwd or fatal("Cannot change directory to $cwd: $!");
     chdir $dir{$job} or fatal("Cannot change directory to $dir{$job}: $!");
 
     p("[ Uploading job $job");
@@ -870,7 +869,11 @@ JOB: foreach my $job (keys %files) {
         p("\n+ log successful upload\n");
     }
     p(" ]\n");
+} continue {
+    chdir $cwd or fatal("Cannot change directory back to $cwd: $!");
 }
+
+chdir $cwd or fatal("Cannot change directory to $cwd: $!");
 
 if ($method eq 'ftp') {
     unless ($dry) {

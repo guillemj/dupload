@@ -3,6 +3,9 @@ dupload (2.9.4) UNRELEASED; urgency=medium
   * Add missing newline when printing queuedir move.
   * When using the scpb method print that instead of scp.
   * Add verb to the first job print, see #181476.
+  * Fix current working directory for postupload hooks.
+    Fixes <https://bugs.launchpad.net/bugs/795445>.
+    Based on patch by Ignacy Gawędzki <https://launchpad.net/~iazz>.
 
  -- Guillem Jover <guillem@debian.org>  Mon, 25 Feb 2019 03:19:50 +0100
 
