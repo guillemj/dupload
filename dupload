@@ -158,11 +158,6 @@ $user or fatal('Who am I? (cannot get user identity)');
 $myhost or fatal('Who am I? (cannot get hostname)');
 $cwd or fatal('Where am I? (cannot get current directory)');
 
-unless (-x $sendmail) {
-    $nomail = 1;
-    w("mail options disabled, cannot run '$sendmail': $!\n");
-}
-
 #
 # Main
 #
@@ -255,6 +250,11 @@ if ($opt_help) {
 "  -V, --Version            Print program version.\n"
     );
     exit 0;
+}
+
+unless (-x $sendmail) {
+    $nomail = 1;
+    w("mail options disabled, cannot run '$sendmail': $!\n");
 }
 
 # Get the configuration for that host global, job independent information.

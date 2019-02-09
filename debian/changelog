@@ -8,6 +8,10 @@ dupload (2.9.4) UNRELEASED; urgency=medium
     Based on patch by Ignacy Gawędzki <https://launchpad.net/~iazz>.
   * Fallback to getpwuid($<) in case getlogin() fails.
     Fixes <https://bugs.launchpad.net/bugs/1140837>.
+  * Do not use sendmail if it is not available. We are checking whether
+    sendmail is present, to then override the check with the value coming
+    from the config file. We should not try to use sendmail if we have found
+    it is not available. Fixes <https://bugs.launchpad.net/bugs/1504088>.
 
  -- Guillem Jover <guillem@debian.org>  Mon, 25 Feb 2019 03:19:50 +0100
 
