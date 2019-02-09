@@ -2,6 +2,7 @@ dupload (2.9.4) UNRELEASED; urgency=medium
 
   * Add missing newline when printing queuedir move.
   * When using the scpb method print that instead of scp.
+  * Add verb to the first job print, see #181476.
 
  -- Guillem Jover <guillem@debian.org>  Mon, 25 Feb 2019 03:19:50 +0100
 

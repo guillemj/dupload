@@ -406,7 +406,7 @@ PACKAGE: foreach my $change (@changes) {
     # Preupload code for source package.
     preupload_hook('sourcepackage', [ basename($package) . " $version" ]);
 
-    p("[ job $job from $cf");
+    p("[ Preparing job $job from $cf");
 
     # Scan the log file (iff any) for the files we have already put to the
     # host and the announcements already done.
