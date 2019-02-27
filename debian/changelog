@@ -1,4 +1,4 @@
-dupload (2.9.4) UNRELEASED; urgency=medium
+dupload (2.9.4) unstable; urgency=medium
 
   * Add missing newline when printing queuedir move.
   * When using the scpb method print that instead of scp.
@@ -13,7 +13,7 @@ dupload (2.9.4) UNRELEASED; urgency=medium
     from the config file. We should not try to use sendmail if we have found
     it is not available. Fixes <https://bugs.launchpad.net/bugs/1504088>.
 
- -- Guillem Jover <guillem@debian.org>  Mon, 25 Feb 2019 03:19:50 +0100
+ -- Guillem Jover <guillem@debian.org>  Wed, 27 Feb 2019 06:12:56 +0100
 
 dupload (2.9.3) unstable; urgency=medium
 
