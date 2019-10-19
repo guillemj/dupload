@@ -1,6 +1,7 @@
 dupload (2.9.5) UNRELEASED; urgency=medium
 
   * Switch from debian/compat to debhelper-compat in Build-Depends.
+  * Switch to debhelper compatibility level 12.
 
  -- Guillem Jover <guillem@debian.org>  Sun, 20 Oct 2019 01:56:44 +0200
 
