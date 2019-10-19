@@ -1,3 +1,9 @@
+dupload (2.9.5) UNRELEASED; urgency=medium
+
+  *
+
+ -- Guillem Jover <guillem@debian.org>  Sun, 20 Oct 2019 01:56:44 +0200
+
 dupload (2.9.4) unstable; urgency=medium
 
   * Add missing newline when printing queuedir move.
