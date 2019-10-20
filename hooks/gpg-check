@@ -4,7 +4,7 @@
 
 FILE=$1
 # If no gpg is found just exit
-[ ! -x "`which gpg`" ] && exit 0
+[ ! -x "$(which gpg)" ] && exit 0
 # If the file is not found just exit with error
 [ ! -r "$FILE" ] && exit 2
 
