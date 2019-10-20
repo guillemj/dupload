@@ -285,17 +285,38 @@ $host or fatal('Need host to upload to. (See --to option or the default_host con
     }
 
     foreach my $category (qw/changes sourcepackage package file deb/) {
+        my $preupload_hooks;
         if (defined $nick->{preupload}{$category}) {
-            $preupload{$category} = $nick->{preupload}{$category};
+            $preupload_hooks = $nick->{preupload}{$category};
         } else {
-            $preupload{$category} = $config::preupload{$category};
+            $preupload_hooks = $config::preupload{$category};
         }
+        # XXX: Backwards compatibility.
+        if (ref $preupload_hooks ne 'ARRAY') {
+            $preupload_hooks = [ $preupload_hooks ];
+            $ENV{DUPLOAD_PREUPLOAD_HOOK_SCALAR} = 'yes';
+        }
+        push @{$preupload{$category}}, @{$preupload_hooks};
 
+        my $postupload_hooks;
         if (defined $nick->{postupload}{$category}) {
-            $postupload{$category} = $nick->{postupload}{$category};
+            $postupload_hooks = $nick->{postupload}{$category};
         } else {
-            $postupload{$category} = $config::postupload{$category};
+            $postupload_hooks = $config::postupload{$category};
         }
+        # XXX: Backwards compatibility.
+        if (ref $postupload_hooks ne 'ARRAY') {
+            $postupload_hooks = [ $postupload_hooks ];
+            $ENV{DUPLOAD_POSTUPLOAD_HOOK_SCALAR} = 'yes';
+        }
+        push @{$postupload{$category}}, @{$postupload_hooks};
+    }
+    # XXX: Backwards compatibility.
+    if (exists $ENV{DUPLOAD_PREUPLOAD_HOOK_SCALAR}) {
+        w("\%preupload hooks defined as scalars are deprecated");
+    }
+    if (exists $ENV{DUPLOAD_POSTUPLOAD_HOOK_SCALAR}) {
+        w("\%postupload hooks defined as scalars are deprecated");
     }
 
     if ($method eq 'ftp') {
@@ -1165,10 +1186,12 @@ sub preupload_hook
 {
     my ($name, $args) = @_;
 
-    return unless $preupload{$name};
+    return if scalar @{$preupload{$name}} == 0;
 
-    if (not run($preupload{$name}, $args)) {
-        fatal("Pre-upload \'$preupload{$name}\' failed for @{$args}");
+    foreach my $hook (@{$preupload{$name}}) {
+        if (not run($hook, $args)) {
+            fatal("Pre-upload \'$hook\' failed for @{$args}");
+        }
     }
 
     return;
@@ -1178,10 +1201,12 @@ sub postupload_hook
 {
     my ($name, $args) = @_;
 
-    return unless $postupload{$name};
+    return if scalar @{$postupload{$name}} == 0;
 
-    if (not run($postupload{$name}, $args)) {
-        fatal("Post-upload \'$postupload{$name}\' failed for @{$args}");
+    foreach my $hook (@{$postupload{$name}}) {
+        if (not run($hook, $args)) {
+            fatal("Post-upload \'$hook\' failed for @{$args}");
+        }
     }
 
     return;

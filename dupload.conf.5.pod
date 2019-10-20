@@ -219,16 +219,21 @@ the filename as its parameter.
 
 =head2 Syntax
 
-Hooks are defined in two Perl hashes, C<%preupload> and C<%postupload>, each indexed
-by category. In addition to the global hashes, each host entry has two fields
-with the same names, for the host-specific hooks.
+Hooks are defined in two Perl hashes, C<%preupload> and C<%postupload>, each
+indexed by category. In addition to the global hashes, each host entry has
+two fields with the same names, for the host-specific hooks.
+
+Hooks are defined as list reference with each item executed in sequence.
+Note: For backwards compatibility with old configurations they can be
+defined as a simple scalar, even though they will emit a warning, but
+this support will be dropped after the next major Debian release.
 
 The shell command will be substituted first: C<%1> will be replace by the first
 argument, etc.
 
 =head2 Per-host or global hooks
 
-A hook can be global (for all the hosts) or it can be for a specific host.
+Hooks can be global (for all the hosts) or can be for a specific host.
 Host specific hooks override the global ones for each category.
 
 =head2 Examples
@@ -237,17 +242,16 @@ This one runs B<lintian> before uploading. It is global and guarantee
 that you will always upload lintian-clean packages (thanks to B<lintian>
 return status).
 
-     $preupload{'deb'} = 'lintian -v -i %1';
+     $preupload{'deb'} = [ 'lintian -v -i %1' ];
 
 This one just display the name and versions of successfully uploaded packages.
 
-     $postupload{'package'} = 'echo PACKAGE %1 %2 uploaded';
+     $postupload{'package'} = [ 'echo PACKAGE %1 %2 uploaded' ];
 
 Unlike the two others, this one is specific to one host, master, and overrides
 the default global hook in charge of checking the OpenPGP signatures:
 
-     $cfg{master}{preupload}{'changes'} = "echo Uploading %1";
-
+     $cfg{master}{preupload}{'changes'} = [ 'echo Uploading %1' ];
 
 =head1 FILES
 
