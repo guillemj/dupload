@@ -10,7 +10,11 @@ mandate = $(shell TZ=UTC0 LC_ALL=C date '+%F' --date="@$(reltime)")
 MAN1 = dupload.1
 MAN5 = dupload.conf.5
 MAN = $(MAN1) $(MAN5)
-EXTRA_FILES = hooks/gpg-check hooks/debian-security-auth
+EXTRA_FILES = \
+  hooks/gpg-check \
+  hooks/debian-security-auth \
+  hooks/debian-source-only \
+  $(nil)
 
 prefix = /usr/local
 confdir = /etc

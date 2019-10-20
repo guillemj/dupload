@@ -10,6 +10,8 @@ dupload (2.9.5) UNRELEASED; urgency=medium
   * Use qx() instead of `` in perl tests.
   * Remove perlcritic Documentation::RequirePodLinksIncludeText suppression.
   * Do not use contractions in output messages and code comments.
+  * Add a hook to warn on non-source-only uploads to Debian main, and on
+    source-only non-autobuild uploads to Debian non-free. Closes: #303093
 
  -- Guillem Jover <guillem@debian.org>  Sun, 20 Oct 2019 01:56:44 +0200
 
