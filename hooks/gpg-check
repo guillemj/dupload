@@ -18,7 +18,7 @@ if [ $ret -eq 1 ]; then
 	exit 1
 elif [ $ret -eq 2 ]; then
 	if grep -- '-----BEGIN PGP' "$FILE" >/dev/null 2>&1; then
-		echo "GPG signature couldn't be checked, probably because of missing key"
+		echo "GPG signature cannot be checked, probably because of missing keys"
 		exit 0
 	else
 		echo "GPG signature is missing"
