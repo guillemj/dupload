@@ -7,6 +7,7 @@ dupload (2.9.5) UNRELEASED; urgency=medium
     configuration file from the current directory, by making the argument
     mandatory.
   * Use $() instead of `` in shell hooks.
+  * Use qx() instead of `` in perl tests.
 
  -- Guillem Jover <guillem@debian.org>  Sun, 20 Oct 2019 01:56:44 +0200
 
