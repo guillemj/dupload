@@ -3,6 +3,9 @@ dupload (2.9.5) UNRELEASED; urgency=medium
   * Switch from debian/compat to debhelper-compat in Build-Depends.
   * Switch to debhelper compatibility level 12.
   * Bump Standard-Version to 4.4.1 (no changed needed).
+  * Obsolete --configfile without argument automatically loading the
+    configuration file from the current directory, by making the argument
+    mandatory.
 
  -- Guillem Jover <guillem@debian.org>  Sun, 20 Oct 2019 01:56:44 +0200
 

@@ -55,8 +55,6 @@ my $keep = 0;
 my $quiet = 0;
 
 # Specifies an alternative configuration file to read.
-# For backwards compatibility, an empty string means to load ./dupload.conf,
-# which is a security risk that we will warn about as deprecated.
 my $configfile = undef;
 
 # Target host.
@@ -186,7 +184,7 @@ our $opt_version;
 
 $Getopt::Long::ignorecase = 0;
 GetOptions qw(
-    configfile:s
+    configfile=s
     debug:i
     force
     help
@@ -202,12 +200,7 @@ GetOptions qw(
     Version
 ) or fatal('Bad options');
 
-# Handle deprecated configfile option.
-$configfile = $opt_configfile // $configfile;
-if (defined $configfile and length $configfile == 0) {
-    w("--configfile without a filename is a security risk and is deprecated\n");
-    $configfile = './dupload.conf';
-}
+$configfile = $opt_configfile;
 configure($configfile) if defined $configfile;
 
 $dry = defined $opt_no;
