@@ -1,4 +1,4 @@
-dupload (2.9.5) UNRELEASED; urgency=medium
+dupload (2.9.5) unstable; urgency=medium
 
   * Switch from debian/compat to debhelper-compat in Build-Depends.
   * Switch to debhelper compatibility level 12.
@@ -13,7 +13,7 @@ dupload (2.9.5) UNRELEASED; urgency=medium
   * Add a hook to warn on non-source-only uploads to Debian main, and on
     source-only non-autobuild uploads to Debian non-free. Closes: #303093
 
- -- Guillem Jover <guillem@debian.org>  Sun, 20 Oct 2019 01:56:44 +0200
+ -- Guillem Jover <guillem@debian.org>  Sun, 27 Oct 2019 02:34:10 +0100
 
 dupload (2.9.4) unstable; urgency=medium
 
