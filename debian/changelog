@@ -49,7 +49,8 @@ dupload (2.9.5) unstable; urgency=medium
   * Remove perlcritic Documentation::RequirePodLinksIncludeText suppression.
   * Do not use contractions in output messages and code comments.
   * Add a hook to warn on non-source-only uploads to Debian main, and on
-    source-only non-autobuild uploads to Debian non-free. Closes: #303093
+    source-only non-autobuild uploads to Debian non-free.
+    Closes: #303093, #931782
 
  -- Guillem Jover <guillem@debian.org>  Sun, 27 Oct 2019 02:34:10 +0100
 
