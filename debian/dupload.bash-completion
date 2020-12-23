@@ -8,7 +8,7 @@
 have dupload &&
 _dupload()
 {
-    local cur prev options paroptions special i delayed_options hosts
+    local cur prev options
 
     COMPREPLY=()
     cur=${COMP_WORDS[COMP_CWORD]}
