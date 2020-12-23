@@ -36,7 +36,7 @@ _dupload()
       compgen -G "${cur}*.changes"
       compgen -G "${cur}*.asc"
       compgen -G "${cur}*.sig"
-      compgen -W "${options[*]}" | grep "^$cur"
+      compgen -W "${options[*]}" -- "$cur"
     ) )
     ;;
   esac
