@@ -42,4 +42,4 @@ _dupload()
 
   return 0
 }
-[ "$have" ] && complete -F _dupload -o filenames dupload
+[ "$have" ] && complete -F _dupload -o filenames -o plusdirs dupload
