@@ -6,6 +6,7 @@ dupload (2.9.6) UNRELEASED; urgency=medium
     to Build-Depends instead of setting it via dh --with=bash-completion.
   * Improvements and fixes to bash-completion:
     - Remove unused local variables.
+    - Reindent to 2 spaces.
 
  -- Guillem Jover <guillem@debian.org>  Wed, 23 Dec 2020 16:33:45 +0100
 
