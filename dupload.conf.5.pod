@@ -248,10 +248,10 @@ This one just display the name and versions of successfully uploaded packages.
 
      $postupload{'package'} = [ 'echo PACKAGE %1 %2 uploaded' ];
 
-Unlike the two others, this one is specific to one host, master, and overrides
-the default global hook in charge of checking the OpenPGP signatures:
+Unlike the two others, this one is specific to one host, I<debian-ssh>, and
+overrides the default global hook in charge of checking the OpenPGP signatures:
 
-     $cfg{master}{preupload}{'changes'} = [ 'echo Uploading %1' ];
+     $cfg{'debian-ssh'}{preupload}{'changes'} = [ 'echo Uploading %1' ];
 
 =head1 FILES
 

@@ -12,6 +12,8 @@ dupload (2.9.6) UNRELEASED; urgency=medium
     - Move local declarations to their definitions.
     - Autocomplete directories. Closes: #962632
   * Clarify man page SYNOPSIS syntax by not formatting the ‘|’.
+  * Namespace and harmonize Debian repository target names, while preserving
+    backwards compatibility aliases for now.
 
  -- Guillem Jover <guillem@debian.org>  Wed, 23 Dec 2020 16:33:45 +0100
 
