@@ -11,6 +11,7 @@ dupload (2.9.6) UNRELEASED; urgency=medium
     - Pass $cur to compgen as the match word instead of using grep.
     - Move local declarations to their definitions.
     - Autocomplete directories. Closes: #962632
+  * Clarify man page SYNOPSIS syntax by not formatting the ‘|’.
 
  -- Guillem Jover <guillem@debian.org>  Wed, 23 Dec 2020 16:33:45 +0100
 

@@ -23,7 +23,7 @@ dupload - Debian package upload tool
 
 =head1 SYNOPSIS
 
-B<dupload> [I<options>...] [I<changes-file|directory>...]
+B<dupload> [I<options>...] [I<changes-file>|I<directory>...]
 
 =head1 DESCRIPTION
 
