@@ -8,12 +8,11 @@
 have dupload &&
 _dupload()
 {
-  local cur prev options
   COMPREPLY=()
 
-  cur=${COMP_WORDS[COMP_CWORD]}
-  prev=${COMP_WORDS[COMP_CWORD-1]}
-  options=(
+  local cur=${COMP_WORDS[COMP_CWORD]}
+  local prev=${COMP_WORDS[COMP_CWORD-1]}
+  local options=(
     -c --configfile
     -d --debug
     -f --force
