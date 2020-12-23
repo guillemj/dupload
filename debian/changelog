@@ -7,6 +7,7 @@ dupload (2.9.6) UNRELEASED; urgency=medium
   * Improvements and fixes to bash-completion:
     - Remove unused local variables.
     - Reindent to 2 spaces.
+    - Switch the options variable into an array.
 
  -- Guillem Jover <guillem@debian.org>  Wed, 23 Dec 2020 16:33:45 +0100
 

@@ -9,13 +9,23 @@ have dupload &&
 _dupload()
 {
   local cur prev options
-
   COMPREPLY=()
 
   cur=${COMP_WORDS[COMP_CWORD]}
   prev=${COMP_WORDS[COMP_CWORD-1]}
-  options='-c --configfile -d --debug -f --force -k --keep --no --nomail \
-           --mailonly --noarchive -p --print -q --quiet -t --to -V -Version'
+  options=(
+    -c --configfile
+    -d --debug
+    -f --force
+    -k --keep
+    --no --nomail
+    --mailonly
+    --noarchive
+    -p --print
+    -q --quiet
+    -t --to
+    -V -Version
+  )
 
   case $prev in
   --config|-c)
@@ -26,7 +36,7 @@ _dupload()
       compgen -G "${cur}*.changes"
       compgen -G "${cur}*.asc"
       compgen -G "${cur}*.sig"
-      compgen -W "$options" | grep "^$cur"
+      compgen -W "${options[*]}" | grep "^$cur"
     ) )
     ;;
   esac
