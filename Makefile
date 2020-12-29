@@ -53,7 +53,7 @@ clean:
 .PHONY: check
 
 check:
-	PERL5LIB=lib prove
+	prove -Ilib
 
 %:	%.pod
 	$(POD2MAN) \
