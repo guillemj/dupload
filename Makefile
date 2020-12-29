@@ -39,14 +39,16 @@ repl_script = sed -i \
 all: $(MAN)
 
 install:	all
-	$(mkdirhier) $(bindir) $(man1dir) $(man5dir) $(extradir)
-	$(mkdirhier) $(confdir)
-	$(inst_script) dupload $(bindir)
-	$(repl_script) $(bindir)/dupload
-	$(inst_data) $(MAN1) $(man1dir)
-	$(inst_data) $(MAN5) $(man5dir)
-	$(inst_script) $(EXTRA_FILES) $(extradir)
-	$(inst_data) dupload.conf $(confdir)
+	$(mkdirhier) $(DESTDIR)$(bindir)
+	$(mkdirhier) $(DESTDIR)$(confdir)
+	$(mkdirhier) $(DESTDIR)$(man1dir) $(DESTDIR)$(man5dir)
+	$(mkdirhier) $(DESTDIR)$(extradir)
+	$(inst_script) dupload $(DESTDIR)$(bindir)
+	$(repl_script) $(DESTDIR)$(bindir)/dupload
+	$(inst_data) $(MAN1) $(DESTDIR)$(man1dir)
+	$(inst_data) $(MAN5) $(DESTDIR)$(man5dir)
+	$(inst_script) $(EXTRA_FILES) $(DESTDIR)$(extradir)
+	$(inst_data) dupload.conf $(DESTDIR)$(confdir)
 
 clean:
 	rm -f core *.[0-9].pod.* *~ $(MAN)

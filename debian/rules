@@ -2,6 +2,3 @@
 
 %:
 	dh $@
-
-override_dh_auto_install:
-	$(MAKE) prefix=debian/dupload/usr install
