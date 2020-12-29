@@ -40,12 +40,13 @@ all: $(MAN)
 
 install:	all
 	$(mkdirhier) $(bindir) $(man1dir) $(man5dir) $(extradir)
+	$(mkdirhier) $(confdir)
 	$(inst_script) dupload $(bindir)
 	$(repl_script) $(bindir)/dupload
 	$(inst_data) $(MAN1) $(man1dir)
 	$(inst_data) $(MAN5) $(man5dir)
 	$(inst_script) $(EXTRA_FILES) $(extradir)
-	@echo; echo "** You should install dupload.conf to $(confdir)"; echo
+	$(inst_data) dupload.conf $(confdir)
 
 clean:
 	rm -f core *.[0-9].pod.* *~ $(MAN)
