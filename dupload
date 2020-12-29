@@ -313,10 +313,10 @@ $host or fatal('Need host to upload to. (See --to option or the default_host con
     }
     # XXX: Backwards compatibility.
     if (exists $ENV{DUPLOAD_PREUPLOAD_HOOK_SCALAR}) {
-        w("\%preupload hooks defined as scalars are deprecated");
+        w('%preupload hooks defined as scalars are deprecated');
     }
     if (exists $ENV{DUPLOAD_POSTUPLOAD_HOOK_SCALAR}) {
-        w("\%postupload hooks defined as scalars are deprecated");
+        w('%postupload hooks defined as scalars are deprecated');
     }
 
     if ($method eq 'ftp') {

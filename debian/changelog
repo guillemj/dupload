@@ -16,6 +16,7 @@ dupload (2.9.6) UNRELEASED; urgency=medium
     backwards compatibility aliases for now.
   * Rename blacklist/whitelist to blocklist/allowlist, support the old
     variable names for backwards compatibility.
+  * Do not interpolate strings unnecessarily.
 
  -- Guillem Jover <guillem@debian.org>  Wed, 23 Dec 2020 16:33:45 +0100
 
