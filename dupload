@@ -107,8 +107,8 @@ my %postupload;
 my $result;
 my $incoming;
 my $queuedir;
-my $distwhitelist;
-my $distblacklist;
+my $distallowlist;
+my $distblocklist;
 my $mailto;
 my $mailtx;
 my $cc;
@@ -262,8 +262,8 @@ $host or fatal('Need host to upload to. (See --to option or the default_host con
     $fqdn = $myhost if $method eq 'copy';
     $incoming = $nick->{incoming} or fatal('No incoming directory');
     $queuedir = $nick->{queuedir};
-    $distwhitelist = $nick->{distwhitelist};
-    $distblacklist = $nick->{distblacklist};
+    $distallowlist = $nick->{distallowlist} // $nick->{distwhitelist};
+    $distblocklist = $nick->{distblocklist} // $nick->{distblacklist};
     $mailto = $nick->{mailto};
     $mailtx = $nick->{mailtx} || $mailto;
     $cc = $nick->{cc};
@@ -472,8 +472,8 @@ PACKAGE: foreach my $change (@changes) {
                 if ($mailtx and $dist =~ m/^experimental/) {
                     $mailto{$mailtx}++;
                 }
-                if ((defined $distblacklist and $dist =~ m/$distblacklist/) or
-                    (defined $distwhitelist and $dist !~ m/$distwhitelist/)) {
+                if ((defined $distblocklist and $dist =~ m/$distblocklist/) or
+                    (defined $distallowlist and $dist !~ m/$distallowlist/)) {
                     fatal("distribution '$dist' not allowed");
                 }
             }
@@ -1063,8 +1063,8 @@ sub info($)
         info_field('login', $r->{login});
         info_field('incoming', $r->{incoming});
         info_field('queuedir', $r->{queuedir});
-        info_field('dist whitelist', $r->{distwhitelist});
-        info_field('dist blacklist', $r->{distblacklist});
+        info_field('dist allowlist', $r->{distallowlist});
+        info_field('dist blocklist', $r->{distblocklist});
         info_field('mail to', $r->{mailto});
         info_field('mail to x', $r->{mailtx});
         info_field('cc', $r->{cc});

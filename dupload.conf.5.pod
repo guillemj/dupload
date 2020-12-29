@@ -92,15 +92,23 @@ Incoming directory, the directory we try to upload to.
 The directory we move the uploaded files to (after successful upload to
 I<incoming>. Usually necessary only with some special upload queues.
 
-=item B<distwhitelist> [optional]
+=item B<distallowlist> [optional] (since 2.9.6)
 
 The regex of the distributions allowed for this host. This check is done
 against the B<Distribution> field in the F<.changes> file.
 
-=item B<distblacklist> [optional]
+=item B<distwhitelist> [optional] (since 2.9.3)
 
-The regex of the distributions disallowed for this host. This check is done
+Deprecated alias for B<distallowlist>.
+
+=item B<distblocklist> [optional] (since 2.9.6)
+
+The regex of the distributions blocked for this host. This check is done
 against the B<Distribution> field in the F<.changes> file.
+
+=item B<distblacklist> [optional] (since 2.9.3)
+
+Deprecated alias for B<distblocklist>.
 
 =item B<mailto> [optional]
 
