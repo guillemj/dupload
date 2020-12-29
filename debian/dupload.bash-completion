@@ -1,9 +1,8 @@
 # Debian dupload(1) completion
-# Original file:
-#   Debian dput(1) completion
-#   Copyright 2002 Roland Mas <lolando@debian.org>
-# Modified for dupload(1)
-#   Paul Evans <leonerd@leonerd.org.uk>
+#
+# Copyright © 2002 Roland Mas <lolando@debian.org>
+# Copyright © 2009 Paul Evans <leonerd@leonerd.org.uk>
+# Copyright © 2017-2018, 2020 Guillem Jover <guillem@debian.org>
 
 have dupload &&
 _dupload()

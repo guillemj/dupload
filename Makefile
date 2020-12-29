@@ -1,7 +1,7 @@
 # Makefile for dupload
 # Copyright © 1996 Heiko Schlittermann
 # Copyright © 2002 Josip Rodin
-# Copyright © 2017 Guillem Jover <guillem@debian.org>
+# Copyright © 2017, 2019-2020 Guillem Jover <guillem@debian.org>
 
 PACKAGE = dupload
 VERSION = $(shell dpkg-parsechangelog -SVersion)
