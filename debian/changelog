@@ -20,6 +20,7 @@ dupload (2.9.6) UNRELEASED; urgency=medium
   * Build system:
     - Pass lib to prove with -I instead of PERL5LIB.
     - Install dupload.conf from the upstream build system.
+    - Change default installation directory from /usr/local to /usr.
 
  -- Guillem Jover <guillem@debian.org>  Wed, 23 Dec 2020 16:33:45 +0100
 

@@ -16,7 +16,7 @@ EXTRA_FILES = \
   hooks/debian-source-only \
   $(nil)
 
-prefix = /usr/local
+prefix = /usr
 confdir = /etc
 bindir = $(prefix)/bin
 mandir = $(prefix)/share/man
