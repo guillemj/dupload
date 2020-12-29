@@ -3,6 +3,7 @@
 # Copyright © 2002 Josip Rodin
 # Copyright © 2017 Guillem Jover <guillem@debian.org>
 
+PACKAGE = dupload
 VERSION = $(shell dpkg-parsechangelog -SVersion)
 RELTIME = $(shell dpkg-parsechangelog -STimestamp)
 MANDATE = $(shell TZ=UTC0 LC_ALL=C date '+%F' --date="@$(RELTIME)")
@@ -69,3 +70,9 @@ check:
 	  rm -f ,$@
 
 .PHONY:	all install clean
+
+dist:
+	git archive \
+	    --prefix=$(PACKAGE)-$(VERSION)/ \
+	    --output=$(PACKAGE)-$(VERSION).tar.xz \
+	    $(VERSION)
