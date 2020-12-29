@@ -3,9 +3,9 @@
 # Copyright © 2002 Josip Rodin
 # Copyright © 2017 Guillem Jover <guillem@debian.org>
 
-version = $(shell dpkg-parsechangelog -SVersion)
-reltime = $(shell dpkg-parsechangelog -STimestamp)
-mandate = $(shell TZ=UTC0 LC_ALL=C date '+%F' --date="@$(reltime)")
+VERSION = $(shell dpkg-parsechangelog -SVersion)
+RELTIME = $(shell dpkg-parsechangelog -STimestamp)
+MANDATE = $(shell TZ=UTC0 LC_ALL=C date '+%F' --date="@$(RELTIME)")
 
 MAN1 = dupload.1
 MAN5 = dupload.conf.5
@@ -33,7 +33,7 @@ inst_lib = $(INSTALL) -m 644
 inst_data = $(INSTALL) -m 644
 
 repl_script = sed -i \
-	-e "s:^my \$$version = '.*';:my \$$version = '$(version)';:" \
+	-e "s:^my \$$version = '.*';:my \$$version = '$(VERSION)';:" \
 	$(nil)
 
 all: $(MAN)
@@ -63,8 +63,8 @@ check:
 	  --section=$(subst .,,$(suffix $@)) \
 	  --name=$(basename $@) \
 	  --center="Debian Project" \
-	  --date="$(mandate)" \
-	  --release="$(version)" \
+	  --date="$(MANDATE)" \
+	  --release="$(VERSION)" \
 	    $< >,$@ && mv -f ,$@ $@; \
 	  rm -f ,$@
 
