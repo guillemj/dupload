@@ -1,4 +1,4 @@
-dupload (2.9.6) UNRELEASED; urgency=medium
+dupload (2.9.6) unstable; urgency=medium
 
   * Switch to Standard-Version 4.5.1 (no changed needed).
   * Switch to debhelper compatibility level 13.
@@ -26,7 +26,7 @@ dupload (2.9.6) UNRELEASED; urgency=medium
     - Add a dist target.
   * Update copyright years.
 
- -- Guillem Jover <guillem@debian.org>  Wed, 23 Dec 2020 16:33:45 +0100
+ -- Guillem Jover <guillem@debian.org>  Wed, 30 Dec 2020 01:20:51 +0100
 
 dupload (2.9.5) unstable; urgency=medium
 
