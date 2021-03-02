@@ -49,6 +49,6 @@ fi
 # XXX: Backwards compatibility for configurations that use a scalar instead
 # of a list ref for the preupload hooks.
 if [ "$DUPLOAD_PREUPLOAD_HOOK_SCALAR" = "yes" ]; then
-  # Chain the GnuPG check, so that we can override the default global hook.
-  /usr/share/dupload/gpg-check "$changes"
+  # Chain the OpenPGP check, so that we can override the default global hook.
+  /usr/share/dupload/openpgp-check "$changes"
 fi
