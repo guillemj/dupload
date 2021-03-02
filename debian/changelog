@@ -1,6 +1,7 @@
 dupload (2.9.7) UNRELEASED; urgency=medium
 
   * Use OpenPGP instead of GPG for signature related names.
+  * Consider SHA1 and RIPEMD160 weak digest algorithms on OpenPGP signatures.
 
  -- Guillem Jover <guillem@debian.org>  Sat, 20 Mar 2021 02:59:13 +0100
 

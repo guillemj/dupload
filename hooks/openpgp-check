@@ -11,7 +11,7 @@ FILE=$1
 echo -n Checking OpenPGP signatures before upload...
 
 # Use the exit status to determine if the signature is ok or not
-gpg --verify "$FILE" >/dev/null 2>&1
+gpg --weak-digest SHA1 --weak-digest RIPEMD160 --verify "$FILE" >/dev/null 2>&1
 ret=$?
 if [ $ret -eq 1 ]; then
 	echo "OpenPGP verification of $FILE failed!"
