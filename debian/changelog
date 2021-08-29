@@ -1,10 +1,10 @@
-dupload (2.9.7) UNRELEASED; urgency=medium
+dupload (2.9.7) unstable; urgency=medium
 
   * Use OpenPGP instead of GPG for signature related names.
   * Consider SHA1 and RIPEMD160 weak digest algorithms on OpenPGP signatures.
   * Use «command -v» instead of «which», as the former is more portable.
 
- -- Guillem Jover <guillem@debian.org>  Sat, 20 Mar 2021 02:59:13 +0100
+ -- Guillem Jover <guillem@debian.org>  Sun, 29 Aug 2021 13:17:07 +0200
 
 dupload (2.9.6) unstable; urgency=medium
 
