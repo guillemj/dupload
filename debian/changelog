@@ -10,7 +10,7 @@ dupload (2.9.6) unstable; urgency=medium
 
   * Switch to Standard-Version 4.5.1 (no changed needed).
   * Switch to debhelper compatibility level 13.
-  * Enable bash-completin sequence by adding dh-sequence-bash-completion
+  * Enable bash-completion sequence by adding dh-sequence-bash-completion
     to Build-Depends instead of setting it via dh --with=bash-completion.
   * Improvements and fixes to bash-completion:
     - Remove unused local variables.
