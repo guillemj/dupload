@@ -33,16 +33,16 @@ echo -n Checking OpenPGP signatures before upload...
 gpg --weak-digest SHA1 --weak-digest RIPEMD160 --verify "$FILE" >/dev/null 2>&1
 ret=$?
 if [ $ret -eq 1 ]; then
-	echo "OpenPGP verification of $FILE failed!"
-	exit 1
+  echo "OpenPGP verification of $FILE failed!"
+  exit 1
 elif [ $ret -eq 2 ]; then
-	if grep -- '-----BEGIN PGP' "$FILE" >/dev/null 2>&1; then
-		echo "OpenPGP signature cannot be checked, probably because of missing keys"
-		exit 0
-	else
-		echo "OpenPGP signature is missing"
-		exit 1
-	fi
+  if grep -- '-----BEGIN PGP' "$FILE" >/dev/null 2>&1; then
+    echo "OpenPGP signature cannot be checked, probably because of missing keys"
+    exit 0
+  else
+    echo "OpenPGP signature is missing"
+    exit 1
+  fi
 fi
 
 echo ...signatures are ok
