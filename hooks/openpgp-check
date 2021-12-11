@@ -18,8 +18,8 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 
-# Verify that a changes has been OpenPGP signed and that the signatures are
-# good.
+# Verify that a .changes file has been OpenPGP signed and that the signatures
+# are good.
 
 FILE=$1
 # If no gpg is found just exit
