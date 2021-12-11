@@ -4,7 +4,6 @@
 # Copyright © 2009 Paul Evans <leonerd@leonerd.org.uk>
 # Copyright © 2017-2018, 2020 Guillem Jover <guillem@debian.org>
 
-have dupload &&
 _dupload()
 {
   COMPREPLY=()
@@ -41,4 +40,4 @@ _dupload()
 
   return 0
 }
-[ "$have" ] && complete -F _dupload -o filenames -o plusdirs dupload
+complete -F _dupload -o filenames -o plusdirs dupload
