@@ -41,3 +41,5 @@ _dupload()
   return 0
 }
 complete -F _dupload -o filenames -o plusdirs dupload
+
+# vi: filetype=bash
