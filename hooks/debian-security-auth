@@ -35,7 +35,8 @@ WARN
 
 auth='Yes, I am authorized'
 
-read -p "Are you authorized to upload ($auth)? " prompt
+printf "Are you authorized to upload (%s)? " "$auth"
+read -r prompt
 
 if [ "$prompt" = "$auth" ]; then
   echo "Authorized, proceeding with the upload."

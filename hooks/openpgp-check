@@ -27,7 +27,7 @@ FILE=$1
 # If the file is not found just exit with error
 [ ! -r "$FILE" ] && exit 2
 
-echo -n Checking OpenPGP signatures before upload...
+printf "Checking OpenPGP signatures before upload..."
 
 # Use the exit status to determine if the signature is ok or not
 gpg --weak-digest SHA1 --weak-digest RIPEMD160 --verify "$FILE" >/dev/null 2>&1
