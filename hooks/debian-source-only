@@ -28,6 +28,7 @@ my $dsc_path;
 my $changes = Dpkg::Control->new(type => CTRL_FILE_CHANGES);
 $changes->load($changes_path);
 
+my $dist = $changes->{Distribution};
 my $arch = $changes->{Architecture};
 my $area = 'main';
 my $autobuild = 'yes';
@@ -57,9 +58,14 @@ if ($area eq 'non-free') {
     $autobuild = $dsc->{Autobuild} // 'no';
 }
 
+my $to_sid = 0;
+if ($dist =~ m/^(unstable|sid)$/) {
+    $to_sid = 1;
+}
+
 my $what;
 
-if ($area eq 'main' && $arch ne 'source') {
+if ($to_sid && $area eq 'main' && $arch ne 'source') {
     $what = 'binary';
 
     print <<'WARN'
@@ -79,7 +85,7 @@ disable this hook, alternatively you can reply to the following prompt.
 WARN
 }
 
-if ($area eq 'non-free' && $arch eq 'source' && $autobuild eq 'no') {
+if ($to_sid && $area eq 'non-free' && $arch eq 'source' && $autobuild eq 'no') {
     $what = 'source';
     print <<'WARN'
 
