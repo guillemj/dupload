@@ -713,17 +713,14 @@ JOB: foreach my $job (keys %files) {
                     $ftp->delete($file);
                     fatal("Cannot upload $file: $result");
                 }
-                $t = time - $t;
             } else {
                 p("\n+ ftp::put($file)");
-                $t = 1;
             }
         } elsif ($method eq 'scp') {
             $mode = (stat $file)[2] & 07777;
             unless ($dry) {
                 system "scp -p $scp_options $options $file $ssh_target";
                 fatal("scp $file failed") if $?;
-                $t = time - $t;
                 # Small optimization.
                 if ($dochmode && $mode != $filemode) {
                     system "ssh -x $ssh_login $fqdn chmod $filemode $incoming/$file";
@@ -734,7 +731,6 @@ JOB: foreach my $job (keys %files) {
                 if ($dochmode && $mode != $filemode) {
                     p("\n+ ssh -x $ssh_login $fqdn chmod $filemode $incoming/$file");
                 }
-                $t = 1;
             }
         } elsif ($method eq 'scpb') {
             $copiedfiles .= "$file ";
@@ -743,7 +739,6 @@ JOB: foreach my $job (keys %files) {
             if ($dochmode && $mode != $filemode) {
                 $wrong_mode = 1;
             }
-            $t = 1;
             $batchmode = 1;
         } elsif ($method eq 'rsync') {
             $copiedfiles .= "$file ";
@@ -752,7 +747,6 @@ JOB: foreach my $job (keys %files) {
             if ($dochmode && $mode != $filemode) {
                 $wrong_mode = 1;
             }
-            $t = 1;
             $batchmode = 1;
         } elsif ($method eq 'copy') {
             $mode = (stat $file)[2] & 07777;
@@ -760,7 +754,6 @@ JOB: foreach my $job (keys %files) {
             unless ($dry) {
                 copy($file, $incoming)
                     or fatal("Cannot copy $file to $incoming: $!");
-                $t = time - $t;
                 # Small optimization.
                 if ($dochmode && $mode != $filemode) {
                     chmod $filemode, "$incoming/$file"
@@ -771,8 +764,13 @@ JOB: foreach my $job (keys %files) {
                 if ($dochmode && $mode != $filemode) {
                     p("\n+ chmod $filemode $incoming/$file");
                 }
-                $t = 1;
             }
+        }
+
+        if ($dry or $batchmode) {
+            $t = 1;
+        } else {
+            $t = time - $t;
         }
 
         if ($queuedir) {
