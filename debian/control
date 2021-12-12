@@ -10,6 +10,15 @@ Rules-Requires-Root: no
 Build-Depends:
  debhelper-compat (= 13),
  dh-sequence-bash-completion,
+ aspell <dupload/author-tests>,
+ aspell-en <dupload/author-tests>,
+ libtest-minimumversion-perl <dupload/author-tests>,
+ libtest-perl-critic-perl <dupload/author-tests>,
+ libtest-pod-perl <dupload/author-tests>,
+ libtest-spelling-perl <dupload/author-tests>,
+ libtest-strict-perl <dupload/author-tests>,
+ libtest-synopsis-perl <dupload/author-tests>,
+ shellcheck <dupload/author-tests>,
 Build-Depends-Indep:
  perl,
 
