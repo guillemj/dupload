@@ -969,9 +969,10 @@ MAIL
 Subject: Uploaded $package{$job} $version{$job} ($arch{$job}) to $host
 
 MAIL
-    foreach my $announce (@{$extra{$job}}) {
-        my $line;
 
+    my $line;
+
+    foreach my $announce (@{$extra{$job}}) {
         my $fh_announce;
         if (not open $fh_announce, '<', $announce) {
             w("Cannot open extra announce $announce: $!\n");
@@ -986,8 +987,8 @@ MAIL
     }
 
     open my $fh_changes, '<', $changes{$job} or fatal("Cannot open $changes{$job} $!");
-    while (<$fh_changes>) {
-        print $fh_mail;
+    while ($line = <$fh_changes>) {
+        print { $fh_mail } $line;
     }
     close $fh_changes;
 
