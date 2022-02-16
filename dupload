@@ -948,7 +948,7 @@ sub announce_if_necessary($)
 
     my $fh_mail;
     if (not $dry or $mailonly) {
-        open $fh_mail, '|', $sendmail_cmd or fatal("Cannot pipe to $sendmail $!");
+        open $fh_mail, '|-', $sendmail_cmd or fatal("Cannot pipe to $sendmail $!");
     } else {
         p("\n+ announce to $announce{$job} using command '$sendmail_cmd'\n");
         open $fh_mail, '>&', *STDOUT or fatal('Cannot redirect to stdout');
