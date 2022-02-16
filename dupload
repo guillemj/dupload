@@ -162,6 +162,7 @@ $cwd or fatal('Where am I? (cannot get current directory)');
 
 $config::default_host = undef;
 $config::no_parentheses_to_fullname = undef;
+$config::mta = undef;
 $config::postupload = undef;
 $config::preupload = undef;
 
@@ -174,6 +175,7 @@ our $opt_force;
 our $opt_help;
 our $opt_keep;
 our $opt_mailonly;
+our $opt_mta;
 our $opt_no;
 our $opt_noarchive;
 our $opt_nomail;
@@ -190,6 +192,7 @@ GetOptions qw(
     help
     keep
     mailonly
+    mta=s
     no
     noarchive
     nomail
@@ -209,6 +212,7 @@ $dry = 1 if $mailonly;
 $debug = $opt_debug || $debug;
 $keep = $opt_keep || $keep;
 $host = $opt_to || $config::default_host;
+$mta = $opt_mta || $config::mta || $mta;
 $force = $opt_force || $force;
 $nomail = $opt_nomail || 0;
 $quiet = $opt_quiet;
@@ -234,6 +238,7 @@ if ($opt_help) {
 "      --no                 Dry run.\n" .
 "      --nomail             Suppress mail announcement for this run.\n" .
 "      --mailonly           Dry run, except that mail announcement is sent.\n" .
+"      --mta <pathname>     Use <pathname> as the sendmail compatible MTA.\n" .
 "      --noarchive          Mark the mail announcement to not be archived.\n" .
 "  -p, --print              Print the configuration file.\n" .
 "  -c, --configfile <file>  Use <file> as the configuration file.\n" .

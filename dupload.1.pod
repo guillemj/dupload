@@ -143,6 +143,15 @@ default implied for all hosts with the B<dinstall_runs> option set to 1.
 Acts as if B<--no> has been specified, but sends the announcements,
 unconditionally.
 
+=item B<--mta> I<pathname>
+
+Use I<pathname> as the sendmail compatible MTA.
+The MTA specified must support the B<-f> option to set the envelope sender
+address, and the B<-F> option to set the sender's full name.
+The default is F</usr/sbin/sendmail>.
+
+Since version 2.9.8.
+
 =item B<--noarchive>
 
 Adds an B<X-No-Archive: yes> header so that the announcement will not be
