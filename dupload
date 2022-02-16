@@ -68,7 +68,7 @@ my $passwd = "$user\@$myhost";
 # Extra options for rsync or scp.
 my $options = q{};
 
-my $sendmail = '/usr/sbin/sendmail';
+my $mta = '/usr/sbin/sendmail';
 
 # Method specific variables.
 my $ssh_target;
@@ -245,9 +245,9 @@ if ($opt_help) {
     exit 0;
 }
 
-unless (-x $sendmail) {
+unless (-x $mta) {
     $nomail = 1;
-    w("mail options disabled, cannot run '$sendmail': $!\n");
+    w("mail options disabled, cannot run '$mta': $!\n");
 }
 
 # Get the configuration for that host global, job independent information.
@@ -934,23 +934,23 @@ sub announce_if_necessary($)
 
     $opt_fullname = " -F '$fullname'" if $config::no_parentheses_to_fullname;
     $fullname =~ s/\'/''/;
-    my $sendmail_cmd = "$sendmail -f $visibleuser" .
-                       ($visiblename ? "\@$visiblename" : q{}) .
-                       ($fullname ? $opt_fullname : q{}) .
-                       " $announce{$job}";
+    my $mta_cmd = "$mta -f $visibleuser" .
+                  ($visiblename ? "\@$visiblename" : q{}) .
+                  ($fullname ? $opt_fullname : q{}) .
+                  " $announce{$job}";
 
     $msg = "announcing to $announce{$job}";
     if ($cc) {
-        $sendmail_cmd .= q{ } . $cc;
+        $mta_cmd .= q{ } . $cc;
         $msg .= " and $cc";
     }
     p($msg . "\n");
 
     my $fh_mail;
     if (not $dry or $mailonly) {
-        open $fh_mail, '|-', $sendmail_cmd or fatal("Cannot pipe to $sendmail $!");
+        open $fh_mail, '|-', $mta_cmd or fatal("Cannot pipe to $mta $!");
     } else {
-        p("\n+ announce to $announce{$job} using command '$sendmail_cmd'\n");
+        p("\n+ announce to $announce{$job} using command '$mta_cmd'\n");
         open $fh_mail, '>&', *STDOUT or fatal('Cannot redirect to stdout');
     }
 
