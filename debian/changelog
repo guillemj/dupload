@@ -1,3 +1,33 @@
+dupload (2.9.8) unstable; urgency=medium
+
+  * Fix compatibility target host definitions.
+    Reported by Santiago Vila <sanvila@unex.es>.
+  * Add a license header to the OpenPGP check hook.
+  * Clarify comment in OpenPGP check hook.
+  * Fix bashisms in hooks.
+  * Only perform debian-source-only checks for unstable and sid suites.
+  * Refactor time delta computation.
+  * Fix printing the changes file into the announce mail.
+    Thanks to Edouard GAULUE <edouard@e-gaulue.com>. See #1005843.
+  * Fix pipe mode for perl open call to sendmail.
+    Thanks to Edouard GAULUE <edouard@e-gaulue.com>. Closes: #1005843
+  * Add support for configurable MTA in dupload.conf and --mta option.
+  * Fix announce address concatenation handling.
+  * Code internals:
+    - Fix indentation in OpenPGP check hook.
+    - Rename the $sendmail variables to $mta.
+  * Build system:
+    - Add a new gitlab-ci.yml file.
+  * Packaging:
+    - Drop deprecated «have» function usage in bash completion.
+    - Add a bash filetype to the bash completion file.
+    - Add author test dependencies under a build-profile.
+    - Bump to Standards-Version 4.6.0 (no changed needed).
+  * Test suite:
+    - Add a shellcheck test.
+
+ -- Guillem Jover <guillem@debian.org>  Thu, 31 Mar 2022 01:45:49 +0200
+
 dupload (2.9.7) unstable; urgency=medium
 
   * Use OpenPGP instead of GPG for signature related names.
