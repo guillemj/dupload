@@ -504,7 +504,7 @@ PACKAGE: foreach my $change (@changes) {
             if (any { /^a .*\s${k}\s/ } @done) {
                 p(' already done');
             } else {
-                $announce{$job} = join q{ }, $announce{$job}, $k;
+                push @{$announce{$job}}, $k;
                 p(' will be sent');
             }
         }
@@ -937,14 +937,16 @@ sub announce_if_necessary($)
 
     return if not $announce{$job} or $nomail;
 
+    my $to = join q{, }, @{$announce{$job}};
+
     $opt_fullname = " -F '$fullname'" if $config::no_parentheses_to_fullname;
     $fullname =~ s/\'/''/;
     my $mta_cmd = "$mta -f $visibleuser" .
                   ($visiblename ? "\@$visiblename" : q{}) .
                   ($fullname ? $opt_fullname : q{}) .
-                  " $announce{$job}";
+                  " @{$announce{$job}}";
 
-    $msg = "announcing to $announce{$job}";
+    $msg = "announcing to $to";
     if ($cc) {
         $mta_cmd .= q{ } . $cc;
         $msg .= " and $cc";
@@ -955,13 +957,13 @@ sub announce_if_necessary($)
     if (not $dry or $mailonly) {
         open $fh_mail, '|-', $mta_cmd or fatal("Cannot pipe to $mta $!");
     } else {
-        p("\n+ announce to $announce{$job} using command '$mta_cmd'\n");
+        p("\n+ announce to $to using command '$mta_cmd'\n");
         open $fh_mail, '>&', *STDOUT or fatal('Cannot redirect to stdout');
     }
 
     print { $fh_mail } <<"MAIL";
 X-dupload: $version
-To: $announce{$job}
+To: $to
 MAIL
     $cc and print { $fh_mail } <<"MAIL";
 Cc: $cc
@@ -1005,7 +1007,7 @@ MAIL
     }
 
     if (!$dry) {
-        log_job($log{$job}, "a $changes{$job} $announce{$job}");
+        log_job($log{$job}, "a $changes{$job} @{$announce{$job}}");
     } else {
         p("\n+ log announcement\n");
     }
