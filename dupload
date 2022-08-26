@@ -584,8 +584,9 @@ PACKAGE: foreach my $change (@changes) {
             }
 
             if ($checksums{$file}{$alg} ne $checksum) {
-                $keep or fatal(uc $alg . "sum mismatch for $file");
-                w(uc $alg . "sum mismatch for $file, skipping $job\n");
+                my $algsum = uc($alg) . 'sum';
+                $keep or fatal("$algsum mismatch for $file");
+                w("$algsum mismatch for $file, skipping $job\n");
                 push @skipped, $cf;
                 next PACKAGE;
             }
