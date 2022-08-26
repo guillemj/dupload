@@ -1,0 +1,4 @@
+This is a pkg-src 2.0 specific announcement entry,
+that should not be included at all within the test suite.
+  <--X<-->
+

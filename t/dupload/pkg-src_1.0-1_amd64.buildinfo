@@ -1,0 +1,25 @@
+Format: 1.0
+Source: pkg-src
+Binary: pkg-bin
+Architecture: amd64
+Version: 1.0-1
+Checksums-Md5:
+ d41d8cd98f00b204e9800998ecf8427e 0 pkg-bin_1.0-1_amd64.deb
+ d41d8cd98f00b204e9800998ecf8427e 0 pkg-src_1.0.orig.tar
+ d41d8cd98f00b204e9800998ecf8427e 0 pkg-src_1.0-1.debian.tar
+ 951877d5f91ae968314b959326adca44 694 pkg-src_1.0-1.dsc
+Checksums-Sha1:
+ da39a3ee5e6b4b0d3255bfef95601890afd80709 0 pkg-bin_1.0-1_amd64.deb
+ da39a3ee5e6b4b0d3255bfef95601890afd80709 0 pkg-src_1.0.orig.tar
+ da39a3ee5e6b4b0d3255bfef95601890afd80709 0 pkg-src_1.0-1.debian.tar
+ 41d4f7546d72511e7ab8515c30079ba81a931bfc 694 pkg-src_1.0-1.dsc
+Checksums-Sha256:
+ e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 0 pkg-bin_1.0-1_amd64.deb
+ e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 0 pkg-src_1.0.orig.tar
+ e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 0 pkg-src_1.0-1.debian.tar
+ d170b0bd1fc4e65959a79b25f36258d71a68b10e36f501c9878809fc5c4883f9 694 pkg-src_1.0-1.dsc
+Build-Origin: Dpkg
+Build-Architecture: amd64
+Build-Date: Fri, 26 Aug 2022 20:31:25 +0200
+Installed-Build-Depends:
+ base (= 1.0),

@@ -1,0 +1,54 @@
+>>>>--------
+MTA exec: -f thisuser test@example.org
+>>>>--------
+X-dupload: 2.x
+To: test@example.org
+Subject: Uploaded pkg-src 1.0-1 (amd64) to mail-announce-extra
+
+This is the pkg-src generic announcement entry,
+which will be included for all pkg-src uploads.
+  <--X<-->
+
+This is then the pkg-src 1.0 specific announcement entry,
+which will be included for all pkg-src 1.0-N uploads.
+  <--X<-->
+
+This is finally the pkg-src 1.0 specific announcement entry,
+which will be included only for the pkg-src 1.0-1 upload.
+  <--X<-->
+
+Format: 1.8
+Date: Fri, 26 Aug 2022 20:22:27 +0200
+Source: pkg-src
+Binary: pkg-bin
+Architecture: amd64
+Version: 1.0-1
+Distribution: stable-local unstable-local
+Urgency: medium
+Maintainer: Dpkg Developers <debian-dpkg@lists.debian.org>
+Changed-By: Dpkg Developers <debian-dpkg@lists.debian.org>
+Description:
+ pkg-bin - stub binary package for testing
+Changes:
+ pkg-src (1.0-1) test-local; urgency=medium
+ .
+   * Nothing in here.
+Checksums-Sha1:
+ da39a3ee5e6b4b0d3255bfef95601890afd80709 0 pkg-bin_1.0-1_amd64.deb
+ da39a3ee5e6b4b0d3255bfef95601890afd80709 0 pkg-src_1.0.orig.tar
+ da39a3ee5e6b4b0d3255bfef95601890afd80709 0 pkg-src_1.0-1.debian.tar
+ 41d4f7546d72511e7ab8515c30079ba81a931bfc 694 pkg-src_1.0-1.dsc
+ 61607af9472aae3c0b2120b009019b0b7e26ca46 1119 pkg-src_1.0-1_amd64.buildinfo
+Checksums-Sha256:
+ e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 0 pkg-bin_1.0-1_amd64.deb
+ e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 0 pkg-src_1.0.orig.tar
+ e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 0 pkg-src_1.0-1.debian.tar
+ d170b0bd1fc4e65959a79b25f36258d71a68b10e36f501c9878809fc5c4883f9 694 pkg-src_1.0-1.dsc
+ 6e45a4f69d3427c2df9110492e4a9de7d8c313b871c0a37bf826f48af2bfd8df 1119 pkg-src_1.0-1_amd64.buildinfo
+Files:
+ d41d8cd98f00b204e9800998ecf8427e 0 test optional pkg-bin_1.0-1_amd64.deb
+ d41d8cd98f00b204e9800998ecf8427e 0 test optional pkg-src_1.0.orig.tar
+ d41d8cd98f00b204e9800998ecf8427e 0 test optional pkg-src_1.0-1.debian.tar
+ 951877d5f91ae968314b959326adca44 694 test optional pkg-src_1.0-1.dsc
+ 47d8c044897190c396cb5ca522656020 1119 test optional pkg-src_1.0-1_amd64.buildinfo
+>>>>--------

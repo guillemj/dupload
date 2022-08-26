@@ -1,0 +1,14 @@
+#!/bin/sh
+
+set -e
+
+: "${DUPLOAD_TMPDIR:=t}"
+: "${DUPLOAD_MTA_SPOOL:="$DUPLOAD_TMPDIR/sendmail-spool-mbox"}"
+
+(
+echo ">>>>--------"
+echo "MTA exec: $*"
+echo ">>>>--------"
+cat
+echo ">>>>--------"
+) >>"$DUPLOAD_MTA_SPOOL"

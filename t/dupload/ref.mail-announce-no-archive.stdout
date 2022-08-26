@@ -1,0 +1,18 @@
+Uploading (copy) to thishost:<<<BASEDIR>>>/incoming
+[ Preparing job pkg-src_1.0-1_amd64 from pkg-src_1.0-1_amd64.changes
+  announce (pkg-src_1.0-1_amd64.changes) to test@example.org will be sent
+ pkg-bin_1.0-1_amd64.deb, size ok, md5sum ok, sha1sum ok, sha256sum ok
+ pkg-src_1.0-1.debian.tar, size ok, md5sum ok, sha1sum ok, sha256sum ok
+ pkg-src_1.0-1.dsc, size ok, md5sum ok, sha1sum ok, sha256sum ok
+ pkg-src_1.0-1_amd64.buildinfo, size ok, md5sum ok, sha1sum ok, sha256sum ok
+ pkg-src_1.0.orig.tar, size ok, md5sum ok, sha1sum ok, sha256sum ok
+ pkg-src_1.0-1_amd64.changes ok ]
+Uploading (copy) to mail-announce-no-archive (thishost)
+[ Uploading job pkg-src_1.0-1_amd64
+ pkg-bin_1.0-1_amd64.deb 0.0 kB, ok (0 s, 0.00 kB/s)
+ pkg-src_1.0-1.debian.tar 0.0 kB, ok (0 s, 0.00 kB/s)
+ pkg-src_1.0-1.dsc 0.7 kB, ok (0 s, 0.68 kB/s)
+ pkg-src_1.0-1_amd64.buildinfo 1.1 kB, ok (0 s, 1.09 kB/s)
+ pkg-src_1.0.orig.tar 0.0 kB, ok (0 s, 0.00 kB/s)
+ pkg-src_1.0-1_amd64.changes 1.6 kB, ok (0 s, 1.61 kB/s)
+ announcing to test@example.org, ok ]

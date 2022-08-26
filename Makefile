@@ -53,6 +53,7 @@ install:	all
 
 clean:
 	rm -f core *.[0-9].pod.* *~ $(MAN)
+	rm -rf t.tmp
 
 .PHONY: check
 
