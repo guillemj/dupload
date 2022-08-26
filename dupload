@@ -947,12 +947,12 @@ sub announce_if_necessary($)
                   ($fullname ? $opt_fullname : q{}) .
                   " @{$announce{$job}}";
 
-    $msg = "announcing to $to";
+    $msg = "\n announcing to $to";
     if ($cc) {
         $mta_cmd .= q{ } . $cc;
         $msg .= " and $cc";
     }
-    p($msg . "\n");
+    p($msg);
 
     my $fh_mail;
     if (not $dry or $mailonly) {
