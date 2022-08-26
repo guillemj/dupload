@@ -498,7 +498,7 @@ PACKAGE: foreach my $change (@changes) {
             $field = undef;
         }
     }
-    foreach my $k (keys %mailto) {
+    foreach my $k (sort keys %mailto) {
         unless ($nomail) {
             p("\n  announce ($cf) to $k");
             if (any { /^a .*\s${k}\s/ } @done) {
@@ -559,7 +559,7 @@ PACKAGE: foreach my $change (@changes) {
     }
 
     # Test the md5sums.
-    foreach my $file (keys %checksums) {
+    foreach my $file (sort keys %checksums) {
         my $size = -s $file;
 
         p("\n $file");
@@ -677,7 +677,7 @@ if ($method eq 'ftp') {
     fatal("Unknown upload method ($method)");
 }
 
-JOB: foreach my $job (keys %files) {
+JOB: foreach my $job (sort keys %files) {
     my @files = @{$files{$job}};
     my $mode;
     my $batchmode;
@@ -917,7 +917,7 @@ unless ($dry) {
         postupload_hook('deb', [ $file ]);
     }
 
-    foreach my $package (keys %all_packages) {
+    foreach my $package (sort keys %all_packages) {
         postupload_hook('package', [ $package, $all_packages{$package} ]);
     }
 }
