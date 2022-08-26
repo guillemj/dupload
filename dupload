@@ -40,8 +40,8 @@ use Net::FTP;
 
 my $version = '2.x';
 my $progname = basename($0);
-my $user = getlogin || getpwuid($<) || $ENV{LOGNAME} || $ENV{USER};
-my $myhost = qx(hostname --fqdn);
+my $user = $ENV{DUPLOAD_USER} || getlogin || getpwuid($<) || $ENV{LOGNAME} || $ENV{USER};
+my $myhost = $ENV{DUPLOAD_HOST} || qx(hostname --fqdn);
 chomp $myhost;
 my $cwd = cwd();
 
