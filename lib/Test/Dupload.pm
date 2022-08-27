@@ -22,6 +22,8 @@ our $VERSION = '0.00';
 
 our @EXPORT_OK = qw(
     all_perl_files
+    test_get_data_path
+    test_get_temp_path
     test_needs_author
     test_needs_module
     test_needs_command
@@ -34,13 +36,49 @@ our %EXPORT_TAGS = (
     ) ],
     paths => [ qw(
         all_perl_files
+        test_get_data_path
+        test_get_temp_path
      ) ],
 );
 
 use Exporter qw(import);
+use Cwd;
 use File::Find;
+use File::Basename;
+use File::Path qw(make_path);
 use IPC::Cmd qw(can_run);
 use Test::More;
+
+sub _test_get_caller_dir
+{
+    my (undef, $path, undef) = caller 1;
+
+    $path =~ s{\.t$}{};
+    $path =~ s{^\./}{};
+
+    return $path;
+}
+
+sub test_get_data_path
+{
+    my $path = shift;
+
+    if (defined $path) {
+        my $srcdir = $ENV{srcdir} || '.';
+        return "$srcdir/$path";
+    } else {
+        return _test_get_caller_dir();
+    }
+}
+
+sub test_get_temp_path
+{
+    my $path = shift // _test_get_caller_dir();
+    $path = 't.tmp/' . fileparse($path);
+
+    make_path($path);
+    return $path;
+}
 
 sub test_get_perl_dirs
 {
