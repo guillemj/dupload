@@ -1154,7 +1154,8 @@ sub log_job
         return;
     }
     foreach my $line (@logdata) {
-        print { $fh } $line . q{ } . localtime . "\n";
+        my $timestamp = $ENV{DUPLOAD_LOG_TIMESTAMP} || localtime;
+        print { $fh } "$line $timestamp\n";
     }
     close $fh;
 
