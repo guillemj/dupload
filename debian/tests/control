@@ -1,0 +1,3 @@
+Tests: functional
+Depends: @
+Restrictions: rw-build-tree

@@ -55,10 +55,13 @@ clean:
 	rm -f core *.[0-9].pod.* *~ $(MAN)
 	rm -rf t.tmp
 
-.PHONY: check
+.PHONY: check installcheck
 
 check:
 	prove -Ilib
+
+installcheck:
+	DUPLOAD_PROG="$(shell command -v dupload)" prove -Ilib
 
 %:	%.pod
 	$(POD2MAN) \

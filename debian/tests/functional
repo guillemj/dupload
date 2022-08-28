@@ -1,0 +1,6 @@
+#!/bin/sh
+
+set -e
+
+# Run the install-time test suite
+make installcheck
