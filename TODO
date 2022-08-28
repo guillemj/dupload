@@ -4,9 +4,6 @@ dupload TODO
 * Improve hook system:
   - Rewrite several dupload features, such as announcements, as hooks.
   - Make it possible to run perl modules in addition to shell commands.
-  - Make it possible to specify a list of hooks per category, so that one can
-    do «$preupload{changes} = [ 'check-a %1', 'check-b %1' ];» where all
-    hooks must pass. Preserve backwards compatibility.
 
 * Refactor uploader methods into Perl modules.
 
@@ -31,3 +28,12 @@ dupload TODO
 
 * Think about switching from a perl "config" to a proper declarative config
   format.
+
+* Add functional tests:
+  - Announce mails:
+    + .announce files.
+    + visiblename/visibleuser.
+  - Hooks.
+  - Checksum errors.
+  - Other methods (ftp, scp, rsync).
+  - Reupload (no-op, forced).
