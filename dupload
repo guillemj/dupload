@@ -260,7 +260,7 @@ unless (-x $mta) {
 $host or fatal('Need host to upload to. (See --to option or the default_host configuration variable)');
 
 {
-    my $nick = $config::cfg{$host};
+    my $nick = $config::cfg{$host} or fatal("Unknown host $host");
     $method = $nick->{method} || $method;
     $options = $nick->{options} || $options;
     $fqdn = $nick->{fqdn};
