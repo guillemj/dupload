@@ -74,6 +74,19 @@ logins too.
 For B<scp>, B<scpb> and B<rsync> the default is delegated to SSH and its
 own configuration.
 
+=item B<passwordcmd> [optional] (since 2.9.9)
+
+The command to retrieve a password.
+It is expected to output the password on stdout.
+
+If this option has not been specified, and the B<secret-tool> program is
+installed, the following command will be used to retrieve the password
+from a system secrets store via the Secret Service interface:
+Z<>
+  B<secret-tool lookup host >I<host>B< user >I<user>B< service dupload>
+
+If the command fails, then the password will be requested from a prompt.
+
 =item B<password> [optional]
 
 The FTP password for anonymous logins.

@@ -25,11 +25,13 @@
 
 use strict;
 use warnings;
+use feature qw(state);
 
 use IO::Handle;
 use List::Util qw(any uniq);
 use Cwd;
 use Getopt::Long;
+use Dpkg::Path qw(find_command);
 use File::Basename;
 use File::Copy;
 use Net::FTP;
@@ -70,6 +72,8 @@ my $method = 'ftp';
 my $login;
 # Password.
 my $passwd;
+# Password fetching command.
+my $passwd_cmd;
 # Extra options for rsync or scp.
 my $options = q{};
 
@@ -369,6 +373,9 @@ $host or fatal('Need host to upload to. (See --to option or the default_host con
         $ssh_login = "-l $login" if defined $login;
         $scp_options = ' -q' if $quiet;
     }
+
+    $passwd_cmd = $nick->{passwordcmd};
+
     $visibleuser = $nick->{visibleuser} || $user;
     chomp $visibleuser;
     $visiblename = $nick->{visiblename} || '';
@@ -1136,8 +1143,31 @@ sub configure(@)
     return;
 }
 
-# Prompt for the login password.
-sub getpass()
+sub getpass_cmd
+{
+    if (not defined $passwd_cmd) {
+        state $tool = find_command('secret-tool');
+
+        if (length $tool) {
+            $passwd_cmd = "secret-tool lookup host $fqdn user $login service dupload";
+        }
+    }
+    return unless length $passwd_cmd;
+
+    my $pass = qx($passwd_cmd);
+    chomp $pass;
+    if ($?) {
+        w("cannot fetch password for $login\@$fqdn from '$passwd_cmd': $?\n");
+        return;
+    } elsif (length $pass == 0) {
+        w("unknown password for $login\@$fqdn from '$passwd_cmd'\n");
+        return;
+    }
+
+    return $pass;
+}
+
+sub getpass_prompt
 {
     system 'stty -echo cbreak </dev/tty';
     $? and fatal('stty');
@@ -1148,6 +1178,12 @@ sub getpass()
     system 'stty echo -cbreak </dev/tty';
     $? and fatal('stty');
     return $pass;
+}
+
+# Fetch or prompt for the login password.
+sub getpass()
+{
+    return getpass_cmd() // getpass_prompt();
 }
 
 {
