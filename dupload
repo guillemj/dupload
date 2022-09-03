@@ -804,7 +804,7 @@ JOB: foreach my $job (sort keys %files) {
                     if (!$ftp->rename($file, "$queuedir/$file")) {
                         my $result = $ftp->message();
                         $ftp->delete($file);
-                        fatal("Cannot rename $file -> $queuedir/$file");
+                        fatal("Cannot rename $file -> $queuedir/$file: $result");
                     }
                 } else {
                     p("\n+ ftp::rename($file, $queuedir/$file)");
