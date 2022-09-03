@@ -702,7 +702,7 @@ JOB: foreach my $job (sort keys %files) {
         next;
     }
 
-    # For scpb only. A priori, the mode is right for every file.
+    # For scpb and rsync only. A priori, the mode is right for every file.
     my $wrong_mode = 0;
 
     foreach my $file (@files) {
@@ -738,15 +738,7 @@ JOB: foreach my $job (sort keys %files) {
                     p("\n+ ssh -x $ssh_login $fqdn chmod $filemode $incoming/$file");
                 }
             }
-        } elsif ($method eq 'scpb') {
-            $copiedfiles .= "$file ";
-            $mode = (stat $file)[2] & 07777;
-            # Small optimization.
-            if ($dochmode && $mode != $filemode) {
-                $wrong_mode = 1;
-            }
-            $batchmode = 1;
-        } elsif ($method eq 'rsync') {
+        } elsif ($method eq 'scpb' or $method eq 'rsync') {
             $copiedfiles .= "$file ";
             $mode = (stat $file)[2] & 07777;
             # Small optimization.
