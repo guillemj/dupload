@@ -63,10 +63,10 @@ my $configfile = undef;
 my $host = undef;
 # Transfer method.
 my $method = 'ftp';
-# Default login.
-my $login = 'anonymous';
-# Default password.
-my $passwd = "$user\@$myhost";
+# Login name.
+my $login;
+# Password.
+my $passwd;
 # Extra options for rsync or scp.
 my $options = q{};
 
@@ -353,11 +353,12 @@ $host or fatal('Need host to upload to. (See --to option or the default_host con
     }
 
     if ($method eq 'ftp') {
-        $login = $nick->{login} || $login;
+        $login = $nick->{login} || 'anonymous';
 
         # Do not accept passwords in configuration file, except for anonymous
         # logins.
         if ($login =~ /^anonymous|ftp$/) {
+            $passwd = "$user\@$myhost";
             $passwd = $nick->{password} if $nick->{password};
         } else {
             undef $passwd;
