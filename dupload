@@ -516,20 +516,22 @@ PACKAGE: foreach my $change (@changes) {
     }
 
     # Search for extra announcement files.
-    my @announce_names = (
-        "${package}",
-        "${package}_${upstream}",
-        defined $debian ? "${package}_${upstream}-${debian}" : (),
-    );
-    foreach my $announce_filename (@announce_names) {
-        $announce_filename .= '.announce';
-        if (-r $announce_filename) {
-            push @extra, $announce_filename;
+    if (announce_is_sent($job)) {
+        my @announce_names = (
+            "${package}",
+            "${package}_${upstream}",
+            defined $debian ? "${package}_${upstream}-${debian}" : (),
+        );
+        foreach my $announce_filename (@announce_names) {
+            $announce_filename .= '.announce';
+            if (-r $announce_filename) {
+                push @extra, $announce_filename;
+            }
         }
-    }
-    if (@extra) {
-        p(", as well as\n  ", join ', ', @extra);
-        $extra{$job} = [ @extra ];
+        if (@extra) {
+            p(", as well as\n  ", join ', ', @extra);
+            $extra{$job} = [ @extra ];
+        }
     }
 
     my %checksums;
@@ -926,6 +928,14 @@ exit 0;
 
 ### SUBS
 
+sub announce_is_sent
+{
+    my $job = shift;
+
+    return 0 if not $announce{$job} or $nomail;
+    return 1;
+}
+
 # Prepare and possibly send the mail announcement.
 sub announce_if_necessary($)
 {
@@ -933,7 +943,7 @@ sub announce_if_necessary($)
     my ($opt_fullname) = " -F '($fullname)'";
     my ($msg);
 
-    return if not $announce{$job} or $nomail;
+    return if not announce_is_sent($job);
 
     my $to = join q{, }, @{$announce{$job}};
 
