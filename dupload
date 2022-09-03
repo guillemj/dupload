@@ -786,19 +786,11 @@ JOB: foreach my $job (sort keys %files) {
             }
         } elsif ($method eq 'scp') {
             $mode = (stat $file)[2] & 07777;
-            unless ($dry) {
-                system "scp -p $scp_options $options $file $ssh_target";
-                fatal("scp $file failed") if $?;
-                # Small optimization.
-                if ($dochmode && $mode != $filemode) {
-                    system "ssh -x $ssh_login $fqdn chmod $filemode $incoming/$file";
-                    fatal("ssh ... chmod $filemode failed") if $?;
-                }
-            } else {
-                p("\n+ scp -p $scp_options $options $file $ssh_target");
-                if ($dochmode && $mode != $filemode) {
-                    p("\n+ ssh -x $ssh_login $fqdn chmod $filemode $incoming/$file");
-                }
+            method_run("scp -p $scp_options $options $file $ssh_target");
+
+            # Small optimization.
+            if ($dochmode && $mode != $filemode) {
+                method_run("ssh -x $ssh_login $fqdn chmod $filemode $incoming/$file");
             }
         } elsif ($method eq 'scpb' or $method eq 'rsync') {
             $copiedfiles .= "$file ";
@@ -846,12 +838,7 @@ JOB: foreach my $job (sort keys %files) {
                     p("\n+ ftp::rename($file, $queuedir/$file)");
                 }
             } elsif ($method eq 'scp') {
-                unless ($dry) {
-                    system "ssh -x $ssh_login $fqdn \"mv $incoming/$file $queuedir/$file\"";
-                    fatal("ssh -x $ssh_login $fqdn: mv failed") if $?;
-                } else {
-                    p("\n+ ssh -x $ssh_login $fqdn \"mv $incoming/$file $queuedir/$file\"");
-                }
+                method_run("ssh -x $ssh_login $fqdn \"mv $incoming/$file $queuedir/$file\"");
             } elsif ($method eq 'copy') {
                 unless ($dry) {
                     move("$incoming/$file", "$queuedir/$file")
@@ -883,31 +870,19 @@ JOB: foreach my $job (sort keys %files) {
     if ($method eq 'scpb') {
         $subcmd .= "chmod $filemode $copiedfiles;" if $wrong_mode;
 
-        unless ($dry) {
-            p("\n");
-            system "scp $scp_options $options $copiedfiles $ssh_target";
-            if ($?) {
-                unlink $log{$job};
-                fatal("scp $copiedfiles failed");
-            }
-        } else {
-            p("\n+ scp $scp_options $options $copiedfiles $ssh_target");
-        }
+        p("\n");
+        method_run("scp $scp_options $options $copiedfiles $ssh_target",
+            cleanup => sub { unlink $log{$job} },
+        );
     } elsif ($method eq 'rsync') {
         my $rsync_opts = $options;
         $rsync_opts .= ' -v' if not $quiet;
         $rsync_opts .= " --chmod=F$filemode" if $wrong_mode;
 
-        unless ($dry) {
-            p("\n");
-            system "rsync --partial -Ltze ssh $rsync_opts -x $copiedfiles $ssh_target";
-            if ($?) {
-                unlink $log{$job};
-                fatal("rsync $copiedfiles failed");
-            }
-        } else {
-            p("\n+ rsync --partial -Ltze ssh $rsync_opts -x $copiedfiles $ssh_target");
-        }
+        p("\n");
+        method_run("rsync --partial -Ltze ssh $rsync_opts -x $copiedfiles $ssh_target",
+            cleanup => sub { unlink $log{$job} },
+        );
     }
 
     if ($batchmode) {
@@ -915,14 +890,7 @@ JOB: foreach my $job (sort keys %files) {
             $subcmd .= "mv $copiedfiles $queuedir;";
         }
         if (defined $subcmd) {
-            my $cmd = "ssh -x $ssh_login $fqdn 'cd $incoming;$subcmd'";
-
-            unless ($dry) {
-                system $cmd;
-                fatal("$cmd failed") if $?;
-            } else {
-                p("\n+ $cmd");
-            }
+            method_run("ssh -x $ssh_login $fqdn 'cd $incoming;$subcmd'");
         }
 
         unless ($dry) {
@@ -1296,6 +1264,23 @@ sub fatal
 {
     print { *STDERR } "\n";
     die "$progname: error: @_\n";
+}
+
+sub method_run
+{
+    my ($command, %opts) = @_;
+
+    unless ($dry) {
+        system "$command";
+        if (exists $opts{cleanup}) {
+            $opts{cleanup}->();
+        }
+        fatal("$command failed") if $?;
+    } else {
+        p("\n+ $command");
+    }
+
+    return;
 }
 
 sub run_hook
