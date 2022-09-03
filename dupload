@@ -53,6 +53,9 @@ my $force = 0;
 my $keep = 0;
 # Do not talk too much.
 my $quiet = 0;
+# If do-nothing.
+my $dry;
+my $mailonly;
 
 # The configuration files that have been loaded.
 my @configfiles_loaded;
@@ -91,9 +94,6 @@ my @all_the_files;
 my @all_the_debs;
 # All binary packages we installed (for postupload processing).
 my %all_packages;
-# If do-nothing.
-my $dry;
-my $mailonly;
 
 # Variables per host.
 my $fqdn;
