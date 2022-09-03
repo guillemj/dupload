@@ -1103,6 +1103,7 @@ sub info($)
 
         info_field('nick name', $nick);
         info_field('real name', $r->{fqdn});
+        info_field('method', $r->{method} // 'ftp');
         info_field('login', $r->{login});
         info_field('incoming', $r->{incoming});
         info_field('queuedir', $r->{queuedir});
