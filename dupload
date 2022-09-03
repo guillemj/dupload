@@ -105,7 +105,6 @@ my $archive;
 my $noarchive;
 my %preupload;
 my %postupload;
-my $result;
 my $incoming;
 my $queuedir;
 my $distallowlist;
@@ -742,7 +741,7 @@ JOB: foreach my $job (sort keys %files) {
         if ($method eq 'ftp') {
             unless ($dry) {
                 unless ($ftp->put($file, $file)) {
-                    $result = $ftp->message();
+                    my $result = $ftp->message();
                     $ftp->delete($file);
                     fatal("Cannot upload $file: $result");
                 }
@@ -803,7 +802,7 @@ JOB: foreach my $job (sort keys %files) {
             if ($method eq 'ftp') {
                 unless ($dry) {
                     if (!$ftp->rename($file, "$queuedir/$file")) {
-                        $result = $ftp->message();
+                        my $result = $ftp->message();
                         $ftp->delete($file);
                         fatal("Cannot rename $file -> $queuedir/$file");
                     }
