@@ -91,7 +91,6 @@ my @all_the_files;
 my @all_the_debs;
 # All binary packages we installed (for postupload processing).
 my %all_packages;
-my $copiedfiles;
 # If do-nothing.
 my $dry;
 my $mailonly;
@@ -711,8 +710,7 @@ JOB: foreach my $job (sort keys %files) {
     my @files = @{$files{$job}};
     my $mode;
     my $batchmode;
-    my $allfiles;
-    $copiedfiles = qw{};
+    my $copiedfiles = qw{};
 
     my ($package, $version, $arch) = (split /_/, $job, 3);
     my ($upstream, $debian) = (split /-/, $version, 2);
@@ -859,7 +857,6 @@ JOB: foreach my $job (sort keys %files) {
         } else {
             p("\n+ scp $scp_options $options $copiedfiles $ssh_target");
         }
-        $allfiles = $copiedfiles;
     } elsif ($method eq 'rsync') {
         my $rsync_opts = $options;
         $rsync_opts .= ' -v' if not $quiet;
@@ -875,7 +872,6 @@ JOB: foreach my $job (sort keys %files) {
         } else {
             p("\n+ rsync --partial -Ltze ssh $rsync_opts -x $copiedfiles $ssh_target");
         }
-        $allfiles = $copiedfiles;
     }
 
     if ($batchmode) {
@@ -894,7 +890,7 @@ JOB: foreach my $job (sort keys %files) {
         }
 
         unless ($dry) {
-            log_job($log{$job}, map { "u $_ $fqdn" } split / /, $allfiles);
+            log_job($log{$job}, map { "u $_ $fqdn" } split / /, $copiedfiles);
         } else {
             p("\n+ log to $log{$job}\n");
         }
