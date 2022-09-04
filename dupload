@@ -27,7 +27,7 @@ use strict;
 use warnings;
 
 use IO::Handle;
-use List::Util qw(any);
+use List::Util qw(any uniq);
 use Cwd;
 use Getopt::Long;
 use File::Basename;
@@ -111,9 +111,7 @@ my $incoming;
 my $queuedir;
 my $distallowlist;
 my $distblocklist;
-my $mailto;
-my $mailtx;
-my $cc;
+my $mail;
 my $visiblename;
 my $visibleuser;
 my $fullname;
@@ -274,9 +272,34 @@ $host or fatal('Need host to upload to. (See --to option or the default_host con
     $queuedir = $nick->{queuedir};
     $distallowlist = $nick->{distallowlist} // $nick->{distwhitelist};
     $distblocklist = $nick->{distblocklist} // $nick->{distblacklist};
-    $mailto = $nick->{mailto};
-    $mailtx = $nick->{mailtx} || $mailto;
-    $cc = $nick->{cc};
+
+    $mail = $nick->{mail} // [];
+    foreach my $mail (@{$mail}) {
+        fatal("No mail 'match' for $nick") unless length $mail->{match};
+        fatal("No mail 'to' for $nick") unless length $mail->{to};
+    }
+
+    # XXX: Backwards compatibility.
+    if (defined $nick->{mailto}) {
+        w("mailto key is deprecated\n");
+        push @{$mail}, {
+            match => qr/^stable/,
+            to => $nick->{mailto},
+            cc => $nick->{cc},
+        };
+    }
+    if (defined $nick->{mailtx}) {
+        w("mailtx key is deprecated\n");
+        push @{$mail}, {
+            match => qr/^(?:unstable|experimental)/,
+            to => $nick->{mailtx} || $nick->{mailto},
+            cc => $nick->{cc},
+        };
+    }
+    if (defined $nick->{cc}) {
+        w("cc key is deprecated\n");
+    }
+
     $dinstall_runs = $nick->{dinstall_runs};
     $passive = $nick->{passive};
     $dochmode = !exists $nick->{filemode} && defined $nick->{filemode};
@@ -356,7 +379,9 @@ $host or fatal('Need host to upload to. (See --to option or the default_host con
 
 # Command-line options have precedence over configuration files:
 
-($mailto || $mailtx) or p("dupload note: no announcement will be sent.\n");
+if (scalar @{$mail} == 0) {
+    p("dupload note: no announcement will be sent.\n");
+}
 
 $noarchive = $opt_noarchive || (!$archive);
 
@@ -473,14 +498,10 @@ PACKAGE: foreach my $change (@changes) {
         }
         if (/^distribution:\s+/i) {
             foreach my $dist (split ' ', $') {
-                if ($mailto and $dist =~ m/^stable/) {
-                    $mailto{$mailto}++;
-                }
-                if ($mailtx and $dist =~ m/^unstable/) {
-                    $mailto{$mailtx}++;
-                }
-                if ($mailtx and $dist =~ m/^experimental/) {
-                    $mailto{$mailtx}++;
+                foreach my $mail (@{$mail}) {
+                    if ($dist =~ m/$mail->{match}/) {
+                        $mailto{$mail->{to}} = $mail;
+                    }
                 }
                 if ((defined $distblocklist and $dist =~ m/$distblocklist/) or
                     (defined $distallowlist and $dist !~ m/$distallowlist/)) {
@@ -509,7 +530,7 @@ PACKAGE: foreach my $change (@changes) {
             if (any { /^a .*\s${k}\s/ } @done) {
                 p(' already done');
             } else {
-                push @{$announce{$job}}, $k;
+                $announce{$job}{$k} = $mailto{$k};
                 p(' will be sent');
             }
         }
@@ -945,14 +966,22 @@ sub announce_if_necessary($)
 
     return if not announce_is_sent($job);
 
-    my $to = join q{, }, @{$announce{$job}};
+    my @to = sort keys %{$announce{$job}};
+    my @cc = uniq sort map {
+        $_->{cc}
+    } grep {
+        length $_->{cc}
+    } values %{$announce{$job}};
+
+    my $to = join q{, }, @to;
+    my $cc = join q{, }, @cc;
 
     $opt_fullname = " -F '$fullname'" if $config::no_parentheses_to_fullname;
     $fullname =~ s/\'/''/;
     my $mta_cmd = "$mta -f $visibleuser" .
                   ($visiblename ? "\@$visiblename" : q{}) .
                   ($fullname ? $opt_fullname : q{}) .
-                  " @{$announce{$job}}";
+                  " @to";
 
     $msg = "\n announcing to $to";
     if ($cc) {
@@ -1015,7 +1044,7 @@ MAIL
     }
 
     if (!$dry) {
-        log_job($log{$job}, "a $changes{$job} @{$announce{$job}}");
+        log_job($log{$job}, "a $changes{$job} @to");
     } else {
         p("\n+ log announcement\n");
     }
@@ -1079,9 +1108,10 @@ sub info($)
         info_field('queuedir', $r->{queuedir});
         info_field('dist allowlist', $r->{distallowlist});
         info_field('dist blocklist', $r->{distblocklist});
-        info_field('mail to', $r->{mailto});
-        info_field('mail to x', $r->{mailtx});
-        info_field('cc', $r->{cc});
+        foreach my $mail (@{$r->{mail}}) {
+            info_field("mail to ($mail->{match})", $mail->{to});
+            info_field("mail cc ($mail->{match})", $mail->{cc});
+        }
         info_field('passive FTP', $r->{passive});
         info_field('dinstall runs', $r->{dinstall_runs});
         info_field('archive mail', $r->{archive});

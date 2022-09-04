@@ -58,6 +58,7 @@ my @tests = qw(
     bad-sha1sums
     bad-sha256sums
     mail-announce
+    mail-announce-obsolete-mailto
     mail-announce-visible
     mail-announce-no-archive
     mail-announce-extra

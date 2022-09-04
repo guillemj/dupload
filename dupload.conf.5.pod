@@ -110,18 +110,57 @@ against the B<Distribution> field in the F<.changes> file.
 
 Deprecated alias for B<distblocklist>.
 
-=item B<mailto> [optional]
+=item B<mail> [optional] (since 2.9.9)
 
-Email address where the announcement about stable packages is sent.
+The email addresses (C<to> and C<cc>) where the announcement about the upload
+for the C<match> distribution should be sent.
 
-=item B<mailtx> [optional]
+This is an array of hashes with the following keys:
 
-Email address where the announcement about unstable and experimental
-packages is sent.
+=over
+
+=item B<match> [required]
+
+The regex of the distribution that needs to match to send an announcement.
+
+=item B<to> [required]
+
+Email address where the announcement about the packages is sent.
 
 =item B<cc> [optional]
 
 Email address where to send a copy address of the announcement.
+
+=back
+
+=item B<mailto> [optional, deprecated]
+
+Deprecated alias for:
+
+  $cfg{$host}{mail} = [ {
+      match => qr/^stable/,
+      to => $mailto,
+  } ];
+
+=item B<mailtx> [optional, deprecated]
+
+Deprecated alias for:
+
+  $cfg{$host}{mail} = [ {
+      match => qr/^(?:unstable|experimental)/,
+      to => $mailtx,
+  } ];
+
+
+=item B<cc> [optional, deprecated]
+
+Deprecated alias for:
+
+  $cfg{$host}{mail} = [ {
+      match => ...,
+      to => ...,
+      cc => $cc,
+  } ];
 
 =item B<fullname> [optional]
 
