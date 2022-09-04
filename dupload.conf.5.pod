@@ -196,8 +196,12 @@ you can also use the environment variable B<FTP_PASSIVE>.
 
 =item B<options> [optional] (since 2.6.3.1)
 
-String that will be added verbatim to the command line of any
+An array reference containing option strings (since 2.10.2),
+that will be added verbatim to the command line of any
 B<scp> or B<rsync> calls done.
+
+For backwards compatibility it can also be specified as a scalar string,
+but this usage is discouraged and will be deprecated in the future.
 
 =item B<dinstall_runs> [optional] (since 2.1)
 

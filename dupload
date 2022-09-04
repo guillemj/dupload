@@ -76,7 +76,7 @@ my $passwd;
 # Password fetching command.
 my $passwd_cmd;
 # Extra options for rsync or scp.
-my $options = q{};
+my @options;
 
 my $mta = '/usr/sbin/sendmail';
 
@@ -253,7 +253,13 @@ $host or fatal('Need host to upload to. (See --to option or the default_host con
 {
     my $nick = $config::cfg{$host} or fatal("Unknown host $host");
     $method = $nick->{method} || $method;
-    $options = $nick->{options} || $options;
+    if (defined $nick->{options} && ref $nick->{options} eq 'ARRAY') {
+        @options = @{$nick->{options}};
+    } elsif (defined $nick->{options}) {
+        # XXX: Deprecated in the future.
+        # w("'options' defined as a scalar is deprecated; use an arrayref\n");
+        @options = split ' ', $nick->{options};
+    }
     $fqdn = $nick->{fqdn};
     $fqdn = $myhost if $method eq 'copy';
     $incoming = $nick->{incoming} or fatal('No incoming directory');
@@ -367,7 +373,7 @@ $host or fatal('Need host to upload to. (See --to option or the default_host con
         $ssh_target .= "$fqdn:$incoming";
         $ssh_login = "-l $login" if defined $login;
         $scp_options = ' -q' if $quiet;
-        $scp_options .= " $options" if length $options;
+        $scp_options .= " @options" if @options;
     }
 
     $passwd_cmd = $nick->{passwordcmd};
@@ -876,7 +882,7 @@ JOB: foreach my $job (sort keys %files) {
             cleanup => sub { unlink $log{$job} },
         );
     } elsif ($method eq 'rsync') {
-        my $rsync_opts = $options;
+        my $rsync_opts = "@options";
         $rsync_opts .= ' -v' if not $quiet;
         $rsync_opts .= " --chmod=F$filemode" if $wrong_mode;
 
@@ -1311,7 +1317,7 @@ sub run_hook
     local $ENV{DUPLOAD_LOGIN} = $login;
     local $ENV{DUPLOAD_INCOMING} = $incoming;
     local $ENV{DUPLOAD_QUEUEDIR} = $queuedir;
-    local $ENV{DUPLOAD_SSH_OPTIONS} = $options;
+    local $ENV{DUPLOAD_SSH_OPTIONS} = "@options";
     local $ENV{DUPLOAD_FTP_PASSIVE} = $passive;
 
     system "$command";
