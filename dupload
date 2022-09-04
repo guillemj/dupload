@@ -967,7 +967,6 @@ sub announce_is_sent
 sub announce_if_necessary
 {
     my ($job) = @_;
-    my ($opt_fullname) = " -F '($fullname)'";
 
     return if not announce_is_sent($job);
 
@@ -981,25 +980,34 @@ sub announce_if_necessary
     my $to = join q{, }, @to;
     my $cc = join q{, }, @cc;
 
-    $opt_fullname = " -F '$fullname'" if $config::no_parentheses_to_fullname;
-    $fullname =~ s/\'/''/;
-    my $mta_cmd = "$mta -f $visibleuser" .
-                  ($visiblename ? "\@$visiblename" : q{}) .
-                  ($fullname ? $opt_fullname : q{}) .
-                  " @to";
+    my @mta_cmd = ($mta, '-f');
+    if ($visiblename) {
+        push @mta_cmd, "$visibleuser\@$visiblename";
+    } else {
+        push @mta_cmd, $visibleuser;
+    }
+    if ($fullname) {
+        push @mta_cmd, '-F';
+        if ($config::no_parentheses_to_fullname) {
+            push @mta_cmd, $fullname;
+        } else {
+            push @mta_cmd, "($fullname)";
+        }
+    }
+    push @mta_cmd, @to;
 
     my $msg = "\n announcing to $to";
     if ($cc) {
-        $mta_cmd .= q{ } . $cc;
+        push @mta_cmd, $cc;
         $msg .= " and $cc";
     }
     p($msg);
 
     my $fh_mail;
     if (not $dry or $mailonly) {
-        open $fh_mail, '|-', $mta_cmd or fatal("Cannot pipe to $mta $!");
+        open $fh_mail, '|-', @mta_cmd or fatal("Cannot pipe to $mta $!");
     } else {
-        p("\n+ announce to $to using command '$mta_cmd'\n");
+        p("\n+ announce to $to using command '@mta_cmd'\n");
         open $fh_mail, '>&', *STDOUT or fatal('Cannot redirect to stdout');
     }
 
