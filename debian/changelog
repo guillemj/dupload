@@ -1,8 +1,40 @@
-dupload (2.9.9) UNRELEASED; urgency=medium
+dupload (2.9.9) unstable; urgency=medium
 
-  *
+  * Add missing «.*-security» to distallowlist for debian-ftp-security queue.
+  * Sort hash keys when iterating over them for reproducible output.
+  * Only uppercase the digest algorithm name.
+  * Fix email announce action item formatting output.
+  * Check explicitly for unknown nicknames in configuration.
+  * Do not require default config files being loaded, --configfile should do.
+  * Do not print the extra announce files when no announcement is sent.
+  * Generalize mailto and mailx handling. Closes: #960708
+  * Print the method for each host on --print.
+  * Print the reason when files cannot be renamed over FTP.
+  * Generalize getpass() function.
+  * Add support for passwordcmd option with default via Secret Service.
+  * New http/https upload method(s). Closes: #147509
+  * Add explicit method key for default «ftp» for all dupload.conf hosts.
+  * Update copyright years.
+  * Documentation:
+    - doc: Update TODO items.
+    - doc: Mark deprecated configuration keys inside the square brackets.
+  * Code internals:
+    - Merge same if/else mode handling branch for scpb and rsync methods.
+    - Move ftp specific defaults to ftp handling code.
+    - Use getcwd() instead of cwd().
+    - Simplify copied files tracking.
+    - Reduce scope for FTP $result variable.
+    - Group $dry and $mainonly declarations with global control flow variables.
+  * Packaging:
+    - Bump to Standards-Version 4.6.1 (no changed needed).
+    - Add autopkgtest for the functional test suite.
+  * Test suite:
+    - Add support for DUPLOAD_USER and DUPLOAD_HOST.
+    - Add support for DUPLOAD_LOG_TIMESTAMP.
+    - Add directory handling functions.
+    - Add functional test suite.
 
- -- Guillem Jover <guillem@debian.org>  Mon, 06 Jun 2022 14:10:50 +0200
+ -- Guillem Jover <guillem@debian.org>  Sun, 04 Sep 2022 22:57:18 +0200
 
 dupload (2.9.8) unstable; urgency=medium
 
