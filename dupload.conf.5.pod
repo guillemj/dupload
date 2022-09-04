@@ -2,7 +2,7 @@
 # Copyright © 1999 Stephane Bortzmeyer
 # Copyright © 2002, 2003 Josip Rodin <joy-packages@debian.org>
 # Copyright © 2011 Frank Lichtenheld <djpig@debian.org>
-# Copyright © 2017, 2019-2020 Guillem Jover <guillem@debian.org>
+# Copyright © 2017, 2019-2020, 2022 Guillem Jover <guillem@debian.org>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by

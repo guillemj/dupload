@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 #
-# Copyright © 2016-2017, 2019 Guillem Jover <guillem@debian.org>
+# Copyright © 2016-2017, 2019-2020 Guillem Jover <guillem@debian.org>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
