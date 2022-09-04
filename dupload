@@ -367,6 +367,7 @@ $host or fatal('Need host to upload to. (See --to option or the default_host con
         $ssh_target .= "$fqdn:$incoming";
         $ssh_login = "-l $login" if defined $login;
         $scp_options = ' -q' if $quiet;
+        $scp_options .= " $options" if length $options;
     }
 
     $passwd_cmd = $nick->{passwordcmd};
@@ -786,7 +787,7 @@ JOB: foreach my $job (sort keys %files) {
             }
         } elsif ($method eq 'scp') {
             $mode = (stat $file)[2] & 07777;
-            method_run("scp -p $scp_options $options $file $ssh_target");
+            method_run("scp -p $scp_options $file $ssh_target");
 
             # Small optimization.
             if ($dochmode && $mode != $filemode) {
@@ -871,7 +872,7 @@ JOB: foreach my $job (sort keys %files) {
         $subcmd .= "chmod $filemode @copiedfiles;" if $wrong_mode;
 
         p("\n");
-        method_run("scp $scp_options $options @copiedfiles $ssh_target",
+        method_run("scp $scp_options @copiedfiles $ssh_target",
             cleanup => sub { unlink $log{$job} },
         );
     } elsif ($method eq 'rsync') {
