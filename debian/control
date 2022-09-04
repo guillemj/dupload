@@ -12,12 +12,14 @@ Build-Depends:
  dh-sequence-bash-completion,
  aspell <pkg.dupload.author-tests>,
  aspell-en <pkg.dupload.author-tests>,
+ libio-socket-ssl-perl <pkg.dupload.author-tests>,
  libtest-minimumversion-perl <pkg.dupload.author-tests>,
  libtest-perl-critic-perl <pkg.dupload.author-tests>,
  libtest-pod-perl <pkg.dupload.author-tests>,
  libtest-spelling-perl <pkg.dupload.author-tests>,
  libtest-strict-perl <pkg.dupload.author-tests>,
  libtest-synopsis-perl <pkg.dupload.author-tests>,
+ liburi-perl <pkg.dupload.author-tests>,
  shellcheck <pkg.dupload.author-tests>,
 Build-Depends-Indep:
  perl,
@@ -30,10 +32,13 @@ Depends:
  ${perl:Depends},
  libdpkg-perl,
 Recommends:
+ libio-socket-ssl-perl,
+ liburi-perl,
  openssh-client | ssh,
 Suggests:
  default-mta | mail-transport-agent,
  lintian,
+ secret-tool,
 Description: Debian package upload tool
  dupload will automagically upload Debian packages to a remote host with
  a Debian upload queue. The default host is configurable, along with the

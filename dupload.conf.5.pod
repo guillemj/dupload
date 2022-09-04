@@ -48,12 +48,13 @@ FQDN will be used instead.
 =item B<method> [optional]
 
 The transfer method. The available methods are: B<ftp>
-(which is the default), B<scp>, B<scpb>, B<rsync> (over SSH) and
-B<copy> (local filesystem).
+(which is the default), B<https>, B<http>, B<scp>, B<scpb>,
+B<rsync> (over SSH) and B<copy> (local filesystem).
 
 If you are using an upload queue, use B<ftp> because it is fast.
-If you are using an authenticated host, B<always> use B<scp> or B<rsync>
-via SSH, because B<ftp> transmits the password in clear text.
+If you are using an authenticated host, B<always> use B<https>, or one
+of B<scp> or B<rsync> via SSH, because B<ftp> transmits the password in
+clear text.
 
 For B<scp> and B<rsync> to work properly, you have to setup the remote
 and local host to establish a ssh/slogin connection using F<.shosts/.rhosts>
@@ -73,6 +74,7 @@ For B<ftp> the default is B<anonymous>, which should work with firewall
 logins too.
 For B<scp>, B<scpb> and B<rsync> the default is delegated to SSH and its
 own configuration.
+For B<http> and B<https> there is no default.
 
 =item B<passwordcmd> [optional] (since 2.9.9)
 

@@ -35,6 +35,7 @@ use Dpkg::Path qw(find_command);
 use File::Basename;
 use File::Copy;
 use Net::FTP;
+use HTTP::Tiny;
 
 #
 # More or less configurable constants.
@@ -83,6 +84,7 @@ my $mta = '/usr/sbin/sendmail';
 my $ssh_target;
 my $ssh_login = q{};
 my $scp_options = q{};
+my $http_uri = q{};
 
 #
 # Global variables
@@ -102,6 +104,7 @@ my %all_packages;
 # Variables per host.
 my $fqdn;
 my $ftp;
+my $http;
 my $dinstall_runs;
 my $passive;
 my $nomail;
@@ -365,6 +368,31 @@ $host or fatal('Need host to upload to. (See --to option or the default_host con
         } else {
             undef $passwd;
         }
+    }
+    if ($method eq 'http' or $method eq 'https') {
+        eval {
+            require URI;
+            require URI::Escape;
+            1;
+        } or do {
+            fatal('HTTP auth in use but missing URI and/or URI::Escape modules');
+        };
+        URI->import();
+        URI::Escape->import();
+
+        $login = $nick->{login};
+
+        # Do not accept passwords in configuration file.
+        if (defined $nick->{password}) {
+            fatal('password not allowed in configuration; ' .
+                  'use a passwordcmd or type it on the prompt');
+        }
+        undef $passwd;
+
+        $incoming =~ s{^/*}{}g;
+        $incoming =~ s{/*$}{}g;
+
+        $http_uri = URI->new("$method://$fqdn/$incoming");
     }
     if ($method eq 'scp' or $method eq 'scpb' or $method eq 'rsync') {
         $login = $nick->{login};
@@ -702,6 +730,31 @@ if ($method eq 'ftp') {
         p("+ ftp_open($fqdn, $login, $passwd)\n");
         p("+ ftp::cwd($incoming\n");
     }
+} elsif ($method eq 'http' || $method eq 'https') {
+    p("Uploading ($method) to $host ($fqdn)\n");
+
+    if (defined $login and not defined $passwd) {
+        if (!$dry) {
+            $passwd = getpass();
+
+            my $http_user = uri_escape_utf8($login);
+            my $http_pass = uri_escape_utf8($passwd);
+            $http_uri->userinfo("$http_user:$http_pass");
+        } else {
+            p("+ getpass()\n");
+        }
+    }
+    if ($method eq 'https' and not HTTP::Tiny::can_ssl()) {
+        fatal('Method https requested but missing IO::Socket::SSL module');
+    }
+    if (!$dry) {
+        $http = HTTP::Tiny->new(
+            agent => "dupload/$version",
+            verify_SSL => 1,
+        );
+    } else {
+        p("+ http_open()\n");
+    }
 } elsif ($method eq 'scp' || $method eq 'scpb') {
     p("Uploading ($method) to $host ($fqdn)\n");
 } elsif ($method eq 'rsync') {
@@ -754,6 +807,16 @@ JOB: foreach my $job (sort keys %files) {
                 }
             } else {
                 p("\n+ ftp::put($file)");
+            }
+        } elsif ($method eq 'http' or $method eq 'https') {
+            unless ($dry) {
+                my $res = http_upload($http_uri, $file);
+                unless ($res->{success}) {
+                    $http->delete("$http_uri/$file");
+                    fatal("Cannot upload $file: $res->{reason}");
+                }
+            } else {
+                p("\n+ http::put($file)");
             }
         } elsif ($method eq 'scp') {
             $mode = (stat $file)[2] & 07777;
@@ -1094,6 +1157,32 @@ sub info_field
     printf "%-14s: %s\n", $field, $value // '';
 
     return;
+}
+
+sub http_upload
+{
+    my ($uri, $file) = @_;
+
+    open my $fh, '<', $file or fatal("cannot open file $file");
+
+    my $http_content_feeder = sub {
+        my $buf;
+        my $rc = read $fh, $buf, 4096;
+        fatal("Cannot read  $file: $!") unless defined $rc;
+        return if $rc == 0;
+        return $buf;
+    };
+
+    my $res = $http->put("$uri/$file", {
+        headers => {
+            'content-length' => (stat $fh)[7],
+        },
+        content => $http_content_feeder,
+    });
+
+    close $fh;
+
+    return $res;
 }
 
 # Display known host information.

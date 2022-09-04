@@ -9,7 +9,6 @@ dupload TODO
 
 * Add new uploader methods:
   - FTP via HTTP proxy.
-  - HTTP, HTTPS.
   - SFTP.
 
 * Switch to use libdpkg-perl Perl modules.
