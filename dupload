@@ -968,7 +968,6 @@ sub announce_if_necessary
 {
     my ($job) = @_;
     my ($opt_fullname) = " -F '($fullname)'";
-    my ($msg);
 
     return if not announce_is_sent($job);
 
@@ -989,7 +988,7 @@ sub announce_if_necessary
                   ($fullname ? $opt_fullname : q{}) .
                   " @to";
 
-    $msg = "\n announcing to $to";
+    my $msg = "\n announcing to $to";
     if ($cc) {
         $mta_cmd .= q{ } . $cc;
         $msg .= " and $cc";
