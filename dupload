@@ -735,7 +735,7 @@ JOB: foreach my $job (sort keys %files) {
     my @files = @{$files{$job}};
     my $mode;
     my $batchmode;
-    my $copiedfiles = qw{};
+    my @copiedfiles;
 
     my ($package, $version, $arch) = (split /_/, $job, 3);
     my ($upstream, $debian) = (split /-/, $version, 2);
@@ -793,7 +793,7 @@ JOB: foreach my $job (sort keys %files) {
                 method_run("ssh -x $ssh_login $fqdn chmod $filemode $incoming/$file");
             }
         } elsif ($method eq 'scpb' or $method eq 'rsync') {
-            $copiedfiles .= "$file ";
+            push @copiedfiles, $file;
             $mode = (stat $file)[2] & 07777;
             # Small optimization.
             if ($dochmode && $mode != $filemode) {
@@ -868,10 +868,10 @@ JOB: foreach my $job (sort keys %files) {
     my $subcmd;
 
     if ($method eq 'scpb') {
-        $subcmd .= "chmod $filemode $copiedfiles;" if $wrong_mode;
+        $subcmd .= "chmod $filemode @copiedfiles;" if $wrong_mode;
 
         p("\n");
-        method_run("scp $scp_options $options $copiedfiles $ssh_target",
+        method_run("scp $scp_options $options @copiedfiles $ssh_target",
             cleanup => sub { unlink $log{$job} },
         );
     } elsif ($method eq 'rsync') {
@@ -880,21 +880,21 @@ JOB: foreach my $job (sort keys %files) {
         $rsync_opts .= " --chmod=F$filemode" if $wrong_mode;
 
         p("\n");
-        method_run("rsync --partial -Ltze ssh $rsync_opts -x $copiedfiles $ssh_target",
+        method_run("rsync --partial -Ltze ssh $rsync_opts -x @copiedfiles $ssh_target",
             cleanup => sub { unlink $log{$job} },
         );
     }
 
     if ($batchmode) {
         if (defined $queuedir and length $queuedir > 0) {
-            $subcmd .= "mv $copiedfiles $queuedir;";
+            $subcmd .= "mv @copiedfiles $queuedir;";
         }
         if (defined $subcmd) {
             method_run("ssh -x $ssh_login $fqdn 'cd $incoming;$subcmd'");
         }
 
         unless ($dry) {
-            log_job($log{$job}, map { "u $_ $fqdn" } split / /, $copiedfiles);
+            log_job($log{$job}, map { "u $_ $fqdn" } @copiedfiles);
         } else {
             p("\n+ log to $log{$job}\n");
         }
