@@ -54,6 +54,8 @@ my $keep = 0;
 # Do not talk too much.
 my $quiet = 0;
 
+# The configuration files that have been loaded.
+my @configfiles_loaded;
 # Specifies an alternative configuration file to read.
 my $configfile = undef;
 
@@ -205,6 +207,9 @@ GetOptions qw(
 
 $configfile = $opt_configfile;
 configure($configfile) if defined $configfile;
+if (@configfiles_loaded == 0) {
+    fatal('No configuration files');
+}
 
 $dry = defined $opt_no;
 $mailonly = defined $opt_mailonly;
@@ -1088,9 +1093,8 @@ sub configure(@)
         -r _ or next;
         -s _ or next;
         do $file or fatal("$@");
-        push @read, $file;
+        push @configfiles_loaded, $file;
     }
-    @read or fatal('No configuration files');
 
     return;
 }
