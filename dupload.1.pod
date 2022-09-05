@@ -228,6 +228,8 @@ Prints version and exits.
 
 =item F<~/.dupload.conf>
 
+=item B<--configfile> I<config-file>
+
 The configuration files are loaded if available in the order listed,
 overriding previous files.
 
