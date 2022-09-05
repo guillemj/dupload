@@ -118,9 +118,16 @@ mails instead.
 
 =over 12
 
-=item B<-d>, B<--debug> [I<level>]
+=item B<-t>, B<--to> I<nickname>
 
-Enable more verbose output from the FTP module.
+Upload to I<nickname>'d host.  I<nickname> is the key for doing lookups
+in the config file. You can use the B<default_host> configuration option
+to specify a host without B<--to>.
+
+=item B<-c>, B<--configfile> I<filename>
+
+Read the file I<filename> as a configuration file, in addition to the global
+configuration file.
 
 =item B<-f>, B<--force>
 
@@ -130,15 +137,27 @@ Upload regardless of the transfers logged as already completed.
 
 Keep going, skipping packages whose checksums does not match.
 
-=item B<-c>, B<--configfile> I<filename>
+=item B<-q>, B<--quiet>
 
-Read the file I<filename> as a configuration file, in addition to the global
-configuration file.
+Be quiet, i.e., suppress normal output and progress bars.
+
+=item B<-d>, B<--debug> [I<level>]
+
+Enable more verbose output from the FTP module.
 
 =item B<--no>
 
 Dry run, no files are changed, no upload is attempted, only tell
 what we would do.
+
+=item B<--mta> I<pathname>
+
+Use I<pathname> as the sendmail compatible MTA.
+The MTA specified must support the B<-f> option to set the envelope sender
+address, and the B<-F> option to set the sender's full name.
+The default is F</usr/sbin/sendmail>.
+
+Since version 2.9.8.
 
 =item B<--nomail>
 
@@ -151,15 +170,6 @@ default implied for all hosts with the B<dinstall_runs> option set to 1.
 Acts as if B<--no> has been specified, but sends the announcements,
 unconditionally.
 
-=item B<--mta> I<pathname>
-
-Use I<pathname> as the sendmail compatible MTA.
-The MTA specified must support the B<-f> option to set the envelope sender
-address, and the B<-F> option to set the sender's full name.
-The default is F</usr/sbin/sendmail>.
-
-Since version 2.9.8.
-
 =item B<--noarchive>
 
 Adds an B<X-No-Archive: yes> header so that the announcement will not be
@@ -171,16 +181,6 @@ file.
 Print the E<quot>databaseE<quot> as read from the config files and exit.
 If a host is specified via option B<--to>, only this host's entry is
 displayed.
-
-=item B<-q>, B<--quiet>
-
-Be quiet, i.e., suppress normal output and progress bars.
-
-=item B<-t>, B<--to> I<nickname>
-
-Upload to I<nickname>'d host.  I<nickname> is the key for doing lookups
-in the config file. You can use the B<default_host> configuration option
-to specify a host without B<--to>.
 
 =item B<--help>
 
