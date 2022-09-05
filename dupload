@@ -731,8 +731,6 @@ if ($method eq 'ftp') {
         p("+ ftp::cwd($incoming\n");
     }
 } elsif ($method eq 'http' || $method eq 'https') {
-    p("Uploading ($method) to $host ($fqdn)\n");
-
     if (defined $login and not defined $passwd) {
         if (!$dry) {
             $passwd = getpass();
@@ -747,6 +745,8 @@ if ($method eq 'ftp') {
     if ($method eq 'https' and not HTTP::Tiny::can_ssl()) {
         fatal('Method https requested but missing IO::Socket::SSL module');
     }
+
+    p("Uploading ($method) to $host ($fqdn)\n");
     if (!$dry) {
         $http = HTTP::Tiny->new(
             agent => "dupload/$version",
