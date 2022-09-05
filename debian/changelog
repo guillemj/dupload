@@ -1,3 +1,9 @@
+dupload (2.9.11) UNRELEASED; urgency=medium
+
+  *
+
+ -- Guillem Jover <guillem@debian.org>  Tue, 06 Sep 2022 01:00:44 +0200
+
 dupload (2.9.10) unstable; urgency=medium
 
   * Print «Uploading job» for http/https methods after password prompt.
