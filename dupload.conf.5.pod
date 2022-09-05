@@ -347,4 +347,16 @@ overriding previous files.
 
 Those of L<Net::FTP> for the B<ftp> method.
 
+=item B<http_proxy> or B<HTTP_PROXY>
+
+=item B<https_proxy> or B<HTTPS_PROXY>
+
+=item B<all_proxy> or B<ALL_PROXY>
+
+=item B<no_proxy>
+
+=item B<REQUEST_METHOD>
+
+Those of L<HTTP::Tiny> for the B<http> and B<https> methods.
+
 =back
