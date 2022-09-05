@@ -60,6 +60,9 @@ clean:
 check:
 	prove -Ilib
 
+authorcheck:
+	AUTHOR_TESTING=1 $(MAKE) check
+
 installcheck:
 	DUPLOAD_PROG="$(shell command -v dupload)" prove -Ilib
 
