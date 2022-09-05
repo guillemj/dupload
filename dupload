@@ -369,6 +369,9 @@ $host or fatal('Need host to upload to. (See --to option or the default_host con
             undef $passwd;
         }
     }
+    if ($method eq 'https' and not HTTP::Tiny::can_ssl()) {
+        fatal('Method https requested but missing IO::Socket::SSL module');
+    }
     if ($method eq 'http' or $method eq 'https') {
         eval {
             require URI;
@@ -741,9 +744,6 @@ if ($method eq 'ftp') {
         } else {
             p("+ getpass()\n");
         }
-    }
-    if ($method eq 'https' and not HTTP::Tiny::can_ssl()) {
-        fatal('Method https requested but missing IO::Socket::SSL module');
     }
 
     p("Uploading ($method) to $host ($fqdn)\n");
