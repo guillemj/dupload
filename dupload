@@ -82,8 +82,8 @@ my $mta = '/usr/sbin/sendmail';
 
 # Method specific variables.
 my $ssh_target;
-my $ssh_login = q{};
-my $scp_options = q{};
+my @ssh_login;
+my @scp_options;
 my $http_uri = q{};
 
 #
@@ -371,9 +371,9 @@ $host or fatal('Need host to upload to. (See --to option or the default_host con
         $login = $nick->{login};
         $ssh_target = "$login\@" if defined $login;
         $ssh_target .= "$fqdn:$incoming";
-        $ssh_login = "-l $login" if defined $login;
-        $scp_options = ' -q' if $quiet;
-        $scp_options .= " @options" if @options;
+        push @ssh_login, ('-l', $login) if defined $login;
+        push @scp_options, qw(-q) if $quiet;
+        push @scp_options, @options;
     }
 
     $passwd_cmd = $nick->{passwordcmd};
@@ -793,11 +793,11 @@ JOB: foreach my $job (sort keys %files) {
             }
         } elsif ($method eq 'scp') {
             $mode = (stat $file)[2] & 07777;
-            method_run("scp -p $scp_options $file $ssh_target");
+            method_run("scp -p @scp_options $file $ssh_target");
 
             # Small optimization.
             if ($dochmode && $mode != $filemode) {
-                method_run("ssh -x $ssh_login $fqdn chmod $filemode $incoming/$file");
+                method_run("ssh -x @ssh_login $fqdn chmod $filemode $incoming/$file");
             }
         } elsif ($method eq 'scpb' or $method eq 'rsync') {
             push @copiedfiles, $file;
@@ -845,7 +845,7 @@ JOB: foreach my $job (sort keys %files) {
                     p("\n+ ftp::rename($file, $queuedir/$file)");
                 }
             } elsif ($method eq 'scp') {
-                method_run("ssh -x $ssh_login $fqdn \"mv $incoming/$file $queuedir/$file\"");
+                method_run("ssh -x @ssh_login $fqdn \"mv $incoming/$file $queuedir/$file\"");
             } elsif ($method eq 'copy') {
                 unless ($dry) {
                     move("$incoming/$file", "$queuedir/$file")
@@ -878,7 +878,7 @@ JOB: foreach my $job (sort keys %files) {
         $subcmd .= "chmod $filemode @copiedfiles;" if $wrong_mode;
 
         p("\n");
-        method_run("scp $scp_options @copiedfiles $ssh_target",
+        method_run("scp @scp_options @copiedfiles $ssh_target",
             cleanup => sub { unlink $log{$job} },
         );
     } elsif ($method eq 'rsync') {
@@ -897,7 +897,7 @@ JOB: foreach my $job (sort keys %files) {
             $subcmd .= "mv @copiedfiles $queuedir;";
         }
         if (defined $subcmd) {
-            method_run("ssh -x $ssh_login $fqdn 'cd $incoming;$subcmd'");
+            method_run("ssh -x @ssh_login $fqdn 'cd $incoming;$subcmd'");
         }
 
         unless ($dry) {
