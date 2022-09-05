@@ -85,7 +85,20 @@ foobar.announce.
 
 =back
 
-=head2 FTP login and password
+=head2 Upload methods
+
+The default transfer method is B<ftp>.
+Alternative methods are B<http>, B<https>, B<scp>/SSH, B<scpb>/SSH,
+B<rsync>/SSH and B<copy>.
+
+If you are using an upload queue, use B<ftp> because it is fast.
+If you are using an authenticated host, B<always> use B<https>, or one of
+B<scp> or B<rsync> via SSH, because B<ftp> transmits the password in clear
+text.
+
+=over 2
+
+=item B<ftp>
 
 If no login (username) is defined in the configuration file,
 B<anonymous> is used.  The password is derived from your
@@ -97,27 +110,32 @@ For logins other than B<anonymous>, you are asked for
 the password.  For security reasons there is no way to supply it via
 the command-line or the environment.
 
-=head2 ftp / http / https / scp / rsync / copy
+=item B<http> / B<https>
 
-The default transfer method is B<ftp>.
-Alternative methods are B<http>, B<https>, B<scp>/SSH, B<rsync>/SSH and
-B<copy>.
+There is no default login nor password.
+If you specify a login, a password will be fetched from B<passwordcmd> or
+if that is not defined via the Secret Service interface, otherwise it will
+be prompted.
 
-For B<scp> and B<rsync>, the default login is delegated to SSH and its own
-configuration.
+=item B<scp> / B<scpb>
+
+The default login is delegated to SSH and its own configuration.
 
 The B<scp>/SSH method only works properly if no password is required
 (see B<ssh>(1)).
 When you use B<scp>, it is recommended to set the "method" keyword to
 B<scpb>, which will transfer all files in a batch.
 
+=item B<rsync>
+
+The default login is delegated to SSH and its own configuration.
+
+=item B<copy>
+
 The B<copy> method works by simply copying the files to another directory
 in the local filesystem.
 
-If you are using an upload queue, use B<ftp> because it is fast.
-If you are using an authenticated host, B<always> use B<https>, or one of
-B<scp> or B<rsync> via SSH, because B<ftp> transmits the password in clear
-text.
+=back
 
 =head2 Announcement addresses
 
