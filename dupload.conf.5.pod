@@ -179,7 +179,7 @@ Deprecated alias for:
 
 =item B<fullname> [optional]
 
-Your full name, one that should appear in the announcement;
+Your full name, one that should appear in the announcement.
 
 If you leave this setting empty, the default will depend on your mail
 system. Usually the full name will be copied from the GCOS field in
@@ -248,7 +248,7 @@ mail announcements. Default is 0 (false), set it to 1 to enable it.
 Hooks are a powerful way to add actions which will be run before or
 after a dupload (like the preinst and postinst script of B<dpkg>).
 
-You have two sort of hooks: pre-upload and post-upload. Both are simple
+You have two sorts of hooks: pre-upload and post-upload. Both are simple
 shell commands (executed by C<sh -c> so you can use any shell tricks).
 Pre-uploads are
 always run (even in dry mode) and stop B<dupload> if they fail
@@ -307,7 +307,7 @@ Host specific hooks override the global ones for each category.
 
 =head2 Examples
 
-This one runs B<lintian> before uploading. It is global and guarantee
+This one runs B<lintian> before uploading. It is global and guarantees
 that you will always upload lintian-clean packages (thanks to B<lintian>
 return status).
 

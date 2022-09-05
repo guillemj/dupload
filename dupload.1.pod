@@ -85,7 +85,7 @@ the configuration file.
 
 For logins other than B<anonymous>, you are asked for
 the password.  For security reasons there is no way to supply it via
-the commandline or the environment.
+the command-line or the environment.
 
 =head2 ftp / http / https / scp / rsync / copy
 
