@@ -15,6 +15,7 @@ EXTRA_FILES = \
   hooks/openpgp-check \
   hooks/debian-security-auth \
   hooks/debian-source-only \
+  hooks/debian-transition \
   hooks/debian-next-dinstall \
   $(nil)
 
@@ -57,6 +58,7 @@ install:	all
 	$(inst_data) $(MAN1) $(DESTDIR)$(man1dir)
 	$(inst_data) $(MAN5) $(DESTDIR)$(man5dir)
 	$(inst_script) $(EXTRA_FILES) $(DESTDIR)$(extradir)
+	$(repl_script) $(DESTDIR)$(extradir)/debian-transition
 	$(inst_data) dupload.conf $(DESTDIR)$(confdir)
 
 clean:

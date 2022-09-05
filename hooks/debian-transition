@@ -1,0 +1,135 @@
+#!/usr/bin/perl
+#
+# Copyright © 2022-2024 Guillem Jover <guillem@debian.org>
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#
+
+use strict;
+use warnings;
+
+use List::Util qw(none first);
+use HTTP::Tiny;
+use Dpkg::ErrorHandling;
+use Dpkg::Control;
+
+eval {
+    require YAML::XS;
+    1;
+} or do {
+    warning('missing YAML::XS module, skipping transitions checks');
+    exit 0;
+};
+
+my $version = '2.x';
+
+# XXX: There is another potential source of data for transitions checks
+#   for uploads that would get rejected anyway, but it is currently not
+#   widely used, revisit if this changes.
+# Ref: https://ftp-master.debian.org/transitions.yaml
+# Doc: https://lists.debian.org/debian-release/2008/04/msg00282.html
+
+my $url_base = 'https://release.debian.org/transitions';
+my $url_packages = "$url_base/export/packages.yaml";
+my $url_ongoing = "$url_base/html";
+
+my $changes_path = $ARGV[0];
+
+my $changes = Dpkg::Control->new(type => CTRL_FILE_CHANGES);
+$changes->load($changes_path);
+my $source = $changes->{Source};
+my @arches = split ' ', $changes->{Architecture};
+my @dists = split ' ', $changes->{Distribution};
+
+if (none { $_ eq 'source' } @arches) {
+    # Not a sourceful upload, ignore it.
+    exit 0;
+}
+
+my %dists = map { $_ => 1 } qw(
+    unstable
+    sid
+);
+if (none { exists $dists{$_} } @dists) {
+    # Not an unstable upload, ignore it.
+    exit 0;
+}
+
+print "Checking Debian transitions...";
+
+my $http = HTTP::Tiny->new(
+    agent => "dupload/$version",
+    verify_SSL => 1,
+);
+my $res = $http->get($url_packages);
+if (not $res->{success}) {
+    print "\n";
+    warning("cannot fetch transitions information: $res->{reason}");
+    prompt();
+}
+
+my $yaml = YAML::XS::Load($res->{content});
+
+my $entry = first { $_->{name} eq $source } @{$yaml};
+if ($entry) {
+    my @ongoing = join "\n  ", sort map {
+        "<$url_ongoing/$_->[0]>"
+    } grep {
+        $_->[1] eq 'ongoing'
+    } @{$entry->{list}};
+
+    if (@ongoing > 0) {
+        print "\n";
+        print <<"WARN";
+
+Warning: Source package $source is part of ongoing transitions:
+
+  @ongoing
+
+If the upload does not solve issues caused by these transitions, then it
+might disrupt them by adding delays or entangling them. For more information,
+please read:
+
+  <https://wiki.debian.org/Teams/ReleaseTeam/TransitionUploadHook>
+
+Note: If you are aware of this and do not want to be warned, you can disable
+this hook from the configuration file, skip it with --skip-hooks or set the
+one-off environment variable DUPLOAD_SKIP_HOOKS, or alternatively you can
+reply to the following prompt.
+
+WARN
+        prompt();
+    }
+} else {
+    print "not found in any.\n";
+}
+
+sub prompt
+{
+    my $accept = 'yes';
+    print "Continue anyway? ($accept/NO) ";
+
+    my $prompt = <STDIN>;
+    chomp $prompt;
+
+    if ($prompt eq $accept) {
+        print "Ok, continuing anyway with the upload.\n";
+        print "\n";
+        exit 0;
+    } else {
+        warn "Ok, aborting the upload.\n";
+        warn "\n";
+        exit 1;
+    }
+}

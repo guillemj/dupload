@@ -35,6 +35,7 @@ Depends:
 Recommends:
  libio-socket-ssl-perl,
  liburi-perl,
+ libyaml-libyaml-perl,
  openssh-client | ssh,
 Suggests:
  default-mta | mail-transport-agent,
