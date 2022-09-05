@@ -1,0 +1,37 @@
+dupload - Debian package upload tool
+
+This tool will automagically upload Debian packages to a remote host with
+a Debian upload queue. The default host is configurable, along with the
+upload method and a lot of other things. All uploads are logged.
+
+
+Releases
+--------
+
+The current legacy, stable and development releases can be found at:
+
+  <https://deb.debian.org/debian/pool/main/d/dupload/>
+
+For older releases check:
+
+  <https://snapshot.debian.org/package/dupload/>
+
+
+Source Repository
+-----------------
+
+The primary repository can be browsed and cloned from:
+
+  <https://git.dpkg.org/git/dpkg/dupload.git>
+
+
+Mailing List
+------------
+
+The subscription interface and web archives can be found at:
+
+  <https://lists.debian.org/debian-dpkg/>
+
+The mailing list address is (no subscription required to post):
+
+  debian-dpkg@lists.debian.org
