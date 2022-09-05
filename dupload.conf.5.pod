@@ -292,7 +292,7 @@ Hooks are defined in two Perl hashes, C<%preupload> and C<%postupload>, each
 indexed by category. In addition to the global hashes, each host entry has
 two fields with the same names, for the host-specific hooks.
 
-Hooks are defined as list reference with each item executed in sequence.
+Hooks are defined as array references with each item executed in sequence.
 Note: For backwards compatibility with old configurations they can be
 defined as a simple scalar, even though they will emit a warning, but
 this support will be dropped after the next major Debian release.
