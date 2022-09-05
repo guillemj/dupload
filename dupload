@@ -882,12 +882,14 @@ JOB: foreach my $job (sort keys %files) {
             cleanup => sub { unlink $log{$job} },
         );
     } elsif ($method eq 'rsync') {
-        my $rsync_opts = "@options";
-        $rsync_opts .= ' -v' if not $quiet;
-        $rsync_opts .= " --chmod=F$filemode" if $wrong_mode;
+        my @rsync_opts;
+
+        push @rsync_opts, '-v' if not $quiet;
+        push @rsync_opts, "--chmod=F$filemode" if $wrong_mode;
+        push @rsync_opts, @options;
 
         p("\n");
-        method_run("rsync --partial -Ltze ssh $rsync_opts -x @copiedfiles $ssh_target",
+        method_run("rsync --partial -Ltze ssh @rsync_opts -x @copiedfiles $ssh_target",
             cleanup => sub { unlink $log{$job} },
         );
     }
