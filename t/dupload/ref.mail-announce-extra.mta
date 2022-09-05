@@ -1,7 +1,7 @@
 >>>>--------
 MTA exec: -f thisuser test@example.org
 >>>>--------
-X-dupload: 2.x
+X-dupload: <<<DUPLOAD_VERSION>>>
 To: test@example.org
 Subject: Uploaded pkg-src 1.0-1 (amd64) to mail-announce-extra
 

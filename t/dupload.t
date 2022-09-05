@@ -72,10 +72,12 @@ plan tests =>
     scalar @tests * (scalar @upload_files + 1)
 ;
 
-sub test_neutralize_basedir
+sub test_neutralize_variance
 {
     my ($filename, $basedir) = @_;
     my $filenamenew = "$filename.new";
+
+    return unless -e $filename;
 
     open my $fhnew, '>', $filenamenew
         or die "cannot open new $filenamenew: $!\n";
@@ -83,6 +85,7 @@ sub test_neutralize_basedir
         or die "cannot open old $filename: $!\n";
     while (<$fh>) {
         s{\Q$basedir\E}{<<<BASEDIR>>>}g;
+        s{X-dupload: .*}{X-dupload: <<<DUPLOAD_VERSION>>>}g;
         print { $fhnew } $_;
     }
     close $fh or die "cannot close $filename\n";
@@ -153,7 +156,8 @@ sub test_dupload
     my $rc = !!($ret >> 8);
     ok($rc == $opts{ref_rc}, "dupload to remote $remote exit $rc == $opts{ref_rc}");
 
-    test_neutralize_basedir($opts{cmd_stdout}, $testdir);
+    test_neutralize_variance($opts{cmd_stdout}, $testdir);
+    test_neutralize_variance($opts{cmd_mtaout}, $testdir);
 
     test_file($opts{ref_upload}, $logfile);
     test_file($opts{ref_stdout}, $opts{cmd_stdout});
