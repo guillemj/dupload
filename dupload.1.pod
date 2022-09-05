@@ -109,6 +109,11 @@ If you are using an authenticated host, B<always> use B<https>, or one of
 B<scp> or B<rsync> via SSH, because B<ftp> transmits the password in clear
 text.
 
+=head2 Announcement addresses
+
+By default, the announcement addresses are unset because dinstall sends
+mails instead.
+
 =head1 OPTIONS
 
 =over 12
@@ -205,11 +210,6 @@ Z<>.orig.tar.*, .debian.tar.*, .diff.*
 B<dupload> itself writes the log file I<package_version-debian>.upload,
 and the additional announcement files I<package>.announce,
 I<package_upstreamver>.announce, or I<package_upstreamver-debianrev>.announce.
-
-=head2 Announcement addresses
-
-By default, the announcement addresses are unset because dinstall sends
-mails instead.
 
 =head1 BUGS
 
