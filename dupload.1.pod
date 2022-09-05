@@ -50,8 +50,18 @@ F<.upload> log file.
 
 If all files of a package are processed, the F<.changes> file is mailed to the
 announcement address specified in the configuration file.  If files with
-Z<> F<package>.announce, F<package_UPSTREAMVER>.announce, or
-Z<> F<package_UPSTREAMVER-DEBIANREV>.announce exist, these files get
+
+=over
+
+=item F<package>.announce,
+
+=item F<package_UPSTREAMVER>.announce, or
+
+=item F<package_UPSTREAMVER-DEBIANREV>.announce
+
+=back
+
+exist, these files get
 prepended to the announcement. I<UPSTREAMVER> and I<DEBIANREV> are to be
 replaced with actual version numbers. For example, if your package is called
 B<foobar>, has upstream version 3.14, and Debian revision 2:
@@ -194,22 +204,42 @@ Prints version and exits.
 
 =head1 FILES
 
-=head2 Configuration
+=over
 
-The configuration files are searched as follows (and read in this
-order, overriding each other):
+=item F</etc/dupload.conf>
 
-	/etc/dupload.conf
-	~/.dupload.conf
+=item F<~/.dupload.conf>
 
-=head2 Other
+The configuration files are loaded if available in the order listed,
+overriding previous files.
 
-Various Debian package files are used by B<dupload>: .dsc, .changes, .deb,
-Z<>.orig.tar.*, .debian.tar.*, .diff.*
+=item I<package>.announce
 
-B<dupload> itself writes the log file I<package_version-debian>.upload,
-and the additional announcement files I<package>.announce,
-I<package_upstreamver>.announce, or I<package_upstreamver-debianrev>.announce.
+=item I<package_upstreamver>.announce
+
+=item I<package_upstreamver-debianrev>.announce
+
+If present, they will all be read to prepend to the announcement mail.
+
+=item F<.changes>
+
+=item F<.dsc>
+
+=item F<.orig.tar.*>
+
+=item F<.debian.tar.*>
+
+=item F<.diff.*>
+
+=item F<.deb>
+
+The F<.changes> file to upload and all of its referenced files.
+
+=item I<package_version-revision_arch>.upload
+
+The file where B<dupload> writes the upload log.
+
+=back
 
 =head1 BUGS
 

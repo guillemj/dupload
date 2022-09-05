@@ -324,16 +324,25 @@ overrides the default global hook in charge of checking the OpenPGP signatures:
 
 =head1 FILES
 
-The configuration is searched as following:
+=over
 
-	/etc/dupload.conf
-	~/.dupload.conf
+=item F</etc/dupload.conf>
 
-The latest entries override the former.
+=item F<~/.dupload.conf>
+
+The configuration files are loaded if available in the order listed,
+overriding previous files.
+
+=back
 
 =head1 ENVIRONMENT
 
-Those of L<Net::FTP> for the FTP method:
+=over
 
- FTP_FIREWALL
- FTP_PASSIVE
+=item B<FTP_FIREWALL>
+
+=item B<FTP_PASSIVE>
+
+Those of L<Net::FTP> for the B<ftp> method.
+
+=back
