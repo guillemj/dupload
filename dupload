@@ -794,11 +794,12 @@ JOB: foreach my $job (sort keys %files) {
             }
         } elsif ($method eq 'scp') {
             $mode = (stat $file)[2] & 07777;
-            method_run("scp -p @scp_options $file $ssh_target");
+            method_run([ 'scp', '-p', @scp_options, $file, $ssh_target ]);
 
             # Small optimization.
             if ($dochmode && $mode != $filemode) {
-                method_run("ssh @ssh_options $fqdn chmod $filemode $incoming/$file");
+                method_run([ 'ssh', @ssh_options, $fqdn,
+                    'chmod', $filemode, "$incoming/$file" ]);
             }
         } elsif ($method eq 'scpb' or $method eq 'rsync') {
             push @copiedfiles, $file;
@@ -846,7 +847,8 @@ JOB: foreach my $job (sort keys %files) {
                     p("\n+ ftp::rename($file, $queuedir/$file)");
                 }
             } elsif ($method eq 'scp') {
-                method_run("ssh @ssh_options $fqdn \"mv $incoming/$file $queuedir/$file\"");
+                method_run([ 'ssh', @ssh_options, $fqdn,
+                    'mv', "$incoming/$file", "$queuedir/$file" ]);
             } elsif ($method eq 'copy') {
                 unless ($dry) {
                     move("$incoming/$file", "$queuedir/$file")
@@ -879,7 +881,7 @@ JOB: foreach my $job (sort keys %files) {
         $subcmd .= "chmod $filemode @copiedfiles;" if $wrong_mode;
 
         p("\n");
-        method_run("scp @scp_options @copiedfiles $ssh_target",
+        method_run([ 'scp', @scp_options, @copiedfiles, $ssh_target ],
             cleanup => sub { unlink $log{$job} },
         );
     } elsif ($method eq 'rsync') {
@@ -892,7 +894,7 @@ JOB: foreach my $job (sort keys %files) {
         push @rsync_opts, @options;
 
         p("\n");
-        method_run("rsync @rsync_opts @copiedfiles $ssh_target",
+        method_run([ 'rsync', @rsync_opts, @copiedfiles, $ssh_target ],
             cleanup => sub { unlink $log{$job} },
         );
     }
@@ -902,7 +904,8 @@ JOB: foreach my $job (sort keys %files) {
             $subcmd .= "mv @copiedfiles $queuedir;";
         }
         if (defined $subcmd) {
-            method_run("ssh @ssh_options $fqdn 'cd $incoming;$subcmd'");
+            method_run([ 'ssh', @ssh_options, $fqdn,
+                "cd $incoming;$subcmd" ]);
         }
 
         unless ($dry) {
@@ -1290,13 +1293,13 @@ sub method_run
     my ($command, %opts) = @_;
 
     unless ($dry) {
-        system "$command";
+        system { $command->[0] } @{$command};
         if (exists $opts{cleanup}) {
             $opts{cleanup}->();
         }
-        fatal("$command failed") if $?;
+        fatal("@{$command} failed") if $?;
     } else {
-        p("\n+ $command");
+        p("\n+ @{$command}");
     }
 
     return;
