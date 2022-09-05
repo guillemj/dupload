@@ -1150,15 +1150,6 @@ sub ftp_open($$$)
     return $ftp;
 }
 
-sub info_field
-{
-    my ($field, $value) = @_;
-
-    printf "%-14s: %s\n", $field, $value // '';
-
-    return;
-}
-
 sub http_upload
 {
     my ($uri, $file) = @_;
@@ -1183,6 +1174,15 @@ sub http_upload
     close $fh;
 
     return $res;
+}
+
+sub info_field
+{
+    my ($field, $value) = @_;
+
+    printf "%-14s: %s\n", $field, $value // '';
+
+    return;
 }
 
 # Display known host information.
