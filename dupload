@@ -72,6 +72,8 @@ my $configfile = undef;
 my $host = undef;
 # Transfer method.
 my $method = 'ftp';
+# Whether the method used uploads in batches.
+my $batchmode = 0;
 # Login name.
 my $login;
 # Password.
@@ -342,6 +344,10 @@ $host or fatal('Need host to upload to. (See --to option or the default_host con
             fatal("postupload hook $category is not an array");
         }
         push @{$postupload{$category}}, @{$postupload_hooks};
+    }
+
+    if (any { $method eq $_ } qw(scpb rsync)) {
+        $batchmode = 1;
     }
 
     if ($method eq 'ftp') {
@@ -761,7 +767,6 @@ if ($method eq 'ftp') {
 JOB: foreach my $job (sort keys %files) {
     my @files = @{$files{$job}};
     my $mode;
-    my $batchmode;
     my @copiedfiles;
 
     my ($package, $version, $arch) = (split /_/, $job, 3);
@@ -827,7 +832,6 @@ JOB: foreach my $job (sort keys %files) {
             if ($dochmode && $mode != $filemode) {
                 $wrong_mode = 1;
             }
-            $batchmode = 1;
         } elsif ($method eq 'copy') {
             $mode = (stat $file)[2] & 07777;
 
@@ -851,6 +855,10 @@ JOB: foreach my $job (sort keys %files) {
             $t = 1;
         } else {
             $t = time - $t;
+        }
+
+        if ($batchmode) {
+            p(', uploading');
         }
 
         if ($queuedir) {
@@ -878,9 +886,9 @@ JOB: foreach my $job (sort keys %files) {
             }
         }
 
-        p(', ok');
-
         unless ($batchmode) {
+            p(', ok');
+
             # The batch methods do not produce the $t statistic.
             p(sprintf " (${t} s, %.2f kB/s)", $size / 1024 / ($t || 1))
                 unless $nostats;
@@ -932,7 +940,6 @@ JOB: foreach my $job (sort keys %files) {
         } else {
             p("\n+ log to $log{$job}\n");
         }
-        $batchmode = 0;
     }
 
     announce_if_necessary($job);
