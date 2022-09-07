@@ -49,7 +49,7 @@ foreach my $file (split /\n[ \t]*/, $changes->{Files}) {
 
 # If this is a non-free upload, determine whether the source is marked as
 # auto-buildable.
-if ($area eq 'non-free') {
+if ($area =~ m/^non-free/) {
     my (undef, $base_dir) = fileparse($changes_path);
 
     my $dsc = Dpkg::Control->new(type => CTRL_PKG_SRC);
@@ -85,7 +85,7 @@ disable this hook, alternatively you can reply to the following prompt.
 WARN
 }
 
-if ($to_sid && $area eq 'non-free' && $arch eq 'source' && $autobuild eq 'no') {
+if ($to_sid && $area =~ m/^non-free/ && $arch eq 'source' && $autobuild eq 'no') {
     $what = 'source';
     print <<'WARN'
 
