@@ -262,7 +262,7 @@ If present, they will all be read to prepend to the announcement mail.
 
 The F<.changes> file to upload and all of its referenced files.
 
-=item I<package_version-revision_arch>.upload
+=item I<package>B<_>I<version>B<_>I<arch>.upload
 
 The file where B<dupload> writes the upload log.
 
