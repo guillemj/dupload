@@ -38,7 +38,7 @@ Recommends:
 Suggests:
  default-mta | mail-transport-agent,
  lintian,
- secret-tool,
+ libsecret-tools,
 Description: Debian package upload tool
  dupload will automagically upload Debian packages to a remote host with
  a Debian upload queue. The default host is configurable, along with the
