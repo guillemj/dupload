@@ -57,27 +57,27 @@ B<ftp> (default)
 
 =item *
 
-B<http>
+B<http> (since 2.9.9)
 
 =item *
 
-B<https>
+B<https> (since 2.9.9)
 
 =item *
 
-B<scp>
+B<scp> (since 1.8)
 
 =item *
 
-B<scpb>
+B<scpb> (since 1.17)
 
 =item *
 
-B<rsync> (over SSH)
+B<rsync> (over SSH; since 2.4.1)
 
 =item *
 
-B<copy> (local filesystem)
+B<copy> (local filesystem; since 2.9.0)
 
 =back
 
@@ -123,7 +123,7 @@ If the command fails, then the password will be requested from a prompt.
 
 The FTP password for anonymous logins.
 
-=item B<filemode> [optional]
+=item B<filemode> [optional] (since 2.9.1)
 
 The destination files mode, in octal. If the value is B<undef>, the mode
 will not be modified. The default is B<0644>.
@@ -226,23 +226,23 @@ The host/domain name that appears as the part to the right of the B<@>
 character in the I<from>-part of the announcement. Defaults to the value
 your local MTA likes.
 
-=item B<passive> [optional]
+=item B<passive> [optional] (since 2.0)
 
 Set the passive mode for FTP transfers. Since B<dupload> uses L<Net::FTP>,
 you can also use the environment variable B<FTP_PASSIVE>.
 
-=item B<options> [optional]
+=item B<options> [optional] (since 2.6.3.1)
 
 String that will be added verbatim to the command line of any
 B<scp> or B<rsync> calls done.
 
-=item B<dinstall_runs> [optional]
+=item B<dinstall_runs> [optional] (since 2.1)
 
 Tells B<dupload> that the remote host runs dinstall (or equivalent)
 so that B<dupload> will not send a duplicate announcement mail.
 The default is 0 (false), set it to 1 to enable it.
 
-=item B<archive> [optional]
+=item B<archive> [optional] (since 2.0)
 
 If set to 0 (false), adds a B<X-No-Archive: yes> header in the announcement.
 The default is 1 (true).
@@ -253,7 +253,7 @@ The configuration files also contain the following global variables:
 
 =over 4
 
-=item B<default_host> [optional]
+=item B<default_host> [optional] (since 2.1)
 
 The default host to upload to. The default value of this variable is set
 depending on the current vendor, but if there is no configuration for that
@@ -266,7 +266,7 @@ The MTA specified must support the B<-f> option to set the envelope sender
 address, and the B<-F> option to set the sender's full name.
 The default is F</usr/sbin/sendmail>.
 
-=item B<no_parentheses_to_fullname> [optional]
+=item B<no_parentheses_to_fullname> [optional] (since 2.1)
 
 Prevents B<dupload> to add parentheses around the full name when making
 mail announcements. Default is 0 (false), set it to 1 to enable it.

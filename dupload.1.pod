@@ -110,14 +110,14 @@ For logins other than B<anonymous>, you are asked for
 the password.  For security reasons there is no way to supply it via
 the command-line or the environment.
 
-=item B<http> / B<https>
+=item B<http> (since 2.9.9) / B<https> (since 2.9.9)
 
 There is no default login nor password.
 If you specify a login, a password will be fetched from B<passwordcmd> or
 if that is not defined via the Secret Service interface, otherwise it will
 be prompted.
 
-=item B<scp> / B<scpb>
+=item B<scp> (since 1.8) / B<scpb> (since 1.17)
 
 The default login is delegated to SSH and its own configuration.
 
@@ -126,11 +126,11 @@ The B<scp>/SSH method only works properly if no password is required
 When you use B<scp>, it is recommended to set the "method" keyword to
 B<scpb>, which will transfer all files in a batch.
 
-=item B<rsync>
+=item B<rsync> (since 2.4.1)
 
 The default login is delegated to SSH and its own configuration.
 
-=item B<copy>
+=item B<copy> (since 2.9.0)
 
 The B<copy> method works by simply copying the files to another directory
 in the local filesystem.
