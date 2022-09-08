@@ -47,9 +47,39 @@ FQDN will be used instead.
 
 =item B<method> [optional]
 
-The transfer method. The available methods are: B<ftp>
-(which is the default), B<https>, B<http>, B<scp>, B<scpb>,
-B<rsync> (over SSH) and B<copy> (local filesystem).
+The transfer method. The available methods are:
+
+=over 2
+
+=item *
+
+B<ftp> (default)
+
+=item *
+
+B<http>
+
+=item *
+
+B<https>
+
+=item *
+
+B<scp>
+
+=item *
+
+B<scpb>
+
+=item *
+
+B<rsync> (over SSH)
+
+=item *
+
+B<copy> (local filesystem)
+
+=back
 
 If you are using an upload queue, use B<ftp> because it is fast.
 If you are using an authenticated host, B<always> use B<https>, or one
