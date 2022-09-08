@@ -49,41 +49,8 @@ to the server and upload. Each successfully uploaded file is recorded in the
 F<.upload> log file.
 
 If all files of a package are processed, the F<.changes> file is mailed to the
-announcement address specified in the configuration file.  If files with
-
-=over
-
-=item F<package>.announce,
-
-=item F<package_UPSTREAMVER>.announce, or
-
-=item F<package_UPSTREAMVER-DEBIANREV>.announce
-
-=back
-
-exist, these files get
-prepended to the announcement. I<UPSTREAMVER> and I<DEBIANREV> are to be
-replaced with actual version numbers. For example, if your package is called
-B<foobar>, has upstream version 3.14, and Debian revision 2:
-
-=over 2
-
-=item *
-
-If you only want the announcement to be made with only ONE upload,
-you name it I<foobar_3.14-2.announce>.
-
-=item *
-
-If you want it to be made with every upload of a particular upstream
-version, name it I<foobar_3.14.announce>.
-
-=item *
-
-If you want it made with B<every> upload of a given package, name it
-foobar.announce.
-
-=back
+announcement address specified in the configuration file, see the
+L<Annoucement> section for more details.
 
 =head2 Upload methods
 
@@ -137,7 +104,47 @@ in the local filesystem.
 
 =back
 
-=head2 Announcement addresses
+=head2 Announcement
+
+If the host has been configured to send announcement mails, the F<.changes>
+file will be sent to the specified addresses.
+
+The contents of all the following files are prepended to the announcement
+mail body, if present:
+
+=over
+
+=item I<package>B<.announce>
+
+=item I<package>B<_>I<upstream-version>B<.announce>
+
+=item I<package>B<_>I<upstream-version>B<->I<revision>B<.announce>
+
+=back
+
+Where I<upstream-version> and I<revision> are to be replaced with actual
+version numbers.
+For example, if your package is called B<foobar>, has upstream version 3.14,
+and Debian revision 2:
+
+=over 2
+
+=item *
+
+If you only want the announcement to be made with only ONE upload,
+you name it F<foobar_3.14-2.announce>.
+
+=item *
+
+If you want it to be made with every upload of a particular upstream
+version, name it F<foobar_3.14.announce>.
+
+=item *
+
+If you want it made with B<every> upload of a given package, name it
+F<foobar.announce>.
+
+=back
 
 By default, the announcement addresses are unset because dinstall sends
 mails instead.
@@ -233,11 +240,11 @@ Prints version and exits.
 The configuration files are loaded if available in the order listed,
 overriding previous files.
 
-=item I<package>.announce
+=item I<package>B<.announce>
 
-=item I<package_upstreamver>.announce
+=item I<package>B<_>I<upstream-version>B<.announce>
 
-=item I<package_upstreamver-debianrev>.announce
+=item I<package>B<_>I<upstream-version>B<->I<revision>B<.announce>
 
 If present, they will all be read to prepend to the announcement mail.
 
