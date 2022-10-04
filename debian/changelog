@@ -1,8 +1,15 @@
-dupload (2.9.11) UNRELEASED; urgency=medium
+dupload (2.9.11) unstable; urgency=medium
 
-  *
+  * hooks: Match on any section starting with non-free.
+  * Documentation:
+    - Itemize available methods in dupload.conf(5).
+    - Document when each method and configuration option was added.
+    - Move all announcement documentation into a dupload(1) subsection.
+    - Clarify .upload filename format in dupload(1).
+  * Packaging:
+    - Fix dependency on libsecret-tools.
 
- -- Guillem Jover <guillem@debian.org>  Tue, 06 Sep 2022 01:00:44 +0200
+ -- Guillem Jover <guillem@debian.org>  Tue, 04 Oct 2022 03:46:32 +0200
 
 dupload (2.9.10) unstable; urgency=medium
 
