@@ -50,7 +50,7 @@ F<.upload> log file.
 
 If all files of a package are processed, the F<.changes> file is mailed to the
 announcement address specified in the configuration file, see the
-L<Annoucement> section for more details.
+L<Announcement> section for more details.
 
 =head2 Upload methods
 
