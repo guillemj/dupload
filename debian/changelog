@@ -1,8 +1,14 @@
-dupload (2.9.12) UNRELEASED; urgency=medium
+dupload (2.9.12) unstable; urgency=medium
 
-  *
+  * Fix typo in dupload.conf.
+  * Documentation:
+    - doc: Fix typo in dupload(1).
+  * Packaging:
+    - Switch to Standards-Version 4.6.2 (no changed needed).
+    - Do not trim debian/changelog.
+    - Update copyright years.
 
- -- Guillem Jover <guillem@debian.org>  Sun, 09 Oct 2022 22:41:05 +0200
+ -- Guillem Jover <guillem@debian.org>  Sat, 07 Jan 2023 23:56:17 +0100
 
 dupload (2.9.11) unstable; urgency=medium
 
