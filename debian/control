@@ -9,6 +9,7 @@ Standards-Version: 4.6.2
 Rules-Requires-Root: no
 Build-Depends:
  debhelper-compat (= 13),
+ debhelper (>= 13.10),
  dh-sequence-bash-completion,
  aspell <pkg.dupload.author-tests>,
  aspell-en <pkg.dupload.author-tests>,
