@@ -1,3 +1,9 @@
+dupload (2.10.0) UNRELEASED; urgency=medium
+
+  *
+
+ -- Guillem Jover <guillem@debian.org>  Fri, 03 Mar 2023 00:36:25 +0100
+
 dupload (2.9.12) unstable; urgency=medium
 
   * Fix typo in dupload.conf.
