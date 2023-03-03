@@ -262,25 +262,11 @@ $host or fatal('Need host to upload to. (See --to option or the default_host con
         fatal("No mail 'to' for $nick") unless length $mail->{to};
     }
 
-    # XXX: Backwards compatibility.
-    if (defined $nick->{mailto}) {
-        w("mailto key is deprecated\n");
-        push @{$mail}, {
-            match => qr/^stable/,
-            to => $nick->{mailto},
-            cc => $nick->{cc},
-        };
-    }
-    if (defined $nick->{mailtx}) {
-        w("mailtx key is deprecated\n");
-        push @{$mail}, {
-            match => qr/^(?:unstable|experimental)/,
-            to => $nick->{mailtx} || $nick->{mailto},
-            cc => $nick->{cc},
-        };
-    }
-    if (defined $nick->{cc}) {
-        w("cc key is deprecated\n");
+    # Catch obsolete keys.
+    foreach my $key (qw(mailto mailtx cc)) {
+        if (defined $nick->{$key}) {
+            fatal("$key key is obsolete; use mail instead");
+        }
     }
 
     $dinstall_runs = $nick->{dinstall_runs};

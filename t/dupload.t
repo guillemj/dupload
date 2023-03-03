@@ -52,6 +52,7 @@ my @upload_files = qw(
 
 my @tests = qw(
     bad-no-nickname
+    bad-conf-obsolete-mailto
     bad-size-fields
     bad-size-disk
     bad-md5sums
@@ -59,7 +60,6 @@ my @tests = qw(
     bad-sha256sums
     hook-exec
     mail-announce
-    mail-announce-obsolete-mailto
     mail-announce-visible
     mail-announce-no-archive
     mail-announce-extra

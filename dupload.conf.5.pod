@@ -178,35 +178,6 @@ Email address where to send a copy address of the announcement.
 
 =back
 
-=item B<mailto> [optional, deprecated]
-
-Deprecated alias for:
-
-  $cfg{$host}{mail} = [ {
-      match => qr/^stable/,
-      to => $mailto,
-  } ];
-
-=item B<mailtx> [optional, deprecated]
-
-Deprecated alias for:
-
-  $cfg{$host}{mail} = [ {
-      match => qr/^(?:unstable|experimental)/,
-      to => $mailtx,
-  } ];
-
-
-=item B<cc> [optional, deprecated]
-
-Deprecated alias for:
-
-  $cfg{$host}{mail} = [ {
-      match => ...,
-      to => ...,
-      cc => $cc,
-  } ];
-
 =item B<fullname> [optional]
 
 Your full name, one that should appear in the announcement.
