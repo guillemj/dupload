@@ -253,8 +253,8 @@ $host or fatal('Need host to upload to. (See --to option or the default_host con
     $fqdn = $myhost if $method eq 'copy';
     $incoming = $nick->{incoming} or fatal('No incoming directory');
     $queuedir = $nick->{queuedir};
-    $distallowlist = $nick->{distallowlist} // $nick->{distwhitelist};
-    $distblocklist = $nick->{distblocklist} // $nick->{distblacklist};
+    $distallowlist = $nick->{distallowlist};
+    $distblocklist = $nick->{distblocklist};
 
     $mail = $nick->{mail} // [];
     foreach my $mail (@{$mail}) {
@@ -263,6 +263,12 @@ $host or fatal('Need host to upload to. (See --to option or the default_host con
     }
 
     # Catch obsolete keys.
+    if (defined $nick->{distwhitelist}) {
+        fatal('distwhitelist is obsolete; use distallowlist instead');
+    }
+    if (defined $nick->{distblacklist}) {
+        fatal('distblacklist is obsolete; use distblocklist instead');
+    }
     foreach my $key (qw(mailto mailtx cc)) {
         if (defined $nick->{$key}) {
             fatal("$key key is obsolete; use mail instead");

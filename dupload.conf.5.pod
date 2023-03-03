@@ -142,18 +142,10 @@ I<incoming>. Usually necessary only with some special upload queues.
 The regex of the distributions allowed for this host. This check is done
 against the B<Distribution> field in the F<.changes> file.
 
-=item B<distwhitelist> [optional, deprecated] (since 2.9.3)
-
-Deprecated alias for B<distallowlist>.
-
 =item B<distblocklist> [optional] (since 2.9.6)
 
 The regex of the distributions blocked for this host. This check is done
 against the B<Distribution> field in the F<.changes> file.
-
-=item B<distblacklist> [optional, deprecated] (since 2.9.3)
-
-Deprecated alias for B<distblocklist>.
 
 =item B<mail> [optional] (since 2.9.9)
 
