@@ -16,8 +16,6 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 
-changes="$1"
-
 set -e
 
 cat <<'WARN'
@@ -45,11 +43,4 @@ else
   echo "Not authorized, aborting the upload." >&2
   echo
   exit 1
-fi
-
-# XXX: Backwards compatibility for configurations that use a scalar instead
-# of a list ref for the preupload hooks.
-if [ "$DUPLOAD_PREUPLOAD_HOOK_SCALAR" = "yes" ]; then
-  # Chain the OpenPGP check, so that we can override the default global hook.
-  /usr/share/dupload/openpgp-check "$changes"
 fi

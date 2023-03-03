@@ -307,10 +307,8 @@ $host or fatal('Need host to upload to. (See --to option or the default_host con
         } else {
             $preupload_hooks = $config::preupload{$category};
         }
-        # XXX: Backwards compatibility.
         if (ref $preupload_hooks ne 'ARRAY') {
-            $preupload_hooks = [ $preupload_hooks ];
-            $ENV{DUPLOAD_PREUPLOAD_HOOK_SCALAR} = 'yes';
+            fatal("preupload hook $category is not an array");
         }
         push @{$preupload{$category}}, @{$preupload_hooks};
 
@@ -320,19 +318,10 @@ $host or fatal('Need host to upload to. (See --to option or the default_host con
         } else {
             $postupload_hooks = $config::postupload{$category};
         }
-        # XXX: Backwards compatibility.
         if (ref $postupload_hooks ne 'ARRAY') {
-            $postupload_hooks = [ $postupload_hooks ];
-            $ENV{DUPLOAD_POSTUPLOAD_HOOK_SCALAR} = 'yes';
+            fatal("postupload hook $category is not an array");
         }
         push @{$postupload{$category}}, @{$postupload_hooks};
-    }
-    # XXX: Backwards compatibility.
-    if (exists $ENV{DUPLOAD_PREUPLOAD_HOOK_SCALAR}) {
-        w('%preupload hooks defined as scalars are deprecated');
-    }
-    if (exists $ENV{DUPLOAD_POSTUPLOAD_HOOK_SCALAR}) {
-        w('%postupload hooks defined as scalars are deprecated');
     }
 
     if ($method eq 'ftp') {
