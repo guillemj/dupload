@@ -1,4 +1,5 @@
 dupload note: no announcement will be sent.
+hook/per-host host=hook-exec method=copy fqdn=thishost login=<no> incoming=<<<BASEDIR>>>/incoming queuedir=<no> hook=host arg="hook-exec"
 hook/per-host host=hook-exec method=copy fqdn=thishost login=<no> incoming=<<<BASEDIR>>>/incoming queuedir=<no> hook=changes arg="<<<BASEDIR>>>/work/pkg-src_1.0-1_amd64.changes"
 Uploading (copy) to thishost:<<<BASEDIR>>>/incoming
 hook/per-host host=hook-exec method=copy fqdn=thishost login=<no> incoming=<<<BASEDIR>>>/incoming queuedir=<no> hook=sourcepackage arg="pkg-src 1.0-1"
@@ -35,3 +36,4 @@ hook/per-host host=hook-exec method=copy fqdn=thishost login=<no> incoming=<<<BA
 hook/per-host host=hook-exec method=copy fqdn=thishost login=<no> incoming=<<<BASEDIR>>>/incoming queuedir=<no> hook=file arg="pkg-src_1.0-1_amd64.changes"
 hook/per-host host=hook-exec method=copy fqdn=thishost login=<no> incoming=<<<BASEDIR>>>/incoming queuedir=<no> hook=deb arg="pkg-bin_1.0-1_amd64.deb"
 hook/per-host host=hook-exec method=copy fqdn=thishost login=<no> incoming=<<<BASEDIR>>>/incoming queuedir=<no> hook=package arg="pkg-bin"
+hook/per-host host=hook-exec method=copy fqdn=thishost login=<no> incoming=<<<BASEDIR>>>/incoming queuedir=<no> hook=host arg="hook-exec"

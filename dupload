@@ -300,7 +300,7 @@ $host or fatal('Need host to upload to. (See --to option or the default_host con
         $archive = 1;
     }
 
-    foreach my $category (qw/changes sourcepackage package file deb/) {
+    foreach my $category (qw(host changes sourcepackage package file deb)) {
         my $preupload_hooks;
         if (defined $nick->{preupload}{$category}) {
             $preupload_hooks = $nick->{preupload}{$category};
@@ -431,6 +431,8 @@ foreach my $pathname (@ARGV) {
 }
 
 @changes or fatal('No changes file, so nothing to do');
+
+preupload_hook('host', [ $host ]);
 
 # Preupload code for changes files.
 foreach my $change (@changes) {
@@ -986,6 +988,8 @@ unless ($dry) {
         postupload_hook('package', [ $package, $all_packages{$package} ]);
     }
 }
+
+postupload_hook('host', [ $host ]);
 
 @skipped and w("skipped: @skipped\n");
 

@@ -330,7 +330,7 @@ Same as the B<queuedir> option.
 =back
 
 Both sorts of hooks are run for a given category: B<changes>, B<sourcepackage>,
-B<package>, B<file> or B<deb>.
+B<package>, B<file>, B<deb> and B<host>.
 
 =over 4
 
@@ -357,6 +357,11 @@ This hook is run once per uploaded file, with the file name as its parameter.
 
 This hook is run once per binary package (a F<deb> file) with
 the filename as its parameter.
+
+=item host (since 2.10.0)
+
+This hook is run once before any other pre hook and after any post hook,
+with the host name as its parameter.
 
 =back
 
