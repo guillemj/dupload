@@ -1304,7 +1304,7 @@ sub fatal
     die "$progname: error: @_\n";
 }
 
-sub run
+sub run_hook
 {
     my ($command, $args) = @_;
     my (@args) = @{$args};
@@ -1328,7 +1328,7 @@ sub preupload_hook
     return if scalar @{$preupload{$name}} == 0;
 
     foreach my $hook (@{$preupload{$name}}) {
-        if (not run($hook, $args)) {
+        if (not run_hook($hook, $args)) {
             fatal("Pre-upload \'$hook\' failed for @{$args}");
         }
     }
@@ -1343,7 +1343,7 @@ sub postupload_hook
     return if scalar @{$postupload{$name}} == 0;
 
     foreach my $hook (@{$postupload{$name}}) {
-        if (not run($hook, $args)) {
+        if (not run_hook($hook, $args)) {
             fatal("Post-upload \'$hook\' failed for @{$args}");
         }
     }
