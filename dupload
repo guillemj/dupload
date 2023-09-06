@@ -1088,7 +1088,7 @@ MAIL
             w("Cannot open extra announce $announce: $!\n");
             next;
         }
-        p " ($announce";
+        p(" ($announce");
         while ($line = <$fh_announce>) {
             print { $fh_mail } $line;
         }
