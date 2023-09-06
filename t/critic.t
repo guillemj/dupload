@@ -96,6 +96,7 @@ my @policies = qw(
     Subroutines::ProhibitManyArgs
     Subroutines::ProhibitNestedSubs
     Subroutines::ProhibitReturnSort
+    Subroutines::ProhibitSubroutinePrototypes
     Subroutines::ProhibitUnusedPrivateSubroutines
     Subroutines::ProtectPrivateSubs
     Subroutines::RequireFinalReturn

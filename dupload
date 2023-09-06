@@ -134,28 +134,6 @@ my %log;
 my %announce;
 my %extra;
 
-#
-# Prototypes
-#
-
-# Reads the config file(s).
-sub configure(@);
-# Rstablishs the ftp connection.
-sub ftp_open($$$);
-# Print the available info (for a given host).
-sub info($);
-# Bail out.
-sub fatal(@);
-# Read a password.
-sub getpass();
-# Warn (to STDERR if quiet, to STDOUT else).
-sub w(@);
-# Print (suppress if quiet, to STDOUT else).
-sub p(@);
-sub announce_if_necessary($);
-# Runs an external program and return its exit status.
-sub run($$);
-
 # Some tests on constants.
 $user or fatal('Who am I? (cannot get user identity)');
 $myhost or fatal('Who am I? (cannot get hostname)');
@@ -1024,7 +1002,7 @@ sub announce_is_sent
 }
 
 # Prepare and possibly send the mail announcement.
-sub announce_if_necessary($)
+sub announce_if_necessary
 {
     my ($job) = @_;
     my ($opt_fullname) = " -F '($fullname)'";
@@ -1119,7 +1097,7 @@ MAIL
 }
 
 # Open the FTP connection.
-sub ftp_open($$$)
+sub ftp_open
 {
     my ($remote, $user, $pass) = @_;
     my %ftp_opts;
@@ -1181,7 +1159,7 @@ sub info_field
 }
 
 # Display known host information.
-sub info($)
+sub info
 {
     my ($host) = @_;
 
@@ -1210,7 +1188,7 @@ sub info($)
 }
 
 # Read the dupload configuration files.
-sub configure(@)
+sub configure
 {
     my @conffiles = @_;
 
@@ -1265,7 +1243,7 @@ sub getpass_prompt
 }
 
 # Fetch or prompt for the login password.
-sub getpass()
+sub getpass
 {
     return getpass_cmd() // getpass_prompt();
 }
@@ -1275,7 +1253,7 @@ sub getpass()
 my $nl;
 
 # Print to STDOUT if !$quiet.
-sub p(@)
+sub p
 {
     return if $quiet;
     $nl = $_[-1] =~ /\n$/;
@@ -1284,7 +1262,7 @@ sub p(@)
 }
 
 # Warn to STDOUT if !$quiet, or to STDERR if $quiet.
-sub w(@)
+sub w
 {
     if ($quiet) {
         print { *STDERR } "$progname: warning: ", @_;
@@ -1320,13 +1298,13 @@ sub log_job
 }
 
 # Emit a fatal error and die.
-sub fatal(@)
+sub fatal
 {
     print { *STDERR } "\n";
     die "$progname: error: @_\n";
 }
 
-sub run($$)
+sub run
 {
     my ($command, $args) = @_;
     my (@args) = @{$args};
