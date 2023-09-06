@@ -1306,7 +1306,7 @@ sub fatal
 
 sub run_hook
 {
-    my ($command, $args) = @_;
+    my ($name, $command, $args) = @_;
     my (@args) = @{$args};
     my ($result);
 
@@ -1316,6 +1316,17 @@ sub run_hook
         # Substitute %1 by the first argument, etc.
         $command =~ s/\%$i/$arg/g;
     }
+
+    local $ENV{DUPLOAD_HOOK} = $name;
+    local $ENV{DUPLOAD_HOST} = $host;
+    local $ENV{DUPLOAD_METHOD} = $method;
+    local $ENV{DUPLOAD_FQDN} = $fqdn;
+    local $ENV{DUPLOAD_LOGIN} = $login;
+    local $ENV{DUPLOAD_INCOMING} = $incoming;
+    local $ENV{DUPLOAD_QUEUEDIR} = $queuedir;
+    local $ENV{DUPLOAD_SSH_OPTIONS} = $options;
+    local $ENV{DUPLOAD_FTP_PASSIVE} = $passive;
+
     system "$command";
     $result = $? >> 8;
     return !$result;
@@ -1328,7 +1339,7 @@ sub preupload_hook
     return if scalar @{$preupload{$name}} == 0;
 
     foreach my $hook (@{$preupload{$name}}) {
-        if (not run_hook($hook, $args)) {
+        if (not run_hook($name, $hook, $args)) {
             fatal("Pre-upload \'$hook\' failed for @{$args}");
         }
     }
@@ -1343,7 +1354,7 @@ sub postupload_hook
     return if scalar @{$postupload{$name}} == 0;
 
     foreach my $hook (@{$postupload{$name}}) {
-        if (not run_hook($hook, $args)) {
+        if (not run_hook($name, $hook, $args)) {
             fatal("Post-upload \'$hook\' failed for @{$args}");
         }
     }

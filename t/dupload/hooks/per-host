@@ -1,3 +1,11 @@
 #!/bin/sh
 
-echo "hook/per-host $@"
+printf 'hook/per-host '
+printf 'host=%s ' "${DUPLOAD_HOST:-<no>}"
+printf 'method=%s ' "${DUPLOAD_METHOD:-<no>}"
+printf 'fqdn=%s ' "${DUPLOAD_FQDN:-<no>}"
+printf 'login=%s ' "${DUPLOAD_LOGIN:-<no>}"
+printf 'incoming=%s ' "${DUPLOAD_INCOMING:-<no>}"
+printf 'queuedir=%s ' "${DUPLOAD_QUEUEDIR:-<no>}"
+printf 'hook=%s ' "${DUPLOAD_HOOK:-<no>}"
+printf 'arg="%s"\n' "$*"
