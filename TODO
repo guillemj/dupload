@@ -29,6 +29,5 @@ dupload TODO
   format.
 
 * Add functional tests:
-  - Hooks.
   - Other methods (ftp, scp, rsync).
   - Reupload (no-op, forced).

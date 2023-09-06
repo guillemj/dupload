@@ -57,6 +57,7 @@ my @tests = qw(
     bad-md5sums
     bad-sha1sums
     bad-sha256sums
+    hook-exec
     mail-announce
     mail-announce-obsolete-mailto
     mail-announce-visible
@@ -141,6 +142,7 @@ sub test_dupload
 
     local $ENV{DUPLOAD_LOG_TIMESTAMP} = 'Wed Feb  2 00:00:00 2022';
     local $ENV{DUPLOAD_MTA_SPOOL} = $opts{cmd_mtaout};
+    local $ENV{DUPLOAD_DATA_DIR} = rel2abs($datadir);
     local $ENV{DUPLOAD_TEST_DIR} = $testdir;
 
     my @cmd = ($dupload);
