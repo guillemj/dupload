@@ -1,8 +1,22 @@
-dupload (2.10.0) UNRELEASED; urgency=medium
+dupload (2.10.0) unstable; urgency=medium
 
-  *
+  * Add new README.
+  * Remove unnecessary slash escaping in hook substitution.
+  * Do not warn when hook arguments are not set.
+  * Pass host metadata to hooks via the environment.
+  * Add support for a new hook category to run once per host. Closes: #589198
+  * hooks: Add new debian-next-dinstall postupload hook.
+  * Reject obsolete scalar hook definitions.
+  * Reject obsolete mailto, mailtx and cc keys.
+  * Reject obsolete distwhitelist and distblacklist keys.
+  * Code internals:
+    - Call p() with parenthesis.
+    - Remove function prototypes.
+    - Rename run() to run_hook().
+  * Test suite:
+    - Add a test case for hooks.
 
- -- Guillem Jover <guillem@debian.org>  Fri, 03 Mar 2023 00:36:25 +0100
+ -- Guillem Jover <guillem@debian.org>  Sun, 10 Sep 2023 13:59:23 +0200
 
 dupload (2.9.12) unstable; urgency=medium
 
