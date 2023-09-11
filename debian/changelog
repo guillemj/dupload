@@ -1,8 +1,12 @@
-dupload (2.10.1) UNRELEASED; urgency=medium
+dupload (2.10.1) unstable; urgency=medium
 
-  *
+  * Pass version argument on its own to preupload sourcepackage hook.
+  * Use pre-computed package and version for postupload sourcepackage hook.
+  * Test suite:
+    - Check all arguments for hooks with multiple arguments.
+    - Rename arg to args in test hook.
 
- -- Guillem Jover <guillem@debian.org>  Mon, 11 Sep 2023 15:55:47 +0200
+ -- Guillem Jover <guillem@debian.org>  Mon, 11 Sep 2023 15:57:05 +0200
 
 dupload (2.10.0) unstable; urgency=medium
 
