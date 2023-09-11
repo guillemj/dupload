@@ -451,7 +451,7 @@ PACKAGE: foreach my $change (@changes) {
     $version{$job} = $version;
 
     # Preupload code for source package.
-    preupload_hook('sourcepackage', [ basename($package) . " $version" ]);
+    preupload_hook('sourcepackage', [ basename($package), $version ]);
 
     p("[ Preparing job $job from $cf");
 
