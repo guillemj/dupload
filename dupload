@@ -50,7 +50,7 @@ my $cwd = getcwd();
 
 # For somewhat more verbose output from the ftp module.
 my $debug = 0;
-# Fo it, even when already done.
+# Do it, even when already done.
 my $force = 0;
 # Keep going, even if checksum errors.
 my $keep = 0;
