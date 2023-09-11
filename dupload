@@ -951,9 +951,12 @@ if ($method eq 'ftp') {
 # Postupload code for changes files.
 unless ($dry) {
     foreach my $change (@changes) {
+        my $job = basename($change, '.changes');
+
         postupload_hook('changes', [ $change ]);
 
-        my ($package, $version, $arch) = (split /_/, $change, 3);
+        my $package = $package{$job};
+        my $version = $version{$job};
         postupload_hook('sourcepackage', [ basename($package), $version ]);
     }
 
