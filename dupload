@@ -82,7 +82,7 @@ my $mta = '/usr/sbin/sendmail';
 
 # Method specific variables.
 my $ssh_target;
-my @ssh_login;
+my @ssh_options;
 my @scp_options;
 my $http_uri = q{};
 
@@ -371,7 +371,8 @@ $host or fatal('Need host to upload to. (See --to option or the default_host con
         $login = $nick->{login};
         $ssh_target = "$login\@" if defined $login;
         $ssh_target .= "$fqdn:$incoming";
-        push @ssh_login, ('-l', $login) if defined $login;
+        push @ssh_options, qw(-x);
+        push @ssh_options, ('-l', $login) if defined $login;
         push @scp_options, qw(-q) if $quiet;
         push @scp_options, @options;
     }
@@ -797,7 +798,7 @@ JOB: foreach my $job (sort keys %files) {
 
             # Small optimization.
             if ($dochmode && $mode != $filemode) {
-                method_run("ssh -x @ssh_login $fqdn chmod $filemode $incoming/$file");
+                method_run("ssh @ssh_options $fqdn chmod $filemode $incoming/$file");
             }
         } elsif ($method eq 'scpb' or $method eq 'rsync') {
             push @copiedfiles, $file;
@@ -845,7 +846,7 @@ JOB: foreach my $job (sort keys %files) {
                     p("\n+ ftp::rename($file, $queuedir/$file)");
                 }
             } elsif ($method eq 'scp') {
-                method_run("ssh -x @ssh_login $fqdn \"mv $incoming/$file $queuedir/$file\"");
+                method_run("ssh @ssh_options $fqdn \"mv $incoming/$file $queuedir/$file\"");
             } elsif ($method eq 'copy') {
                 unless ($dry) {
                     move("$incoming/$file", "$queuedir/$file")
@@ -901,7 +902,7 @@ JOB: foreach my $job (sort keys %files) {
             $subcmd .= "mv @copiedfiles $queuedir;";
         }
         if (defined $subcmd) {
-            method_run("ssh -x @ssh_login $fqdn 'cd $incoming;$subcmd'");
+            method_run("ssh @ssh_options $fqdn 'cd $incoming;$subcmd'");
         }
 
         unless ($dry) {
