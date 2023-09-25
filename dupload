@@ -234,7 +234,7 @@ if ($opt_help) {
 "  -p, --print              Print the configuration file.\n" .
 "  -c, --configfile <file>  Use <file> as the configuration file.\n" .
 "  -q, --quiet              Enable quiet mode.\n" .
-"  -d, --debug [<level>]    Enable debug output from the FTP module.\n" .
+"  -d, --debug [<level>]    Enable debug output from ftp, scp, scpb methods.\n" .
 "      --help               Print this help message.\n" .
 "  -V, --Version            Print program version.\n"
     );
@@ -373,7 +373,9 @@ $host or fatal('Need host to upload to. (See --to option or the default_host con
         $ssh_target .= "$fqdn:$incoming";
         push @ssh_options, qw(-x);
         push @ssh_options, ('-l', $login) if defined $login;
+        push @ssh_options, qw(-v) x $debug if $debug;
         push @scp_options, qw(-q) if $quiet;
+        push @scp_options, qw(-v) x $debug if $debug;
         push @scp_options, @options;
     }
 
