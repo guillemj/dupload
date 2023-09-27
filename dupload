@@ -884,12 +884,14 @@ JOB: foreach my $job (sort keys %files) {
     } elsif ($method eq 'rsync') {
         my @rsync_opts;
 
+        push @rsync_opts, qw(--partial);
+        push @rsync_opts, qw(-Lxtze ssh);
         push @rsync_opts, '-v' if not $quiet;
         push @rsync_opts, "--chmod=F$filemode" if $wrong_mode;
         push @rsync_opts, @options;
 
         p("\n");
-        method_run("rsync --partial -Ltze ssh @rsync_opts -x @copiedfiles $ssh_target",
+        method_run("rsync @rsync_opts @copiedfiles $ssh_target",
             cleanup => sub { unlink $log{$job} },
         );
     }
