@@ -1,0 +1,20 @@
+dupload note: no announcement will be sent.
+Uploading (rsync) to example.org:<<<BASEDIR>>>/incoming
+[ Preparing job pkg-src_1.0-1_amd64 from pkg-src_1.0-1_amd64.changes
+ pkg-bin_1.0-1_amd64.deb, size ok, md5sum ok, sha1sum ok, sha256sum ok
+ pkg-src_1.0-1.debian.tar, size ok, md5sum ok, sha1sum ok, sha256sum ok
+ pkg-src_1.0-1.dsc, size ok, md5sum ok, sha1sum ok, sha256sum ok
+ pkg-src_1.0-1_amd64.buildinfo, size ok, md5sum ok, sha1sum ok, sha256sum ok
+ pkg-src_1.0.orig.tar, size ok, md5sum ok, sha1sum ok, sha256sum ok
+ pkg-src_1.0-1_amd64.changes ok ]
+Uploading (rsync) to method-rsync-direct (example.org)
+[ Uploading job pkg-src_1.0-1_amd64
+ pkg-bin_1.0-1_amd64.deb 0.0 kB, ok
+ pkg-src_1.0-1.debian.tar 0.0 kB, ok
+ pkg-src_1.0-1.dsc 0.7 kB, ok
+ pkg-src_1.0-1_amd64.buildinfo 1.1 kB, ok
+ pkg-src_1.0.orig.tar 0.0 kB, ok
+ pkg-src_1.0-1_amd64.changes 1.6 kB, ok
+
+mock-rsync --partial -Ltze ssh -v -x pkg-bin_1.0-1_amd64.deb pkg-src_1.0-1.debian.tar pkg-src_1.0-1.dsc pkg-src_1.0-1_amd64.buildinfo pkg-src_1.0.orig.tar pkg-src_1.0-1_amd64.changes example.org:<<<BASEDIR>>>/incoming
+ ]

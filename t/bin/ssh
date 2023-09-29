@@ -1,0 +1,18 @@
+#!/bin/sh
+
+set -e
+
+printf "\nmock-ssh %s\n" "$*"
+
+while [ $# -gt 0 ]; do
+  arg="$1"
+  shift
+  case "$arg" in
+    example.org)
+      # We pass the commands we need to execute just after the hostname.
+      eval $@
+
+      exit 0
+      ;;
+  esac
+done

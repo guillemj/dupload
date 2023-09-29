@@ -1,0 +1,6 @@
+#!/bin/sh
+
+set -e
+
+printf "\nmock-scp %s\n" "$*"
+mock-method-xfer "$@"

@@ -1,0 +1,6 @@
+#!/bin/sh
+
+set -e
+
+printf "\nmock-rsync %s\n" "$*"
+mock-method-xfer "$@"

@@ -1,0 +1,25 @@
+#!/bin/sh
+
+set -e
+
+: "${DUPLOAD_TEST_DIR:=t}"
+
+dest=
+
+for arg in "$@"; do
+  case "$arg" in
+    example.org:*)
+      dest="${arg##*:}"
+      dest="${dest##$DUPLOAD_TEST_DIR}"
+      ;;
+  esac
+done
+
+for arg in "$@"; do
+  case "$arg" in
+    pkg-*)
+      mkdir -p $DUPLOAD_TEST_DIR/$dest
+      cp "$arg" $DUPLOAD_TEST_DIR/$dest
+      ;;
+  esac
+done

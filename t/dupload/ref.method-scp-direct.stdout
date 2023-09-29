@@ -1,0 +1,29 @@
+dupload note: no announcement will be sent.
+Uploading (scp) to example.org:<<<BASEDIR>>>/incoming
+[ Preparing job pkg-src_1.0-1_amd64 from pkg-src_1.0-1_amd64.changes
+ pkg-bin_1.0-1_amd64.deb, size ok, md5sum ok, sha1sum ok, sha256sum ok
+ pkg-src_1.0-1.debian.tar, size ok, md5sum ok, sha1sum ok, sha256sum ok
+ pkg-src_1.0-1.dsc, size ok, md5sum ok, sha1sum ok, sha256sum ok
+ pkg-src_1.0-1_amd64.buildinfo, size ok, md5sum ok, sha1sum ok, sha256sum ok
+ pkg-src_1.0.orig.tar, size ok, md5sum ok, sha1sum ok, sha256sum ok
+ pkg-src_1.0-1_amd64.changes ok ]
+Uploading (scp) to method-scp-direct (example.org)
+[ Uploading job pkg-src_1.0-1_amd64
+ pkg-bin_1.0-1_amd64.deb 0.0 kB
+mock-scp -p pkg-bin_1.0-1_amd64.deb example.org:<<<BASEDIR>>>/incoming
+, ok
+ pkg-src_1.0-1.debian.tar 0.0 kB
+mock-scp -p pkg-src_1.0-1.debian.tar example.org:<<<BASEDIR>>>/incoming
+, ok
+ pkg-src_1.0-1.dsc 0.7 kB
+mock-scp -p pkg-src_1.0-1.dsc example.org:<<<BASEDIR>>>/incoming
+, ok
+ pkg-src_1.0-1_amd64.buildinfo 1.1 kB
+mock-scp -p pkg-src_1.0-1_amd64.buildinfo example.org:<<<BASEDIR>>>/incoming
+, ok
+ pkg-src_1.0.orig.tar 0.0 kB
+mock-scp -p pkg-src_1.0.orig.tar example.org:<<<BASEDIR>>>/incoming
+, ok
+ pkg-src_1.0-1_amd64.changes 1.6 kB
+mock-scp -p pkg-src_1.0-1_amd64.changes example.org:<<<BASEDIR>>>/incoming
+, ok ]

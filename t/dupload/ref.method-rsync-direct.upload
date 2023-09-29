@@ -1,0 +1,7 @@
+u pkg-bin_1.0-1_amd64.deb example.org Wed Feb  2 00:00:00 2022
+u pkg-src_1.0-1.debian.tar example.org Wed Feb  2 00:00:00 2022
+u pkg-src_1.0-1.dsc example.org Wed Feb  2 00:00:00 2022
+u pkg-src_1.0-1_amd64.buildinfo example.org Wed Feb  2 00:00:00 2022
+u pkg-src_1.0.orig.tar example.org Wed Feb  2 00:00:00 2022
+u pkg-src_1.0-1_amd64.changes example.org Wed Feb  2 00:00:00 2022
+s pkg-src_1.0-1_amd64.changes example.org Wed Feb  2 00:00:00 2022

@@ -66,6 +66,12 @@ my @tests = qw(
     mail-no-announce-no-extra
     method-copy-direct
     method-copy-queue
+    method-scp-direct
+    method-scp-queue
+    method-scpb-direct
+    method-scpb-queue
+    method-rsync-direct
+    method-rsync-queue
 );
 
 plan tests =>
