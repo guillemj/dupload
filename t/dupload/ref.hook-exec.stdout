@@ -20,12 +20,12 @@ hook/per-host host=hook-exec method=copy fqdn=thishost login=<no> incoming=<<<BA
 hook/per-host host=hook-exec method=copy fqdn=thishost login=<no> incoming=<<<BASEDIR>>>/incoming queuedir=<no> hook=file args="pkg-src_1.0-1_amd64.changes"
 Uploading (copy) to hook-exec (thishost)
 [ Uploading job pkg-src_1.0-1_amd64
- pkg-bin_1.0-1_amd64.deb 0.0 kB, ok (0 s, 0.00 kB/s)
- pkg-src_1.0-1.debian.tar 0.0 kB, ok (0 s, 0.00 kB/s)
- pkg-src_1.0-1.dsc 0.7 kB, ok (0 s, 0.68 kB/s)
- pkg-src_1.0-1_amd64.buildinfo 1.1 kB, ok (0 s, 1.09 kB/s)
- pkg-src_1.0.orig.tar 0.0 kB, ok (0 s, 0.00 kB/s)
- pkg-src_1.0-1_amd64.changes 1.6 kB, ok (0 s, 1.61 kB/s) ]
+ pkg-bin_1.0-1_amd64.deb 0.0 kB, ok
+ pkg-src_1.0-1.debian.tar 0.0 kB, ok
+ pkg-src_1.0-1.dsc 0.7 kB, ok
+ pkg-src_1.0-1_amd64.buildinfo 1.1 kB, ok
+ pkg-src_1.0.orig.tar 0.0 kB, ok
+ pkg-src_1.0-1_amd64.changes 1.6 kB, ok ]
 hook/per-host host=hook-exec method=copy fqdn=thishost login=<no> incoming=<<<BASEDIR>>>/incoming queuedir=<no> hook=changes args="<<<BASEDIR>>>/work/pkg-src_1.0-1_amd64.changes"
 hook/per-host host=hook-exec method=copy fqdn=thishost login=<no> incoming=<<<BASEDIR>>>/incoming queuedir=<no> hook=sourcepackage args="pkg-src 1.0-1"
 hook/per-host host=hook-exec method=copy fqdn=thishost login=<no> incoming=<<<BASEDIR>>>/incoming queuedir=<no> hook=file args="pkg-bin_1.0-1_amd64.deb"

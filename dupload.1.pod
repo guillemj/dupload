@@ -185,6 +185,12 @@ Enable more verbose output from the FTP module.
 Dry run, no files are changed, no upload is attempted, only tell
 what we would do.
 
+=item B<--nostats>
+
+Suppress printing download statistics.
+
+Since version 2.10.2.
+
 =item B<--mta> I<pathname>
 
 Use I<pathname> as the sendmail compatible MTA.

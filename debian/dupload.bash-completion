@@ -16,6 +16,7 @@ _dupload()
     -f --force
     -k --keep
     --no
+    --nostats
     --nomail
     --mta
     --mailonly

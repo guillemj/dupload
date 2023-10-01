@@ -107,6 +107,7 @@ my $ftp;
 my $http;
 my $dinstall_runs;
 my $passive;
+my $nostats;
 my $nomail;
 my $archive;
 my $noarchive;
@@ -160,6 +161,7 @@ our $opt_keep;
 our $opt_mailonly;
 our $opt_mta;
 our $opt_no;
+our $opt_nostats;
 our $opt_noarchive;
 our $opt_nomail;
 our $opt_print;
@@ -179,6 +181,7 @@ GetOptions qw(
     no
     noarchive
     nomail
+    nostats
     print
     quiet
     to=s
@@ -201,6 +204,7 @@ $host = $opt_to || $config::default_host;
 $mta = $opt_mta || $config::mta || $mta;
 $force = $opt_force || $force;
 $nomail = $opt_nomail || 0;
+$nostats = $opt_nostats || 0;
 $quiet = $opt_quiet;
 
 # Only info or version?
@@ -222,6 +226,7 @@ if ($opt_help) {
 "  -f, --force              Upload even if a previous upload is present.\n" .
 "  -k, --keep               Keep going, ignore packages with wrong checksums\n" .
 "      --no                 Dry run.\n" .
+"      --nostats            Suppress download statistics.\n" .
 "      --nomail             Suppress mail announcement for this run.\n" .
 "      --mailonly           Dry run, except that mail announcement is sent.\n" .
 "      --mta <pathname>     Use <pathname> as the sendmail compatible MTA.\n" .
@@ -861,7 +866,8 @@ JOB: foreach my $job (sort keys %files) {
 
         unless ($batchmode) {
             # The batch methods do not produce the $t statistic.
-            p(sprintf " (${t} s, %.2f kB/s)", $size / 1024 / ($t || 1));
+            p(sprintf " (${t} s, %.2f kB/s)", $size / 1024 / ($t || 1))
+                unless $nostats;
 
             unless ($dry) {
                 log_job($log{$job}, "u $file $fqdn");

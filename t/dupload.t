@@ -147,6 +147,7 @@ sub test_dupload
 
     my @cmd = ($dupload);
     push @cmd, '--configfile', $opts{config};
+    push @cmd, '--nostats';
     push @cmd, '--mta', $opts{mta} // $mta;
     push @cmd, '--to', $remote;
     push @cmd, @{$opts{args}} if exists $opts{args};

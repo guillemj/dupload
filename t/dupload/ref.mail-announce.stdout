@@ -10,10 +10,10 @@ Uploading (copy) to thishost:<<<BASEDIR>>>/incoming
  pkg-src_1.0-1_amd64.changes ok ]
 Uploading (copy) to mail-announce (thishost)
 [ Uploading job pkg-src_1.0-1_amd64
- pkg-bin_1.0-1_amd64.deb 0.0 kB, ok (0 s, 0.00 kB/s)
- pkg-src_1.0-1.debian.tar 0.0 kB, ok (0 s, 0.00 kB/s)
- pkg-src_1.0-1.dsc 0.7 kB, ok (0 s, 0.68 kB/s)
- pkg-src_1.0-1_amd64.buildinfo 1.1 kB, ok (0 s, 1.09 kB/s)
- pkg-src_1.0.orig.tar 0.0 kB, ok (0 s, 0.00 kB/s)
- pkg-src_1.0-1_amd64.changes 1.6 kB, ok (0 s, 1.61 kB/s)
+ pkg-bin_1.0-1_amd64.deb 0.0 kB, ok
+ pkg-src_1.0-1.debian.tar 0.0 kB, ok
+ pkg-src_1.0-1.dsc 0.7 kB, ok
+ pkg-src_1.0-1_amd64.buildinfo 1.1 kB, ok
+ pkg-src_1.0.orig.tar 0.0 kB, ok
+ pkg-src_1.0-1_amd64.changes 1.6 kB, ok
  announcing to stable@example.org, unstable@example.org and cc@example.org, ok ]
