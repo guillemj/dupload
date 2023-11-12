@@ -32,8 +32,6 @@ _dupload()
   *)
     COMPREPLY=($(
       compgen -G "${cur}*.changes"
-      compgen -G "${cur}*.asc"
-      compgen -G "${cur}*.sig"
       compgen -W "${options[*]}" -- "$cur"
     ))
     ;;
