@@ -22,11 +22,11 @@ _dupload()
     -p --print
     -q --quiet
     -t --to
-    -V -Version
+    -V --Version
   )
 
   case $prev in
-  --config|-c)
+  --configfile|-c)
     COMPREPLY=($(compgen -o filenames -G "$cur*"))
     ;;
   *)
