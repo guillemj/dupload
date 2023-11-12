@@ -31,7 +31,7 @@ _dupload()
     ;;
   *)
     COMPREPLY=($(
-      compgen -G "${cur}*.changes"
+      compgen -o filenames -o plusdirs -G "${cur}*.changes"
       compgen -W "${options[*]}" -- "$cur"
     ))
     ;;
@@ -39,6 +39,6 @@ _dupload()
 
   return
 }
-complete -F _dupload -o filenames -o plusdirs dupload
+complete -F _dupload dupload
 
 # vi: filetype=bash
