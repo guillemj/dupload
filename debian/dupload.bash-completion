@@ -2,7 +2,7 @@
 #
 # Copyright © 2002 Roland Mas <lolando@debian.org>
 # Copyright © 2009 Paul Evans <leonerd@leonerd.org.uk>
-# Copyright © 2017-2018, 2020-2021 Guillem Jover <guillem@debian.org>
+# Copyright © 2017-2023 Guillem Jover <guillem@debian.org>
 
 _dupload()
 {
@@ -15,7 +15,8 @@ _dupload()
     -d --debug
     -f --force
     -k --keep
-    --no --nomail
+    --no
+    --nomail
     --mailonly
     --noarchive
     -p --print
@@ -26,15 +27,15 @@ _dupload()
 
   case $prev in
   --config|-c)
-    COMPREPLY=( $( compgen -o filenames -G "$cur*" ) )
+    COMPREPLY=($(compgen -o filenames -G "$cur*"))
     ;;
   *)
-    COMPREPLY=( $(
+    COMPREPLY=($(
       compgen -G "${cur}*.changes"
       compgen -G "${cur}*.asc"
       compgen -G "${cur}*.sig"
       compgen -W "${options[*]}" -- "$cur"
-    ) )
+    ))
     ;;
   esac
 
