@@ -17,6 +17,7 @@ _dupload()
     -k --keep
     --no
     --nomail
+    --mta
     --mailonly
     --noarchive
     -p --print
@@ -25,9 +26,30 @@ _dupload()
     -V --Version
   )
 
+  case $cur in
+  -*)
+    COMPREPLY=($(compgen -W "${options[*]}" -- "$cur"))
+    return
+    ;;
+  esac
+
   case $prev in
-  --configfile|-c)
+  --no|--nomail|--noarchive|\
+  -k|--keep|\
+  -d|--debug|\
+  -f|--force|\
+  -p|--print|\
+  -q|--quiet|\
+  -V|--Version)
+    return
+    ;;
+  --configfile|-c|--mta)
     COMPREPLY=($(compgen -o filenames -G "$cur*"))
+    ;;
+  --to)
+    declare -a nicknames
+    nicknames=($(dupload -p | awk -F': ' '/nick name/ { print $2 }'))
+    COMPREPLY=($(compgen -W "${nicknames[*]}" -- "$cur"))
     ;;
   *)
     COMPREPLY=($(
