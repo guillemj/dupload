@@ -39,7 +39,7 @@ _dupload()
     ;;
   esac
 
-  return 0
+  return
 }
 complete -F _dupload -o filenames -o plusdirs dupload
 
