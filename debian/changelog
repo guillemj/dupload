@@ -1,8 +1,30 @@
-dupload (2.10.2) UNRELEASED; urgency=medium
+dupload (2.10.2) unstable; urgency=medium
 
-  *
+  * completion: Fix coding style.
+  * completion: Just return without a value.
+  * completion: Fix config file and version option names.
+  * completion: Do not look for *.asc and *.sig only *.changes.
+  * completion: Do not unconditionally complete filenames and dirs.
+  * completion: Add missing options.
+  * Add new --nostats option.
+  * Pass -v to ssh and scp on dupload --debug. Closes: #505611
+  * Code internals:
+    - Fix typo in code comment.
+    - Refactor methods runner into a new function.
+    - Turn $copiedfiles into an array.
+    - Move $msg declaration to its first use in announce_if_necessary().
+    - Turn $mta_cmd into an array.
+    - Append $options to $scp_options on setup instead of on each call.
+    - Turn $options into an array.
+    - Turn $ssh_login and $scp_options into arrays.
+    - Turn $rsync_opts into an array.
+    - Pass all rsync options via @rsync_opts.
+    - Pass ssh -x and -l via new @ssh_options instead of on each call.
+    - Switch ssh/scp and rsync system() calls to its array form.
+  * Test suite:
+    - Add test for the scp, scpb and rsync methods.
 
- -- Guillem Jover <guillem@debian.org>  Mon, 11 Sep 2023 18:27:57 +0200
+ -- Guillem Jover <guillem@debian.org>  Sun, 19 Nov 2023 03:54:35 +0100
 
 dupload (2.10.1) unstable; urgency=medium
 
