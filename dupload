@@ -28,6 +28,7 @@ use warnings;
 use feature qw(state);
 
 use IO::Handle;
+use IO::Socket;
 use List::Util qw(any uniq);
 use Cwd;
 use Getopt::Long;
@@ -1105,6 +1106,9 @@ sub ftp_open
         or fatal("Login as $user failed");
     $ftp->type('I')
         or fatal('Cannot set binary type');
+    # Set the socket keep-alive for the control connection to avoid it being
+    # closed during long data transfers on the data connection.
+    $ftp->setsockopt(SOL_SOCKET, SO_KEEPALIVE, 1);
 
     return $ftp;
 }
