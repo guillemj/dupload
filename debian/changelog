@@ -1,8 +1,8 @@
-dupload (2.10.3) UNRELEASED; urgency=medium
+dupload (2.10.3) unstable; urgency=medium
 
-  *
+  * Enable TCP keep-alive for the FTP control connection. Closes: #827053
 
- -- Guillem Jover <guillem@debian.org>  Wed, 06 Dec 2023 23:19:52 +0100
+ -- Guillem Jover <guillem@debian.org>  Thu, 07 Dec 2023 23:48:47 +0100
 
 dupload (2.10.2) unstable; urgency=medium
 
