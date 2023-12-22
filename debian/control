@@ -31,7 +31,7 @@ Multi-Arch: foreign
 Depends:
  ${misc:Depends},
  ${perl:Depends},
- libdpkg-perl,
+ libdpkg-perl (>= 1.21.10),
 Recommends:
  libio-socket-ssl-perl,
  liburi-perl,

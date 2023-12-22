@@ -1,8 +1,8 @@
-#!/bin/sh
+#!/usr/bin/perl
 #
 # Copyright © 2005 Javier Fernandez-Sanguino Peña <jfs@computer.org>
 # Copyright © 2005 Frank Lichtenheld <djpig@debian.org>
-# Copyright © 2017, 2019, 2021 Guillem Jover <guillem@debian.org>
+# Copyright © 2017-2023 Guillem Jover <guillem@debian.org>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -18,34 +18,41 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 
+use strict;
+use warnings;
+
+use Dpkg::ErrorHandling;
+use Dpkg::Vendor qw(run_vendor_hook);
+use Dpkg::OpenPGP;
+use Dpkg::OpenPGP::ErrorCodes;
+
 # Verify that a .changes file has been OpenPGP signed and that the signatures
 # are good.
 
-FILE=$1
-# If no gpg is found just exit
-[ ! -x "$(command -v gpg)" ] && exit 0
-# If the file is not found just exit with error
-[ ! -r "$FILE" ] && exit 2
+my $file = shift;
 
-printf "Checking OpenPGP signatures before upload..."
+# If the file is not found just exit with error.
+exit 2 unless -r $file;
 
-# Use the exit status to determine if the signature is ok or not
-gpg --weak-digest SHA1 --weak-digest RIPEMD160 --verify "$FILE" >/dev/null 2>&1
-ret=$?
-if [ $ret -eq 1 ]; then
-  echo "OpenPGP verification of $FILE failed!"
-  exit 1
-elif [ $ret -eq 2 ]; then
-  if grep -- '-----BEGIN PGP' "$FILE" >/dev/null 2>&1; then
-    echo "OpenPGP signature cannot be checked, probably because of missing keys"
-    exit 0
-  else
-    echo "OpenPGP signature is missing"
-    exit 1
-  fi
-fi
+my $openpgp = Dpkg::OpenPGP->new(needs => { api => 'verify' });
 
-echo ...signatures are ok
+exit 0 unless $openpgp->{backend}->has_verify_cmd();
 
-exit 0
+printf "Checking OpenPGP signatures before upload...";
 
+my @certs;
+push @certs, $openpgp->get_trusted_keyrings();
+foreach my $vendor_keyring (run_vendor_hook('package-keyrings')) {
+    push @certs, $vendor_keyring if -r $vendor_keyring;
+}
+
+# Use the return code to determine whether the signature is fine.
+my $rc = $openpgp->inline_verify($file, undef, @certs);
+if ($rc) {
+    error('cannot verify inline signature for %s: %s',
+          $file, openpgp_errorcode_to_string($rc));
+}
+
+print "signatures are ok\n";
+
+exit 0;
