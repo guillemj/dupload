@@ -1,8 +1,9 @@
-dupload (2.10.4) UNRELEASED; urgency=medium
+dupload (2.10.4) unstable; urgency=medium
 
-  *
+  * hooks: Rewrite openpgp-check in perl for Dpkg::OpenPGP multi-backend
+    support, so that we get automatic SOP and Sequoia-PGP support.
 
- -- Guillem Jover <guillem@debian.org>  Fri, 22 Dec 2023 00:56:56 +0100
+ -- Guillem Jover <guillem@debian.org>  Fri, 22 Dec 2023 01:22:49 +0100
 
 dupload (2.10.3) unstable; urgency=medium
 
