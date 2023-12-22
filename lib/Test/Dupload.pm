@@ -93,6 +93,7 @@ sub test_get_perl_files
         hooks/debian-next-dinstall
         hooks/debian-source-only
         hooks/debian-transition
+        hooks/openpgp-check
     );
 }
 

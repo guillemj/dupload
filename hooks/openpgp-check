@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/perl
 #
 # Copyright © 2005 Javier Fernandez-Sanguino Peña <jfs@computer.org>
 # Copyright © 2005 Frank Lichtenheld <djpig@debian.org>
@@ -18,41 +18,41 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 
+use strict;
+use warnings;
+
+use Dpkg::ErrorHandling;
+use Dpkg::OpenPGP;
+use Dpkg::OpenPGP::ErrorCodes;
+
 # Verify that a .changes file has been OpenPGP signed and that the signatures
 # are good.
 
-FILE=$1
-# If no gpg is found just exit
-[ ! -x "$(command -v gpg)" ] && exit 0
-# If the file is not found just exit with error
-[ ! -r "$FILE" ] && exit 2
+my $file = shift;
 
-echo "Checking OpenPGP signatures on $FILE..."
+# If the file is not found just exit with error.
+exit 2 unless -r $file;
 
-gpg_opts=""
-for keyring in $DUPLOAD_KEYRINGS; do
-  echo "  Using keyring: $keyring"
-  gpg_opts="$gpg_opts --keyring $keyring"
-done
+my $openpgp = Dpkg::OpenPGP->new(needs => { api => 'verify' });
 
-# Use the exit status to determine if the signature is ok or not
-# shellcheck disable=SC2086
-gpg $gpg_opts --weak-digest SHA1 --weak-digest RIPEMD160 --verify "$FILE" >/dev/null 2>&1
-ret=$?
-if [ $ret -eq 1 ]; then
-  echo "  OpenPGP verification of $FILE failed!"
-  exit 1
-elif [ $ret -eq 2 ]; then
-  if grep -- '-----BEGIN PGP' "$FILE" >/dev/null 2>&1; then
-    echo "  OpenPGP signature in $FILE cannot be checked, maybe due to missing keys"
-    exit 0
-  else
-    echo "  OpenPGP signature in $FILE is missing"
-    exit 1
-  fi
-fi
+exit 0 unless $openpgp->{backend}->has_verify_cmd();
 
-echo "  Ok, OpenPGP signatures are valid."
+print "Checking OpenPGP signatures on $file...\n";
 
-exit 0
+my @certs;
+push @certs, $openpgp->get_trusted_keyrings();
+foreach my $host_keyring (split q{ }, $ENV{DUPLOAD_KEYRINGS} // q{}) {
+    print "  Using keyring: $host_keyring\n";
+    push @certs, $host_keyring if -r $host_keyring;
+}
 
+# Use the return code to determine whether the signature is fine.
+my $rc = $openpgp->inline_verify($file, undef, @certs);
+if ($rc) {
+    error('cannot verify OpenPGP signature for %s: %s',
+          $file, openpgp_errorcode_to_string($rc));
+}
+
+print "  Ok, OpenPGP signatures are valid.\n";
+
+exit 0;

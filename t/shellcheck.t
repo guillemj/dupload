@@ -26,7 +26,6 @@ test_needs_command('shellcheck');
 
 my @files = qw(
     hooks/debian-security-auth
-    hooks/openpgp-check
 );
 
 my @shellcheck_opts = (
