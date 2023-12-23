@@ -1,8 +1,11 @@
-dupload (2.10.5) UNRELEASED; urgency=medium
+dupload (2.10.5) unstable; urgency=medium
 
-  *
+  * Revert "hooks: Rewrite openpgp-check in perl for Dpkg::OpenPGP
+    multi-backend support". We need to make the keyrings to use,
+    the OpenPGP backend, its commands and whether to use its certificate
+    store configurable before we can do this switch. Closes: #1059266
 
- -- Guillem Jover <guillem@debian.org>  Fri, 22 Dec 2023 23:32:15 +0100
+ -- Guillem Jover <guillem@debian.org>  Sat, 23 Dec 2023 01:06:23 +0100
 
 dupload (2.10.4) unstable; urgency=medium
 
