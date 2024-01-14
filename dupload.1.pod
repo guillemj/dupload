@@ -220,6 +220,16 @@ Adds an B<X-No-Archive: yes> header so that the announcement will not be
 archived. You can use the per-host B<archive> option in the configuration
 file.
 
+=item B<--skip-hooks> I<hook>[,...]
+
+Skip running the comma-separated list of hooks.
+The hook names can be the filename or the absolute pathname for the hook
+command,
+excluding any argument.
+This option can be specified multiple times.
+
+Since version 2.11.0.
+
 =item B<-p>, B<--print>
 
 Print the E<quot>databaseE<quot> as read from the config files and exit.
@@ -274,6 +284,19 @@ The F<.changes> file to upload and all of its referenced files.
 =item I<package>B<_>I<version>B<_>I<arch>.upload
 
 The file where B<dupload> writes the upload log.
+
+=back
+
+=head1 ENVIRONMENT
+
+=over 2
+
+=item B<DUPLOAD_SKIP_HOOKS>
+
+A comma-separated list of hooks to skip running.
+The B<--skip-hooks> option overrides this setting.
+
+Since version 2.11.0.
 
 =back
 

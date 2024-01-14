@@ -58,7 +58,9 @@ my @tests = qw(
     bad-md5sums
     bad-sha1sums
     bad-sha256sums
+    hook-fail
     hook-exec
+    hook-skip
     mail-announce
     mail-announce-visible
     mail-announce-no-archive
@@ -174,6 +176,7 @@ sub test_dupload
     };
 
     test_neutralize_variance($opts{cmd_stdout}, $repl_dirs);
+    test_neutralize_variance($opts{cmd_stderr}, $repl_dirs);
     test_neutralize_variance($opts{cmd_mtaout}, $repl_dirs);
 
     test_file($opts{ref_upload}, $logfile);
@@ -222,10 +225,16 @@ foreach my $test (@tests) {
     if ($test !~ m/^mail/ or $test =~ m/^mail-no/) {
         $opts{ref_mtaout} = '/dev/null';
     }
-    if ($test =~ m/^bad-/) {
+    if ($test =~ m/^bad-/ || $test =~ m/-fail$/) {
         $opts{ref_rc} = 1;
         $opts{ref_stderr} //= "$datadir/ref.$test.stderr";
         $opts{ref_upload} //= '/dev/null';
+    }
+    if ($test eq 'hook-skip') {
+        my $hookdir = rel2abs("$datadir/hooks");
+
+        push @{$opts{args}}, qw(--skip-hooks), "$hookdir/fail,nonexistent";
+        push @{$opts{args}}, qw(--skip-hooks notfound);
     }
 
     test_dupload(
@@ -247,7 +256,7 @@ foreach my $test (@tests) {
             $destdir = "$testdir/incoming";
         }
 
-        if ($test =~ m/^bad-/) {
+        if ($opts{ref_rc} // 0 == 1) {
             ok(! -e "$destdir/$file", "file $file not uploaded to $destdir");
         } else {
             ok(-e "$destdir/$file", "file $file correctly uploaded to $destdir");

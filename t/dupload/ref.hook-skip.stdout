@@ -1,0 +1,46 @@
+dupload note: no announcement will be sent.
+hook/per-host host=hook-skip method=copy fqdn=thishost login=<no> incoming=<<<TESTDIR>>>/incoming queuedir=<no> hook=host args="hook-skip"
+dupload: warning: skipping pre-upload changes hook <<<DATADIR>>>/hooks/fail
+Uploading (copy) to thishost:<<<TESTDIR>>>/incoming
+hook/per-host host=hook-skip method=copy fqdn=thishost login=<no> incoming=<<<TESTDIR>>>/incoming queuedir=<no> hook=sourcepackage args="pkg-src 1.0-1"
+[ Preparing job pkg-src_1.0-1_amd64 from pkg-src_1.0-1_amd64.changes
+ pkg-bin_1.0-1_amd64.deb, size ok, md5sum ok, sha1sum ok, sha256sum ok
+ pkg-src_1.0-1.debian.tar, size ok, md5sum ok, sha1sum ok, sha256sum ok
+ pkg-src_1.0-1.dsc, size ok, md5sum ok, sha1sum ok, sha256sum ok
+ pkg-src_1.0-1_amd64.buildinfo, size ok, md5sum ok, sha1sum ok, sha256sum ok
+ pkg-src_1.0.orig.tar, size ok, md5sum ok, sha1sum ok, sha256sum ok
+ pkg-src_1.0-1_amd64.changes ok ]
+hook/per-host host=hook-skip method=copy fqdn=thishost login=<no> incoming=<<<TESTDIR>>>/incoming queuedir=<no> hook=file args="pkg-bin_1.0-1_amd64.deb"
+hook/per-host host=hook-skip method=copy fqdn=thishost login=<no> incoming=<<<TESTDIR>>>/incoming queuedir=<no> hook=package args="pkg-bin 1.0-1"
+dupload: warning: skipping pre-upload package hook notfound
+hook/per-host host=hook-skip method=copy fqdn=thishost login=<no> incoming=<<<TESTDIR>>>/incoming queuedir=<no> hook=deb args="pkg-bin_1.0-1_amd64.deb"
+hook/per-host host=hook-skip method=copy fqdn=thishost login=<no> incoming=<<<TESTDIR>>>/incoming queuedir=<no> hook=file args="pkg-src_1.0-1.debian.tar"
+hook/per-host host=hook-skip method=copy fqdn=thishost login=<no> incoming=<<<TESTDIR>>>/incoming queuedir=<no> hook=file args="pkg-src_1.0-1.dsc"
+hook/per-host host=hook-skip method=copy fqdn=thishost login=<no> incoming=<<<TESTDIR>>>/incoming queuedir=<no> hook=file args="pkg-src_1.0-1_amd64.buildinfo"
+hook/per-host host=hook-skip method=copy fqdn=thishost login=<no> incoming=<<<TESTDIR>>>/incoming queuedir=<no> hook=file args="pkg-src_1.0.orig.tar"
+hook/per-host host=hook-skip method=copy fqdn=thishost login=<no> incoming=<<<TESTDIR>>>/incoming queuedir=<no> hook=file args="pkg-src_1.0-1_amd64.changes"
+Uploading (copy) to hook-skip (thishost)
+[ Uploading job pkg-src_1.0-1_amd64
+ pkg-bin_1.0-1_amd64.deb 0.0 kB, ok
+ pkg-src_1.0-1.debian.tar 0.0 kB, ok
+ pkg-src_1.0-1.dsc 0.7 kB, ok
+ pkg-src_1.0-1_amd64.buildinfo 1.1 kB, ok
+ pkg-src_1.0.orig.tar 0.0 kB, ok
+ pkg-src_1.0-1_amd64.changes 1.6 kB, ok ]
+dupload: warning: skipping post-upload changes hook <<<DATADIR>>>/hooks/fail
+hook/per-host host=hook-skip method=copy fqdn=thishost login=<no> incoming=<<<TESTDIR>>>/incoming queuedir=<no> hook=sourcepackage args="pkg-src 1.0-1"
+hook/per-host host=hook-skip method=copy fqdn=thishost login=<no> incoming=<<<TESTDIR>>>/incoming queuedir=<no> hook=file args="pkg-bin_1.0-1_amd64.deb"
+dupload: warning: skipping post-upload file hook nonexistent
+hook/per-host host=hook-skip method=copy fqdn=thishost login=<no> incoming=<<<TESTDIR>>>/incoming queuedir=<no> hook=file args="pkg-src_1.0-1.debian.tar"
+dupload: warning: skipping post-upload file hook nonexistent
+hook/per-host host=hook-skip method=copy fqdn=thishost login=<no> incoming=<<<TESTDIR>>>/incoming queuedir=<no> hook=file args="pkg-src_1.0-1.dsc"
+dupload: warning: skipping post-upload file hook nonexistent
+hook/per-host host=hook-skip method=copy fqdn=thishost login=<no> incoming=<<<TESTDIR>>>/incoming queuedir=<no> hook=file args="pkg-src_1.0-1_amd64.buildinfo"
+dupload: warning: skipping post-upload file hook nonexistent
+hook/per-host host=hook-skip method=copy fqdn=thishost login=<no> incoming=<<<TESTDIR>>>/incoming queuedir=<no> hook=file args="pkg-src_1.0.orig.tar"
+dupload: warning: skipping post-upload file hook nonexistent
+hook/per-host host=hook-skip method=copy fqdn=thishost login=<no> incoming=<<<TESTDIR>>>/incoming queuedir=<no> hook=file args="pkg-src_1.0-1_amd64.changes"
+dupload: warning: skipping post-upload file hook nonexistent
+hook/per-host host=hook-skip method=copy fqdn=thishost login=<no> incoming=<<<TESTDIR>>>/incoming queuedir=<no> hook=deb args="pkg-bin_1.0-1_amd64.deb"
+hook/per-host host=hook-skip method=copy fqdn=thishost login=<no> incoming=<<<TESTDIR>>>/incoming queuedir=<no> hook=package args="pkg-bin 1.0-1"
+hook/per-host host=hook-skip method=copy fqdn=thishost login=<no> incoming=<<<TESTDIR>>>/incoming queuedir=<no> hook=host args="hook-skip"
