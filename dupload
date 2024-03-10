@@ -49,6 +49,8 @@ my $myhost = $ENV{DUPLOAD_HOST} || qx(hostname --fqdn);
 chomp $myhost;
 my $cwd = getcwd();
 
+my @hook_types = qw(host changes sourcepackage package file deb);
+
 # For somewhat more verbose output from the ftp module.
 my $debug = 0;
 # Do it, even when already done.
@@ -304,7 +306,7 @@ $host or fatal('Need host to upload to. (See --to option or the default_host con
         $archive = 1;
     }
 
-    foreach my $category (qw(host changes sourcepackage package file deb)) {
+    foreach my $category (@hook_types) {
         my $preupload_hooks;
         if (defined $nick->{preupload}{$category}) {
             $preupload_hooks = $nick->{preupload}{$category};
