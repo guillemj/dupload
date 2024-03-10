@@ -1150,6 +1150,32 @@ sub info_field
     return;
 }
 
+sub info_hook_field
+{
+    my ($field, $value) = @_;
+
+    printf "%-30s: %s\n", $field, $value // '';
+
+    return;
+}
+
+sub info_hooks
+{
+    my ($name, $host, $global) = @_;
+
+    foreach my $hook_type (@hook_types) {
+        my $hooks = $host->{$hook_type} // $global->{$hook_type};
+        if (ref $hooks ne 'ARRAY') {
+            fatal("$name $hook_type is not an array");
+        }
+        foreach my $hook (@{$hooks}) {
+            info_hook_field("hook $name $hook_type", $hook, 30);
+        }
+    }
+
+    return;
+}
+
 # Display known host information.
 sub info
 {
@@ -1173,6 +1199,8 @@ sub info
         info_field('passive FTP', $r->{passive});
         info_field('dinstall runs', $r->{dinstall_runs});
         info_field('archive mail', $r->{archive});
+        info_hooks('preupload', $r->{preupload}, \%config::preupload);
+        info_hooks('postupload', $r->{postupload}, \%config::postupload);
         print "\n";
     }
 
