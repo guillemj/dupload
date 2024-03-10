@@ -98,8 +98,10 @@ WARN
 
 if (defined $what) {
     print <<'WARN';
-If you are always aware of this and do not want to be warned, you can
-disable this hook, alternatively you can reply to the following prompt.
+Note: If you are always aware of this and do not want to be warned, you
+can disable this hook in the configuration file, skip it via --skip-hooks
+or the one-off environment variable DUPLOAD_SKIP_HOOKS, or alternatively
+you can reply to the following prompt.
 
 WARN
 

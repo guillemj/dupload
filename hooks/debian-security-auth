@@ -26,8 +26,10 @@ from the Debian security team. For more information, please read:
 
   <https://www.debian.org/doc/developers-reference/pkgs.html#bug-security>
 
-If you have been authorized, you can either disable this hook, or reply to
-the following prompt with the exact text presented within parenthesis.
+Note: If you have been authorized, you can either disable this hook in
+the configuration file, skip it via --skip-hooks or the one-off environment
+variable DUPLOAD_SKIP_HOOKS, or reply to the following prompt with the
+exact text presented within parenthesis.
 
 WARN
 
