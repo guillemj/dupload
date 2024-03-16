@@ -128,7 +128,7 @@ sub test_dupload
 {
     my (%opts) = @_;
 
-    my $datadir = $opts{datadir};
+    my $datadir = rel2abs($opts{datadir});
     my $testdir = rel2abs($opts{testdir});
     my $workdir = rel2abs($opts{workdir});
     my $remote = $opts{remote};
@@ -148,7 +148,7 @@ sub test_dupload
 
     local $ENV{DUPLOAD_LOG_TIMESTAMP} = 'Wed Feb  2 00:00:00 2022';
     local $ENV{DUPLOAD_MTA_SPOOL} = $opts{cmd_mtaout};
-    local $ENV{DUPLOAD_DATA_DIR} = rel2abs($datadir);
+    local $ENV{DUPLOAD_DATA_DIR} = $datadir;
     local $ENV{DUPLOAD_TEST_DIR} = $testdir;
 
     my @cmd = ($dupload);
