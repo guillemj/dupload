@@ -1,4 +1,4 @@
 dupload note: no announcement will be sent.
-Uploading (copy) to thishost:<<<BASEDIR>>>/incoming
+Uploading (copy) to thishost:<<<TESTDIR>>>/incoming
 [ Preparing job pkg-src_1.0-1_bad-sha1sums from pkg-src_1.0-1_bad-sha1sums.changes
  pkg-bin_1.0-1_amd64.deb, size ok, md5sum ok

@@ -1,4 +1,4 @@
-Uploading (copy) to thishost:<<<BASEDIR>>>/incoming
+Uploading (copy) to thishost:<<<TESTDIR>>>/incoming
 [ Preparing job pkg-src_1.0-1_amd64 from pkg-src_1.0-1_amd64.changes
   announce (pkg-src_1.0-1_amd64.changes) to stable@example.org will be sent
   announce (pkg-src_1.0-1_amd64.changes) to unstable@example.org will be sent

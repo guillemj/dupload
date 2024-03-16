@@ -81,7 +81,7 @@ plan tests =>
 
 sub test_neutralize_variance
 {
-    my ($filename, $basedir) = @_;
+    my ($filename, $testdir) = @_;
     my $filenamenew = "$filename.new";
 
     return unless -e $filename;
@@ -91,7 +91,7 @@ sub test_neutralize_variance
     open my $fh, '<', $filename
         or die "cannot open old $filename: $!\n";
     while (<$fh>) {
-        s{\Q$basedir\E}{<<<BASEDIR>>>}g;
+        s{\Q$testdir\E}{<<<TESTDIR>>>}g;
         s{X-dupload: .*}{X-dupload: <<<DUPLOAD_VERSION>>>}g;
         print { $fhnew } $_;
     }

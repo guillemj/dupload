@@ -1,6 +1,6 @@
 dupload note: no announcement will be sent.
-Uploading (rsync) to example.org:<<<BASEDIR>>>/incoming
-and moving to example.org:<<<BASEDIR>>>/queue
+Uploading (rsync) to example.org:<<<TESTDIR>>>/incoming
+and moving to example.org:<<<TESTDIR>>>/queue
 [ Preparing job pkg-src_1.0-1_amd64 from pkg-src_1.0-1_amd64.changes
  pkg-bin_1.0-1_amd64.deb, size ok, md5sum ok, sha1sum ok, sha256sum ok
  pkg-src_1.0-1.debian.tar, size ok, md5sum ok, sha1sum ok, sha256sum ok
@@ -17,7 +17,7 @@ Uploading (rsync) to method-rsync-queue (example.org)
  pkg-src_1.0.orig.tar 0.0 kB, renaming, ok
  pkg-src_1.0-1_amd64.changes 1.6 kB, renaming, ok
 
-mock-rsync --partial -Lxtze ssh -v pkg-bin_1.0-1_amd64.deb pkg-src_1.0-1.debian.tar pkg-src_1.0-1.dsc pkg-src_1.0-1_amd64.buildinfo pkg-src_1.0.orig.tar pkg-src_1.0-1_amd64.changes example.org:<<<BASEDIR>>>/incoming
+mock-rsync --partial -Lxtze ssh -v pkg-bin_1.0-1_amd64.deb pkg-src_1.0-1.debian.tar pkg-src_1.0-1.dsc pkg-src_1.0-1_amd64.buildinfo pkg-src_1.0.orig.tar pkg-src_1.0-1_amd64.changes example.org:<<<TESTDIR>>>/incoming
 
-mock-ssh -x example.org cd <<<BASEDIR>>>/incoming;mv pkg-bin_1.0-1_amd64.deb pkg-src_1.0-1.debian.tar pkg-src_1.0-1.dsc pkg-src_1.0-1_amd64.buildinfo pkg-src_1.0.orig.tar pkg-src_1.0-1_amd64.changes <<<BASEDIR>>>/queue;
+mock-ssh -x example.org cd <<<TESTDIR>>>/incoming;mv pkg-bin_1.0-1_amd64.deb pkg-src_1.0-1.debian.tar pkg-src_1.0-1.dsc pkg-src_1.0-1_amd64.buildinfo pkg-src_1.0.orig.tar pkg-src_1.0-1_amd64.changes <<<TESTDIR>>>/queue;
  ]

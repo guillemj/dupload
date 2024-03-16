@@ -1,6 +1,6 @@
 dupload note: no announcement will be sent.
-Uploading (scp) to example.org:<<<BASEDIR>>>/incoming
-and moving to example.org:<<<BASEDIR>>>/queue
+Uploading (scp) to example.org:<<<TESTDIR>>>/incoming
+and moving to example.org:<<<TESTDIR>>>/queue
 [ Preparing job pkg-src_1.0-1_amd64 from pkg-src_1.0-1_amd64.changes
  pkg-bin_1.0-1_amd64.deb, size ok, md5sum ok, sha1sum ok, sha256sum ok
  pkg-src_1.0-1.debian.tar, size ok, md5sum ok, sha1sum ok, sha256sum ok
@@ -11,32 +11,32 @@ and moving to example.org:<<<BASEDIR>>>/queue
 Uploading (scp) to method-scp-queue (example.org)
 [ Uploading job pkg-src_1.0-1_amd64
  pkg-bin_1.0-1_amd64.deb 0.0 kB
-mock-scp -p pkg-bin_1.0-1_amd64.deb example.org:<<<BASEDIR>>>/incoming
+mock-scp -p pkg-bin_1.0-1_amd64.deb example.org:<<<TESTDIR>>>/incoming
 , renaming
-mock-ssh -x example.org mv <<<BASEDIR>>>/incoming/pkg-bin_1.0-1_amd64.deb <<<BASEDIR>>>/queue/pkg-bin_1.0-1_amd64.deb
+mock-ssh -x example.org mv <<<TESTDIR>>>/incoming/pkg-bin_1.0-1_amd64.deb <<<TESTDIR>>>/queue/pkg-bin_1.0-1_amd64.deb
 , ok
  pkg-src_1.0-1.debian.tar 0.0 kB
-mock-scp -p pkg-src_1.0-1.debian.tar example.org:<<<BASEDIR>>>/incoming
+mock-scp -p pkg-src_1.0-1.debian.tar example.org:<<<TESTDIR>>>/incoming
 , renaming
-mock-ssh -x example.org mv <<<BASEDIR>>>/incoming/pkg-src_1.0-1.debian.tar <<<BASEDIR>>>/queue/pkg-src_1.0-1.debian.tar
+mock-ssh -x example.org mv <<<TESTDIR>>>/incoming/pkg-src_1.0-1.debian.tar <<<TESTDIR>>>/queue/pkg-src_1.0-1.debian.tar
 , ok
  pkg-src_1.0-1.dsc 0.7 kB
-mock-scp -p pkg-src_1.0-1.dsc example.org:<<<BASEDIR>>>/incoming
+mock-scp -p pkg-src_1.0-1.dsc example.org:<<<TESTDIR>>>/incoming
 , renaming
-mock-ssh -x example.org mv <<<BASEDIR>>>/incoming/pkg-src_1.0-1.dsc <<<BASEDIR>>>/queue/pkg-src_1.0-1.dsc
+mock-ssh -x example.org mv <<<TESTDIR>>>/incoming/pkg-src_1.0-1.dsc <<<TESTDIR>>>/queue/pkg-src_1.0-1.dsc
 , ok
  pkg-src_1.0-1_amd64.buildinfo 1.1 kB
-mock-scp -p pkg-src_1.0-1_amd64.buildinfo example.org:<<<BASEDIR>>>/incoming
+mock-scp -p pkg-src_1.0-1_amd64.buildinfo example.org:<<<TESTDIR>>>/incoming
 , renaming
-mock-ssh -x example.org mv <<<BASEDIR>>>/incoming/pkg-src_1.0-1_amd64.buildinfo <<<BASEDIR>>>/queue/pkg-src_1.0-1_amd64.buildinfo
+mock-ssh -x example.org mv <<<TESTDIR>>>/incoming/pkg-src_1.0-1_amd64.buildinfo <<<TESTDIR>>>/queue/pkg-src_1.0-1_amd64.buildinfo
 , ok
  pkg-src_1.0.orig.tar 0.0 kB
-mock-scp -p pkg-src_1.0.orig.tar example.org:<<<BASEDIR>>>/incoming
+mock-scp -p pkg-src_1.0.orig.tar example.org:<<<TESTDIR>>>/incoming
 , renaming
-mock-ssh -x example.org mv <<<BASEDIR>>>/incoming/pkg-src_1.0.orig.tar <<<BASEDIR>>>/queue/pkg-src_1.0.orig.tar
+mock-ssh -x example.org mv <<<TESTDIR>>>/incoming/pkg-src_1.0.orig.tar <<<TESTDIR>>>/queue/pkg-src_1.0.orig.tar
 , ok
  pkg-src_1.0-1_amd64.changes 1.6 kB
-mock-scp -p pkg-src_1.0-1_amd64.changes example.org:<<<BASEDIR>>>/incoming
+mock-scp -p pkg-src_1.0-1_amd64.changes example.org:<<<TESTDIR>>>/incoming
 , renaming
-mock-ssh -x example.org mv <<<BASEDIR>>>/incoming/pkg-src_1.0-1_amd64.changes <<<BASEDIR>>>/queue/pkg-src_1.0-1_amd64.changes
+mock-ssh -x example.org mv <<<TESTDIR>>>/incoming/pkg-src_1.0-1_amd64.changes <<<TESTDIR>>>/queue/pkg-src_1.0-1_amd64.changes
 , ok ]
