@@ -1,3 +1,23 @@
+dupload (2.11.0) unstable; urgency=medium
+
+  * Add hook information on --print output.
+  * Add --skip-hooks option and DUPLOAD_SKIP_HOOKS environment variable.
+  * hooks: Print skip and prompt instructions for both debian-source-only
+    warnings.
+  * hooks: Add information on how to skip them.
+  * hooks: Add new Debian transition check hook. See #1060367.
+  * Code internals:
+    - Refactor hook types into a variable.
+  * Build system:
+    - Parametrize prove invocation.
+    - Add support for parallel test execution via TEST_PARALLEL.
+  * Test suite:
+    - Rename BASEDIR replacement to TESTDIR.
+    - Make datadir an absolute path for all codepaths in test_dupload().
+    - Neutralize also datadir and workdir in test_dupload().
+
+ -- Guillem Jover <guillem@debian.org>  Sat, 16 Mar 2024 21:03:08 +0100
+
 dupload (2.10.5) unstable; urgency=medium
 
   * Revert "hooks: Rewrite openpgp-check in perl for Dpkg::OpenPGP
