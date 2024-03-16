@@ -28,6 +28,9 @@ extradir = $(prefix)/share/dupload
 
 INSTALL = install
 POD2MAN = pod2man
+PROVE = prove
+
+PROVE_OPTS =
 
 mkdirhier = $(INSTALL) -d
 inst_script = $(INSTALL) -m 755
@@ -59,13 +62,13 @@ clean:
 .PHONY: check installcheck
 
 check:
-	prove -Ilib
+	$(PROVE) $(PROVE_OPTS) -Ilib
 
 authorcheck:
 	AUTHOR_TESTING=1 $(MAKE) check
 
 installcheck:
-	DUPLOAD_PROG="$(shell command -v dupload)" prove -Ilib
+	DUPLOAD_PROG="$(shell command -v dupload)" $(PROVE) $(PROVE_OPTS) -Ilib
 
 %:	%.pod
 	$(POD2MAN) \
