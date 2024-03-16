@@ -81,7 +81,7 @@ plan tests =>
 
 sub test_neutralize_variance
 {
-    my ($filename, $testdir) = @_;
+    my ($filename, $dirs) = @_;
     my $filenamenew = "$filename.new";
 
     return unless -e $filename;
@@ -91,7 +91,9 @@ sub test_neutralize_variance
     open my $fh, '<', $filename
         or die "cannot open old $filename: $!\n";
     while (<$fh>) {
-        s{\Q$testdir\E}{<<<TESTDIR>>>}g;
+        s{\Q$dirs->{datadir}\E}{<<<DATADIR>>>}g;
+        s{\Q$dirs->{testdir}\E}{<<<TESTDIR>>>}g;
+        s{\Q$dirs->{workdir}\E}{<<<WORKDIR>>>}g;
         s{X-dupload: .*}{X-dupload: <<<DUPLOAD_VERSION>>>}g;
         print { $fhnew } $_;
     }
@@ -165,8 +167,14 @@ sub test_dupload
     my $rc = !!($ret >> 8);
     ok($rc == $opts{ref_rc}, "dupload to remote $remote exit $rc == $opts{ref_rc}");
 
-    test_neutralize_variance($opts{cmd_stdout}, $testdir);
-    test_neutralize_variance($opts{cmd_mtaout}, $testdir);
+    my $repl_dirs = {
+        datadir => $datadir,
+        testdir => $testdir,
+        workdir => $workdir,
+    };
+
+    test_neutralize_variance($opts{cmd_stdout}, $repl_dirs);
+    test_neutralize_variance($opts{cmd_mtaout}, $repl_dirs);
 
     test_file($opts{ref_upload}, $logfile);
     test_file($opts{ref_stdout}, $opts{cmd_stdout});
