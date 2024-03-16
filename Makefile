@@ -32,6 +32,10 @@ PROVE = prove
 
 PROVE_OPTS =
 
+ifdef TEST_PARALLEL
+PROVE_OPTS += -j$(TEST_PARALLEL)
+endif
+
 mkdirhier = $(INSTALL) -d
 inst_script = $(INSTALL) -m 755
 inst_lib = $(INSTALL) -m 644
