@@ -79,9 +79,6 @@ please read:
 
   <https://lists.debian.org/debian-devel-announce/2019/07/msg00002.html>
 
-If you are always aware of this and do not want to be warned, you can
-disable this hook, alternatively you can reply to the following prompt.
-
 WARN
 }
 
@@ -100,6 +97,12 @@ WARN
 }
 
 if (defined $what) {
+    print <<'WARN';
+If you are always aware of this and do not want to be warned, you can
+disable this hook, alternatively you can reply to the following prompt.
+
+WARN
+
     my $accept = 'yes';
     print "Do you want to upload $what packages ($accept/NO)? ";
 
