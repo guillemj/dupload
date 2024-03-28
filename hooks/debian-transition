@@ -82,20 +82,20 @@ if (not $res->{success}) {
 my $yaml = YAML::XS::Load($res->{content});
 
 my $entry = first { $_->{name} eq $source } @{$yaml};
-if ($entry) {
-    my @ongoing = join "\n  ", sort map {
-        "<$url_ongoing/$_->[0]>"
-    } grep {
-        $_->[1] eq 'ongoing'
-    } @{$entry->{list}};
 
-    if (@ongoing > 0) {
-        print "\n";
-        print <<"WARN";
+my @ongoing;
+@ongoing = grep { $_->[1] eq 'ongoing' } @{$entry->{list}} if $entry;
+
+if (@ongoing > 0) {
+    my $ongoing = join "\n  ", sort map {
+        "<$url_ongoing/$_->[0]>"
+    } @ongoing;
+    print "\n";
+    print <<"WARN";
 
 Warning: Source package $source is part of ongoing transitions:
 
-  @ongoing
+  $ongoing
 
 If the upload does not solve issues caused by these transitions, then it
 might disrupt them by adding delays or entangling them. For more information,
@@ -109,8 +109,7 @@ one-off environment variable DUPLOAD_SKIP_HOOKS, or alternatively you can
 reply to the following prompt.
 
 WARN
-        prompt();
-    }
+    prompt();
 } else {
     print "not found in any.\n";
 }
