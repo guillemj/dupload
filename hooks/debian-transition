@@ -88,7 +88,7 @@ my @ongoing;
 
 if (@ongoing > 0) {
     my $ongoing = join "\n  ", sort map {
-        "<$url_ongoing/$_->[0]>"
+        "<$url_ongoing/$_->[0].html>"
     } @ongoing;
     print "\n";
     print <<"WARN";
