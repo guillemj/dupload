@@ -1,3 +1,9 @@
+dupload (2.11.2) unstable; urgency=medium
+
+  * hooks: Fix URLs for Debian transition tracker references.
+
+ -- Guillem Jover <guillem@debian.org>  Mon, 08 Apr 2024 03:47:05 +0200
+
 dupload (2.11.1) unstable; urgency=medium
 
   * hooks: Fix debian-transition to not prompt when there are no transitions.
