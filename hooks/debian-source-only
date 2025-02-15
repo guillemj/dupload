@@ -59,7 +59,7 @@ if ($area =~ m/^non-free/) {
 }
 
 my $to_sid = 0;
-if ($dist =~ m/^(unstable|sid)$/) {
+if ($dist eq 'unstable' || $dist eq 'sid') {
     $to_sid = 1;
 }
 
