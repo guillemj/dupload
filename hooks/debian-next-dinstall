@@ -31,8 +31,9 @@ my $t = $now->truncate(to => 'day') +
         $now->tzoffset +
         Time::Piece->strptime($start, '%H:%M')->epoch;
 
-for (my $iter = 0; ; $iter++) {
-    my $it = $t + ($iter * $every);
+my $iter = 0;
+while (1) {
+    my $it = $t + ($iter++ * $every);
     my $delta = $it - $now->epoch;
 
     if ($delta->epoch > 0) {
