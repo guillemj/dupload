@@ -1,3 +1,9 @@
+dupload (2.12.0) UNRELEASED; urgency=medium
+
+  *
+
+ -- Guillem Jover <guillem@debian.org>  Sat, 15 Feb 2025 22:53:02 +0100
+
 dupload (2.11.2) unstable; urgency=medium
 
   * hooks: Fix URLs for Debian transition tracker references.
