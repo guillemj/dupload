@@ -87,7 +87,13 @@ sub test_get_perl_dirs
 
 sub test_get_perl_files
 {
-    return qw(dupload dupload.conf);
+    return qw(
+        dupload
+        dupload.conf
+        hooks/debian-next-dinstall
+        hooks/debian-source-only
+        hooks/debian-transition
+    );
 }
 
 sub all_perl_files
