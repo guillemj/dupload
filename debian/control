@@ -49,6 +49,7 @@ Description: Debian package upload tool
   * the upload method,
   * queue and incoming directories,
   * file modes,
+  * keyrings for allowed signatures,
   * list of .changes distributions allowed or blocked from upload,
   * whether to send announcement mails or to delegate that to the remote host,
   * and it can be further extended via pre- and post-uploads hooks.

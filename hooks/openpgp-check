@@ -29,8 +29,15 @@ FILE=$1
 
 echo "Checking OpenPGP signatures on $FILE..."
 
+gpg_opts=""
+for keyring in $DUPLOAD_KEYRINGS; do
+  echo "  Using keyring: $keyring"
+  gpg_opts="$gpg_opts --keyring $keyring"
+done
+
 # Use the exit status to determine if the signature is ok or not
-gpg --weak-digest SHA1 --weak-digest RIPEMD160 --verify "$FILE" >/dev/null 2>&1
+# shellcheck disable=SC2086
+gpg $gpg_opts --weak-digest SHA1 --weak-digest RIPEMD160 --verify "$FILE" >/dev/null 2>&1
 ret=$?
 if [ $ret -eq 1 ]; then
   echo "  OpenPGP verification of $FILE failed!"

@@ -80,6 +80,8 @@ my $passwd;
 my $passwd_cmd;
 # Extra options for rsync or scp.
 my @options;
+# Keyrings for OpenPGP verification.
+my @keyrings;
 
 my $mta = '/usr/sbin/sendmail';
 
@@ -276,6 +278,9 @@ $host or fatal('Need host to upload to. (See --to option or the default_host con
     $fqdn = $myhost if $method eq 'copy';
     $incoming = $nick->{incoming} or fatal('No incoming directory');
     $queuedir = $nick->{queuedir};
+    if (defined $nick->{keyrings} && ref $nick->{keyrings} eq 'ARRAY') {
+        @keyrings = @{$nick->{keyrings}};
+    }
     $distallowlist = $nick->{distallowlist};
     $distblocklist = $nick->{distblocklist};
 
@@ -1199,6 +1204,9 @@ sub info
         info_field('login', $r->{login});
         info_field('incoming', $r->{incoming});
         info_field('queuedir', $r->{queuedir});
+        foreach my $keyring (@{$r->{keyrings}}) {
+            info_field('keyrings', $keyring);
+        }
         info_field('dist allowlist', $r->{distallowlist});
         info_field('dist blocklist', $r->{distblocklist});
         foreach my $mail (@{$r->{mail}}) {
@@ -1385,6 +1393,7 @@ sub run_hook
     local $ENV{DUPLOAD_QUEUEDIR} = $queuedir;
     local $ENV{DUPLOAD_SSH_OPTIONS} = "@options";
     local $ENV{DUPLOAD_FTP_PASSIVE} = $passive;
+    local $ENV{DUPLOAD_KEYRINGS} = "@keyrings";
 
     system "$command";
     $result = $? >> 8;

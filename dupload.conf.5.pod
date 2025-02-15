@@ -137,6 +137,12 @@ Incoming directory, the directory we try to upload to.
 The directory we move the uploaded files to (after successful upload to
 I<incoming>. Usually necessary only with some special upload queues.
 
+=item B<keyrings> [optional] (since 2.12.0)
+
+The list of OpenPGP keyrings containing OpenPGP certificates that are
+used to verify signatures allowed for uploads to this host.
+Used by the OpenPGP verification hook.
+
 =item B<distallowlist> [optional] (since 2.9.6)
 
 The regex of the distributions allowed for this host. This check is done
@@ -285,6 +291,10 @@ Same as the B<incomingdir> option.
 =item DUPLOAD_QUEUEDIR
 
 Same as the B<queuedir> option.
+
+=item DUPLOAD_KEYRINGS
+
+Same as the B<keyrings> option.
 
 =item DUPLOAD_SSH_OPTIONS
 
