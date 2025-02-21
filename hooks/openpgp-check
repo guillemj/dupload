@@ -2,7 +2,7 @@
 #
 # Copyright © 2005 Javier Fernandez-Sanguino Peña <jfs@computer.org>
 # Copyright © 2005 Frank Lichtenheld <djpig@debian.org>
-# Copyright © 2017, 2019, 2021 Guillem Jover <guillem@debian.org>
+# Copyright © 2017-2025 Guillem Jover <guillem@debian.org>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -27,25 +27,25 @@ FILE=$1
 # If the file is not found just exit with error
 [ ! -r "$FILE" ] && exit 2
 
-printf "Checking OpenPGP signatures before upload..."
+echo "Checking OpenPGP signatures on $FILE..."
 
 # Use the exit status to determine if the signature is ok or not
 gpg --weak-digest SHA1 --weak-digest RIPEMD160 --verify "$FILE" >/dev/null 2>&1
 ret=$?
 if [ $ret -eq 1 ]; then
-  echo "OpenPGP verification of $FILE failed!"
+  echo "  OpenPGP verification of $FILE failed!"
   exit 1
 elif [ $ret -eq 2 ]; then
   if grep -- '-----BEGIN PGP' "$FILE" >/dev/null 2>&1; then
-    echo "OpenPGP signature cannot be checked, probably because of missing keys"
+    echo "  OpenPGP signature in $FILE cannot be checked, maybe due to missing keys"
     exit 0
   else
-    echo "OpenPGP signature is missing"
+    echo "  OpenPGP signature in $FILE is missing"
     exit 1
   fi
 fi
 
-echo ...signatures are ok
+echo "  OpenPGP signatures are ok"
 
 exit 0
 

@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 #
-# Copyright © 2022-2024 Guillem Jover <guillem@debian.org>
+# Copyright © 2022-2025 Guillem Jover <guillem@debian.org>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -66,7 +66,7 @@ if (none { exists $dists{$_} } @dists) {
     exit 0;
 }
 
-print 'Checking Debian transitions...';
+print "Checking Debian transitions for $source...\n";
 
 my $http = HTTP::Tiny->new(
     agent => "dupload/$version",
@@ -74,7 +74,6 @@ my $http = HTTP::Tiny->new(
 );
 my $res = $http->get($url_packages);
 if (not $res->{success}) {
-    print "\n";
     warning("cannot fetch transitions information: $res->{reason}");
     prompt();
 }
@@ -90,7 +89,6 @@ if (@ongoing > 0) {
     my $ongoing = join "\n  ", sort map {
         "<$url_ongoing/$_->[0].html>"
     } @ongoing;
-    print "\n";
     print <<"WARN";
 
 Warning: Source package $source is part of ongoing transitions:
@@ -111,7 +109,7 @@ reply to the following prompt.
 WARN
     prompt();
 } else {
-    print "not found in any.\n";
+    print "  Ok, not found in any.\n";
 }
 
 sub prompt
@@ -123,11 +121,11 @@ sub prompt
     chomp $prompt;
 
     if ($prompt eq $accept) {
-        print "Ok, continuing anyway with the upload.\n";
+        print "  Ok, continuing anyway with the upload.\n";
         print "\n";
         exit 0;
     } else {
-        warn "Ok, aborting the upload.\n";
+        warn "  Ok, aborting the upload.\n";
         warn "\n";
         exit 1;
     }

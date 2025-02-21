@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# Copyright © 2017, 2019, 2021 Guillem Jover <guillem@debian.org>
+# Copyright © 2017-2025 Guillem Jover <guillem@debian.org>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -39,10 +39,10 @@ printf "Are you authorized to upload (%s)? " "$auth"
 read -r prompt
 
 if [ "$prompt" = "$auth" ]; then
-  echo "Authorized, proceeding with the upload."
+  echo "  Authorized, proceeding with the upload."
   echo
 else
-  echo "Not authorized, aborting the upload." >&2
+  echo "  Not authorized, aborting the upload." >&2
   echo
   exit 1
 fi
