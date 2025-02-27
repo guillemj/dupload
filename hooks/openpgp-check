@@ -52,7 +52,7 @@ elif [ $ret -eq 2 ]; then
   fi
 fi
 
-echo "  OpenPGP signatures are ok"
+echo "  Ok, OpenPGP signatures are valid."
 
 exit 0
 
