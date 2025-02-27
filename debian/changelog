@@ -1,8 +1,11 @@
-dupload (2.13.0) UNRELEASED; urgency=medium
+dupload (2.13.0) unstable; urgency=medium
 
-  *
+  * hooks: Unify OpenPGP verification success message with other hooks.
+  * hooks: Rewrite openpgp-check in perl for Dpkg::OpenPGP multi-backend
+    support.
+  * Fix batch progress printing. Closes: #181476
 
- -- Guillem Jover <guillem@debian.org>  Sun, 23 Feb 2025 18:10:48 +0100
+ -- Guillem Jover <guillem@debian.org>  Thu, 27 Feb 2025 03:38:16 +0100
 
 dupload (2.12.0) unstable; urgency=medium
 
