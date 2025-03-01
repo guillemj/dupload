@@ -48,6 +48,10 @@ foreach my $host_keyring (split q{ }, $ENV{DUPLOAD_KEYRINGS} // q{}) {
     }
 }
 
+if (@certs == 0) {
+    error('no OpenPGP keyring specified for host %s', $ENV{DUPLOAD_HOST});
+}
+
 # Use the return code to determine whether the signature is fine.
 my $rc = $openpgp->inline_verify($file, undef, @certs);
 if ($rc) {
