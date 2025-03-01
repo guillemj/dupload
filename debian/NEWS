@@ -1,0 +1,15 @@
+dupload (2.13.0) unstable; urgency=medium
+
+  The hook to check OpenPGP signatures before upload has been switched to
+  use the dpkg OpenPGP multi-backend support, so now it can use Sequoia-PGP,
+  any of the programs implementing the Stateless OpenPGP CLI (SOP), or
+  GnuPG and its verification only command.
+
+  This requires an explicit keyring configured for any host using this hook,
+  although all default hosts in /etc/dupload.conf that use such hook come
+  with pre-configured keyrings, provided by the distribution keyring packages.
+  If a certificate for the key used to sign the uploads is not on those
+  keyrings, the certificate might need to be exported into an OpenPGP keyring
+  and an explicit entry added for that host.
+
+ -- Guillem Jover <guillem@debian.org>  Sat, 01 Mar 2025 19:28:34 +0100
