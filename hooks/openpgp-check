@@ -42,8 +42,10 @@ print "Checking OpenPGP signatures on $file...\n";
 my @certs;
 push @certs, $openpgp->get_trusted_keyrings();
 foreach my $host_keyring (split q{ }, $ENV{DUPLOAD_KEYRINGS} // q{}) {
-    print "  Using keyring: $host_keyring\n";
-    push @certs, $host_keyring if -r $host_keyring;
+    if (-r $host_keyring) {
+        print "  Using keyring: $host_keyring\n";
+        push @certs, $host_keyring;
+    }
 }
 
 # Use the return code to determine whether the signature is fine.
