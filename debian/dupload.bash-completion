@@ -45,7 +45,8 @@ _dupload()
     return
     ;;
   --configfile|-c|--mta)
-    COMPREPLY=($(compgen -o filenames -G "$cur*"))
+    COMPREPLY=($(compgen -G "$cur*"))
+    compopt -o filenames
     ;;
   --to)
     declare -a nicknames
@@ -54,9 +55,11 @@ _dupload()
     ;;
   *)
     COMPREPLY=($(
-      compgen -o filenames -o plusdirs -G "${cur}*.changes"
+      compgen -G "${cur}*.changes"
       compgen -W "${options[*]}" -- "$cur"
     ))
+    compopt -o filenames
+    compopt -o plusdirs
     ;;
   esac
 
