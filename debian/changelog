@@ -1,8 +1,14 @@
-dupload (2.13.1) UNRELEASED; urgency=medium
+dupload (2.13.1) unstable; urgency=medium
 
-  *
+  * hooks: Only print the OpenPGP keyring being used if it's present on disk.
+  * hooks: Error out if the OpenPGP check ends up with no keyrings.
+  * Packaging:
+    - Add a retroactive NEWS entry for OpenPGP multi-backend support.
+      Closes: #1099178
+    - Fix bash-completion for .changes files and directories. Closes: #1087780
+    - Switch to Standards-Version 4.7.2 (no changed needed).
 
- -- Guillem Jover <guillem@debian.org>  Sat, 01 Mar 2025 06:02:27 +0100
+ -- Guillem Jover <guillem@debian.org>  Sat, 01 Mar 2025 19:52:15 +0100
 
 dupload (2.13.0) unstable; urgency=medium
 
