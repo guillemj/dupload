@@ -33,6 +33,7 @@ Depends:
  ${perl:Depends},
  libdpkg-perl (>= 1.21.10),
 Recommends:
+ debian-keyring | ubuntu-keyring,
  libio-socket-ssl-perl,
  liburi-perl,
  libyaml-libyaml-perl,
