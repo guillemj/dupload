@@ -45,6 +45,8 @@ foreach my $host_keyring (split q{ }, $ENV{DUPLOAD_KEYRINGS} // q{}) {
     if (-r $host_keyring) {
         print "  Using keyring: $host_keyring\n";
         push @certs, $host_keyring;
+    } else {
+        print "  Skipping missing keyring: $host_keyring\n";
     }
 }
 
