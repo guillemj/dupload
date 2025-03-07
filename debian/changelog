@@ -1,8 +1,10 @@
-dupload (2.13.2) UNRELEASED; urgency=medium
+dupload (2.13.2) unstable; urgency=medium
 
-  *
+  * hooks: Print the OpenPGP keyrings that are being skipped.
+  * Packaging:
+    - Add Recommends on debian-keyring | ubuntu-keyring. Closes: #1099556
 
- -- Guillem Jover <guillem@debian.org>  Fri, 07 Mar 2025 12:32:46 +0100
+ -- Guillem Jover <guillem@debian.org>  Fri, 07 Mar 2025 12:33:11 +0100
 
 dupload (2.13.1) unstable; urgency=medium
 
